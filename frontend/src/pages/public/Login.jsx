@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FiMail, FiLock, FiActivity, FiKey } from 'react-icons/fi';
+import { FiMail, FiLock, FiActivity } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { SEO } from '../../components/SEO';
 
@@ -40,33 +40,6 @@ export const Login = () => {
       } else {
         navigate(from, { replace: true });
       }
-    } else {
-      toast.error(res.message);
-    }
-  };
-
-  // Quick credentials selectors for demo purposes
-  const triggerQuickLogin = async (role) => {
-    setSubmitting(true);
-    let credentials = { email: '', password: 'password123' };
-
-    switch (role) {
-      case 'patient': credentials.email = 'patient@purniacare.com'; break;
-      case 'doctor': credentials.email = 'doctor@purniacare.com'; break;
-      case 'hospital': credentials.email = 'hospital@purniacare.com'; break;
-      case 'admin': credentials.email = 'admin@purniacare.com'; break;
-      default: return;
-    }
-
-    const res = await login(credentials.email, credentials.password);
-    setSubmitting(false);
-
-    if (res.success) {
-      toast.success(`Demo Login Successful as ${res.user.role.toUpperCase()}`);
-      if (role === 'patient') navigate('/patient/dashboard');
-      else if (role === 'doctor') navigate('/doctor/dashboard');
-      else if (role === 'hospital') navigate('/hospital/dashboard');
-      else if (role === 'admin') navigate('/admin/dashboard');
     } else {
       toast.error(res.message);
     }
@@ -136,41 +109,6 @@ export const Login = () => {
             {submitting ? 'Authenticating credentials...' : 'Sign In'}
           </button>
         </form>
-
-        {/* Demo Accounts Panel */}
-        <div className="border-t border-slate-100 pt-6 dark:border-slate-700/60">
-          <div className="flex items-center space-x-1.5 text-xs font-bold text-slate-450 dark:text-slate-400 mb-3 justify-center">
-            <FiKey className="text-primary-550" />
-            <span>QUICK ACCESS (TESTING DEMO DECK)</span>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-2 text-[10px] font-extrabold text-slate-700 dark:text-slate-300">
-            <button
-              onClick={() => triggerQuickLogin('patient')}
-              className="rounded-lg border border-slate-200 py-2 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-900 cursor-pointer"
-            >
-              Patient Dashboard
-            </button>
-            <button
-              onClick={() => triggerQuickLogin('doctor')}
-              className="rounded-lg border border-slate-200 py-2 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-900 cursor-pointer"
-            >
-              Doctor Dashboard
-            </button>
-            <button
-              onClick={() => triggerQuickLogin('hospital')}
-              className="rounded-lg border border-slate-200 py-2 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-900 cursor-pointer"
-            >
-              Hospital Dashboard
-            </button>
-            <button
-              onClick={() => triggerQuickLogin('admin')}
-              className="rounded-lg border border-slate-200 py-2 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-900 cursor-pointer"
-            >
-              Admin Dashboard
-            </button>
-          </div>
-        </div>
 
         <div className="text-center text-xs text-slate-500">
           Don't have an account yet?{' '}
