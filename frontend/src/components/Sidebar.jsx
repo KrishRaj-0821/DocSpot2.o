@@ -49,6 +49,7 @@ export const Sidebar = ({ isMobileOpen, toggleSidebar }) => {
           { path: '/admin/doctors', label: 'Verify Doctors', icon: FiCheckSquare },
           { path: '/admin/hospitals', label: 'Verify Hospitals', icon: FiHome },
           { path: '/admin/orders', label: 'System Orders', icon: FiPackage },
+          { path: '/admin/diagnostics', label: 'Lab Bookings', icon: FiFileText },
           { path: '/admin/settings', label: 'Global Settings', icon: FiSettings },
         ];
       default:

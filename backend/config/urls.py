@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 # Import views from all apps
-from accounts.views import RegisterView, UserProfileView, ChangePasswordView, VerifyOTPView
+from accounts.views import RegisterView, UserProfileView, ChangePasswordView, VerifyOTPView, LoginView
 from hospitals.views import HospitalProfileViewSet, DepartmentViewSet, BedViewSet
 from doctors.views import DoctorProfileViewSet, ReviewViewSet
 from patients.views import PatientProfileViewSet, MedicalRecordViewSet
@@ -44,6 +44,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # 1. JWT Authentication Endpoints
+    path('api/login', LoginView.as_view(), name='auth_login_no_slash'),
+    path('api/login/', LoginView.as_view(), name='auth_login'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     

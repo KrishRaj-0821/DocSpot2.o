@@ -2,6 +2,7 @@ from rest_framework import serializers
 from appointments.models import Appointment, Prescription
 from doctors.serializers import DoctorProfileSerializer
 from hospitals.serializers import HospitalProfileSerializer
+from hospitals.models import HospitalProfile
 from accounts.serializers import UserSerializer
 
 class PrescriptionSerializer(serializers.ModelSerializer):
@@ -14,6 +15,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
     hospital_details = HospitalProfileSerializer(source='hospital', read_only=True)
     patient_details = UserSerializer(source='patient', read_only=True)
     prescription = PrescriptionSerializer(read_only=True)
+    
+    hospital = serializers.PrimaryKeyRelatedField(
+        queryset=HospitalProfile.objects.all(),
+        required=False,
+        allow_null=True
+    )
 
     class Meta:
         model = Appointment
@@ -25,7 +32,10 @@ class AppointmentSerializer(serializers.ModelSerializer):
         read_only_fields = ['fees', 'status']
 
     def create(self, validated_data):
-        # Automatically pull consultation fees from doctor profile
         doctor = validated_data['doctor']
+        # Set hospital automatically from doctor's profile if not provided
+        if not validated_data.get('hospital') and doctor.hospital:
+            validated_data['hospital'] = doctor.hospital
+        # Automatically pull consultation fees from doctor profile
         validated_data['fees'] = doctor.fees
         return super().create(validated_data)

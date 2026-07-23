@@ -30,6 +30,7 @@ export const AdminDashboard = () => {
   const [doctorsList, setDoctorsList] = useState([]);
   const [hospitalsList, setHospitalsList] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [labBookings, setLabBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Search filter inside User Directory
@@ -54,10 +55,12 @@ export const AdminDashboard = () => {
       const docRes = await api.get('/doctors');
       const hospRes = await api.get('/hospitals');
       const ordRes = await api.get('/orders');
+      const labRes = await api.get('/diagnostic-bookings');
       
       setDoctorsList(docRes.data);
       setHospitalsList(hospRes.data);
       setOrders(ordRes.data);
+      setLabBookings(labRes.data);
     } catch (err) {
       toast.error("Failed to load platform data.");
     } finally {
@@ -558,6 +561,116 @@ export const AdminDashboard = () => {
             </button>
           </div>
 
+        </div>
+      </div>
+    );
+  }
+
+  // View: Diagnostic Lab Bookings
+  if (path === '/admin/diagnostics') {
+    const handleShiftBookingStatus = async (id, currentStatus) => {
+      let nextStatus = 'Pending';
+      if (currentStatus === 'Pending') nextStatus = 'Completed';
+      else if (currentStatus === 'Completed') nextStatus = 'Cancelled';
+      
+      try {
+        await api.patch(`/diagnostic-bookings/${id}/`, { status: nextStatus });
+        setLabBookings(prev => prev.map(b => b.id === id ? { ...b, status: nextStatus } : b));
+        toast.success(`Booking #${id} status updated to ${nextStatus}`);
+      } catch (err) {
+        toast.error("Failed to update booking status.");
+      }
+    };
+
+    return (
+      <div className="rounded-2xl bg-white p-6 shadow-md border border-slate-105 dark:bg-slate-800 dark:border-slate-800 space-y-6">
+        <div className="border-b pb-3 dark:border-slate-700/60 flex justify-between items-center">
+          <div>
+            <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Diagnostic Lab Bookings</h3>
+            <p className="text-[10px] text-slate-400 mt-0.5 font-semibold">Manage patient pathology test slots, verify prescriptions, and dispatch results.</p>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs font-semibold text-slate-650">
+            <thead>
+              <tr className="border-b border-slate-100 dark:border-slate-750 text-slate-400 font-bold uppercase tracking-wider">
+                <th className="py-3">Ref ID</th>
+                <th className="py-3">Patient</th>
+                <th className="py-3">Test Package</th>
+                <th className="py-3">Lab Center</th>
+                <th className="py-3">Scheduled Date</th>
+                <th className="py-3">Prescription</th>
+                <th className="py-3">Status</th>
+                <th className="py-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50 dark:divide-slate-750">
+              {labBookings.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="py-8 text-center text-slate-400 italic">No lab work bookings recorded on the platform.</td>
+                </tr>
+              ) : (
+                labBookings.map(booking => {
+                  const patient = booking.patient_details || {};
+                  const test = booking.test_details || {};
+                  
+                  return (
+                    <tr key={booking.id}>
+                      <td className="py-4 font-bold text-slate-900 dark:text-white">#{booking.id}</td>
+                      <td className="py-4">
+                        <div className="font-bold text-slate-800 dark:text-slate-205">
+                          {patient.first_name || 'N/A'} {patient.last_name || ''}
+                        </div>
+                        <div className="text-[10px] text-slate-400">{patient.phone || patient.email || 'N/A'}</div>
+                      </td>
+                      <td className="py-4">
+                        <div className="font-bold text-slate-800 dark:text-slate-205">{test.name || 'Custom Test Suite'}</div>
+                        <span className="rounded bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-400 px-1.5 py-0.5 text-[9px] uppercase font-extrabold tracking-wide">
+                          {test.category || 'Pathology'}
+                        </span>
+                      </td>
+                      <td className="py-4 text-slate-500 dark:text-slate-400">
+                        {test.center_details?.name || 'Central Diagnostic Labs'}
+                      </td>
+                      <td className="py-4 text-slate-550 dark:text-slate-400 font-bold">{booking.date}</td>
+                      <td className="py-4">
+                        {booking.prescription_file ? (
+                          <a 
+                            href={booking.prescription_file} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 border border-teal-200/50 dark:border-teal-900/50 px-2 py-1 text-[10px] font-bold inline-flex items-center hover:underline"
+                          >
+                            View Script
+                          </a>
+                        ) : (
+                          <span className="text-slate-400 italic">None Provided</span>
+                        )}
+                      </td>
+                      <td className="py-4">
+                        <span className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                          booking.status === 'Completed' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400' :
+                          booking.status === 'Cancelled' ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-450' :
+                          'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400'
+                        }`}>
+                          {booking.status}
+                        </span>
+                      </td>
+                      <td className="py-4 text-right">
+                        <button
+                          onClick={() => handleShiftBookingStatus(booking.id, booking.status)}
+                          className="rounded bg-slate-50 border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 hover:bg-slate-105 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300 cursor-pointer"
+                        >
+                          Shift Status
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     );

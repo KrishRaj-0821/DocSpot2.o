@@ -56,3 +56,40 @@ class VerifyOTPView(APIView):
             return Response({"detail": "Code and email are required"}, status=status.HTTP_400_BAD_REQUEST)
         # Mock validation success
         return Response({"success": True, "message": "OTP verified successfully"})
+
+class LoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        if not email or not password:
+            return Response(
+                {"detail": "Both email/username and password are required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Look up by email first, then username
+        user = User.objects.filter(email=email).first()
+        if not user:
+            user = User.objects.filter(username=email).first()
+
+        if not user or not user.check_password(password):
+            return Response(
+                {"detail": "Invalid credentials. Please check your username/email and password."},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        if not user.is_active:
+            return Response(
+                {"detail": "User account is disabled."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Generate tokens
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            "token": str(refresh.access_token),
+            "user": UserSerializer(user).data
+        }, status=status.HTTP_200_OK)

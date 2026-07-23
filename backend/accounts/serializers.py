@@ -5,6 +5,8 @@ from accounts.models import Role
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
+    role = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = [
@@ -13,6 +15,13 @@ class UserSerializer(serializers.ModelSerializer):
             'blood_group', 'dob'
         ]
         read_only_fields = ['id', 'role']
+
+    def get_role(self, obj):
+        if obj.role == 'super_admin':
+            return 'admin'
+        if obj.role == 'hospital_admin':
+            return 'hospital'
+        return obj.role
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
