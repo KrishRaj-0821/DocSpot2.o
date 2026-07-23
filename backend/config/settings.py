@@ -9,7 +9,7 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-purnia-care-backend-development-secret-key-1994')
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
@@ -81,53 +81,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database Configuration
 # In production, check if DATABASE_URL (for PostgreSQL) or SQLITE_DB_PATH (for persistent SQLite on Render disk) is provided
-DATABASE_URL = os.getenv('DATABASE_URL')
-SQLITE_DB_PATH = os.getenv('SQLITE_DB_PATH')
-
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
-    }
-elif SQLITE_DB_PATH:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': Path(SQLITE_DB_PATH),
-        }
-    }
-else:
-    # Database fallback switcher
-    # Try MySQL if config is set, otherwise use SQLite
-    USE_MYSQL = os.getenv('DB_ENGINE', 'sqlite') == 'mysql'
-    
-    if USE_MYSQL:
-        import pymysql
-        pymysql.install_as_MySQLdb()
-        
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.mysql',
-                'NAME': os.getenv('DB_NAME', 'purnia_care'),
-                'USER': os.getenv('DB_USER', 'root'),
-                'PASSWORD': os.getenv('DB_PASSWORD', ''),
-                'HOST': os.getenv('DB_HOST', 'localhost'),
-                'PORT': os.getenv('DB_PORT', '3306'),
-                'OPTIONS': {
-                    'charset': 'utf8mb4',
-                }
-            }
-        }
-    else:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR / 'db.sqlite3',
-            }
-        }
+DATABASES = {
+    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
