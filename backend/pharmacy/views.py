@@ -1,9 +1,24 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from pharmacy.models import MedicineOrder, OrderItem
-from pharmacy.serializers import MedicineOrderSerializer
+from pharmacy.models import MedicineOrder, OrderItem, PharmacyProfile
+from pharmacy.serializers import MedicineOrderSerializer, PharmacyProfileSerializer
 from medicines.models import Medicine
+from common.permissions import IsPharmacyAdmin
+
+class PharmacyProfileViewSet(viewsets.ModelViewSet):
+    queryset = PharmacyProfile.objects.all()
+    serializer_class = PharmacyProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'pharmacy_admin':
+            return self.queryset.filter(user=user)
+        return self.queryset
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class MedicineOrderViewSet(viewsets.ModelViewSet):
     queryset = MedicineOrder.objects.all()
@@ -16,6 +31,11 @@ class MedicineOrderViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if user.role == 'patient':
             return self.queryset.filter(user=user)
+        elif user.role == 'pharmacy_admin':
+            pharm = getattr(user, 'pharmacy_profile', None)
+            if pharm:
+                return self.queryset.filter(pharmacy=pharm)
+            return self.queryset.none()
         return self.queryset
 
     def create(self, request, *args, **kwargs):
@@ -48,15 +68,20 @@ class MedicineOrderViewSet(viewsets.ModelViewSet):
         delivery = 30
         total = subtotal + tax + delivery
 
+        # Get pharmacy
+        pharmacy_id = request.data.get('pharmacy')
+
         # Create order
         order = MedicineOrder.objects.create(
             user=request.user,
+            pharmacy_id=pharmacy_id,
             subtotal=subtotal,
             tax=tax,
             delivery_charge=delivery,
             total=total,
             payment_method=request.data.get('payment_method', 'Cash on Delivery'),
-            address=request.data.get('address', request.user.address or '')
+            address=request.data.get('address', request.user.address or ''),
+            prescription_image=request.data.get('prescription_image')
         )
 
         # Create items

@@ -510,6 +510,13 @@ export const mockUsers = {
     role: "diagnostic_admin",
     name: "Lal Path Lab Technician",
     avatar: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=150",
+  },
+  pharmacy_admin: {
+    email: "pharmacy@purniacare.com",
+    password: "password123",
+    role: "pharmacy_admin",
+    name: "Purnia Care Pharmacy Store",
+    avatar: "https://images.unsplash.com/photo-1607619056574-7b8f304b3b8f?auto=format&fit=crop&q=80&w=150",
   }
 };
 

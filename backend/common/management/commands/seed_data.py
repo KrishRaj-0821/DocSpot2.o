@@ -11,7 +11,7 @@ from doctors.models import DoctorProfile, Review
 from patients.models import PatientProfile, MedicalRecord
 from appointments.models import Appointment, Prescription
 from medicines.models import MedicineCategory, Medicine
-from pharmacy.models import MedicineOrder, OrderItem
+from pharmacy.models import MedicineOrder, OrderItem, PharmacyProfile
 from diagnostics.models import DiagnosticCenter, DiagnosticTest, TestBooking
 from ambulance.models import Ambulance, AmbulanceBooking
 from payments.models import PaymentTransaction, Invoice
@@ -39,7 +39,8 @@ class Command(BaseCommand):
         # Clear specific users first
         User.objects.filter(email__in=[
             "patient@purniacare.com", "doctor@purniacare.com", 
-            "hospital@purniacare.com", "admin@purniacare.com", "labs@purniacare.com"
+            "hospital@purniacare.com", "admin@purniacare.com", "labs@purniacare.com",
+            "pharmacy@purniacare.com"
         ]).delete()
 
         admin_user = User.objects.create_user(
@@ -97,6 +98,33 @@ class Command(BaseCommand):
             role=Role.DIAGNOSTIC_ADMIN,
             city="Purnia",
             phone="+91 99887 76655"
+        )
+
+        pharmacy_user = User.objects.create_user(
+            username="pc_pharmacy",
+            email="pharmacy@purniacare.com",
+            password="password123",
+            first_name="Purnia Care",
+            last_name="Pharmacy",
+            role=Role.PHARMACY_ADMIN,
+            city="Purnia",
+            phone="+91 99999 55555"
+        )
+
+        pharm_profile = PharmacyProfile.objects.create(
+            user=pharmacy_user,
+            name="Purnia Care Central Pharmacy",
+            owner_name="Sanjay Gupta",
+            drug_license_number="DL-98765-PUR",
+            gst_number="20AAECP9876F1Z5",
+            address="Line Bazar Chowk, Purnia, Bihar - 854301",
+            city="Purnia",
+            phone="+91 99999 55555",
+            email="pharmacy@purniacare.com",
+            store_timings="8:00 AM - 10:00 PM",
+            home_delivery_available=True,
+            kyc_status=PharmacyProfile.KycStatus.APPROVED,
+            delivery_charges=30.00
         )
 
         # 2. Seeding Hospitals
@@ -191,23 +219,39 @@ class Command(BaseCommand):
         m1 = Medicine.objects.create(
             name="Paracetamol 650mg (Dolo)",
             category=mc1,
+            pharmacy=pharm_profile,
             brand="Micro Labs",
+            generic_name="Paracetamol",
+            manufacturer="Micro Labs Ltd",
+            batch_number="DOL-1029",
+            expiry_date=date(2027, 10, 15),
+            purchase_price=22.00,
+            mrp=40.00,
             price=32.00,
             discount=15,
             stock=500,
             dosage_instructions="One tablet when required or as prescribed.",
-            image="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300"
+            image="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300",
+            prescription_required=False
         )
 
         m2 = Medicine.objects.create(
             name="Pantoprazole 40mg (Pan-D)",
             category=mc2,
+            pharmacy=pharm_profile,
             brand="Alkem",
+            generic_name="Pantoprazole",
+            manufacturer="Alkem Laboratories",
+            batch_number="PND-9923",
+            expiry_date=date(2026, 8, 30), # near expiry
+            purchase_price=110.00,
+            mrp=168.00,
             price=148.00,
             discount=12,
-            stock=300,
+            stock=15, # low stock
             dosage_instructions="One tablet morning before breakfast.",
-            image="https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&q=80&w=300"
+            image="https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&q=80&w=300",
+            prescription_required=True
         )
 
         # 6. Diagnostics Centers
@@ -313,13 +357,15 @@ class Command(BaseCommand):
         # Pharmacy Order
         order = MedicineOrder.objects.create(
             user=patient_user,
+            pharmacy=pharm_profile,
             subtotal=180.00,
             tax=9.00,
             delivery_charge=30.00,
             total=219.00,
             status=MedicineOrder.OrderStatus.DELIVERED,
             payment_method="Cash on Delivery",
-            address="Bhatia Chowk, Ward 12, Purnia, Bihar"
+            address="Bhatia Chowk, Ward 12, Purnia, Bihar",
+            prescription_image="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
         )
 
         OrderItem.objects.create(

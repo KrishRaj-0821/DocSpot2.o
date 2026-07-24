@@ -8,7 +8,8 @@ import {
   FiUser, 
   FiPlusSquare, 
   FiShield, 
-  FiArrowRight 
+  FiArrowRight,
+  FiPackage
 } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -59,6 +60,15 @@ const demoUsers = [
     badgeColor: 'bg-violet-50 text-violet-700 border-violet-200/50 dark:bg-violet-950/30 dark:text-violet-400 dark:border-violet-900/50',
     avatar: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=150',
     desc: 'Manage diagnostic requests, result entries & pathologist reports'
+  },
+  {
+    role: 'pharmacy_admin',
+    name: 'Purnia Care Pharmacy Store',
+    email: 'pharmacy@purniacare.com',
+    icon: FiPackage,
+    badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200/50 dark:bg-emerald-950/30 dark:text-emerald-450 dark:border-emerald-900/50',
+    avatar: 'https://images.unsplash.com/photo-1607619056574-7b8f304b3b8f?auto=format&fit=crop&q=80&w=150',
+    desc: 'Manage medicine listings, inventories, & customer prescriptions'
   }
 ];
 
@@ -96,6 +106,7 @@ export const Login = () => {
         else if (res.user.role === 'hospital') navigate('/hospital/dashboard');
         else if (res.user.role === 'admin') navigate('/admin/dashboard');
         else if (res.user.role === 'diagnostic_admin') navigate('/diagnostics-admin/dashboard');
+        else if (res.user.role === 'pharmacy_admin') navigate('/pharmacy-admin/dashboard');
       } else {
         navigate(from, { replace: true });
       }
@@ -143,6 +154,7 @@ export const Login = () => {
       else if (res.user.role === 'hospital') navigate('/hospital/dashboard');
       else if (res.user.role === 'admin') navigate('/admin/dashboard');
       else if (res.user.role === 'diagnostic_admin') navigate('/diagnostics-admin/dashboard');
+      else if (res.user.role === 'pharmacy_admin') navigate('/pharmacy-admin/dashboard');
     } else {
       toast.error(res.message);
     }

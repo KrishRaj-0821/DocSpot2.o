@@ -104,4 +104,49 @@ class DashboardStatsView(APIView):
                 }
             })
 
+        elif role == Role.PHARMACY_ADMIN:
+            try:
+                from medicines.models import Medicine
+                from datetime import date, timedelta
+                pharm = getattr(user, 'pharmacy_profile', None)
+                if pharm:
+                    pharm_orders = MedicineOrder.objects.filter(pharmacy=pharm)
+                    pending = pharm_orders.filter(status='Pending').count()
+                    completed = pharm_orders.filter(status='Delivered').count()
+                    cancelled = pharm_orders.filter(status='Cancelled').count()
+                    
+                    revenue_agg = pharm_orders.filter(status='Delivered').aggregate(total=Sum('total'))
+                    revenue = float(revenue_agg['total'] or 0)
+                    
+                    low_stock = Medicine.objects.filter(pharmacy=pharm, stock__lt=20).count()
+                    
+                    thirty_days_later = date.today() + timedelta(days=30)
+                    expiring = Medicine.objects.filter(pharmacy=pharm, expiry_date__lte=thirty_days_later).count()
+                    
+                    return Response({
+                        "role": "pharmacy_admin",
+                        "stats": {
+                            "pending_orders": pending,
+                            "completed_orders": completed,
+                            "cancelled_orders": cancelled,
+                            "total_revenue": revenue,
+                            "low_stock_medicines": low_stock,
+                            "expiring_medicines": expiring
+                        }
+                    })
+                else:
+                    return Response({
+                        "role": "pharmacy_admin",
+                        "stats": {
+                            "pending_orders": 0,
+                            "completed_orders": 0,
+                            "cancelled_orders": 0,
+                            "total_revenue": 0.0,
+                            "low_stock_medicines": 0,
+                            "expiring_medicines": 0
+                        }
+                    })
+            except Exception as e:
+                return Response({"detail": str(e)}, status=400)
+
         return Response({"detail": "Dashboard stats not available for this role"}, status=400)

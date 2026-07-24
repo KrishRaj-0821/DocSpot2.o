@@ -150,6 +150,70 @@ if (useMock) {
       }
       return mockResponse(404, { message: 'Booking not found' });
     }
+    if (url === '/pharmacies' && method === 'get') {
+      const mockProfile = {
+        id: 'phm-1',
+        name: 'Purnia Care Central Pharmacy',
+        owner_name: 'Sanjay Gupta',
+        drug_license_number: 'DL-98765-PUR',
+        gst_number: '20AAECP9876F1Z5',
+        address: 'Line Bazar Chowk, Purnia, Bihar - 854301',
+        city: 'Purnia',
+        phone: '+91 99999 55555',
+        email: 'pharmacy@purniacare.com',
+        store_timings: '8:00 AM - 10:00 PM',
+        home_delivery_available: true,
+        logo: 'https://images.unsplash.com/photo-1607619056574-7b8f304b3b8f?auto=format&fit=crop&q=80&w=150',
+        kyc_status: 'Approved',
+        delivery_charges: 30.00,
+        bank_name: 'State Bank of India',
+        bank_account_number: '30994883901',
+        bank_ifsc: 'SBIN0000214'
+      };
+      return mockResponse(200, [mockProfile]);
+    }
+    if (url.startsWith('/pharmacies') && method === 'patch') {
+      return mockResponse(200, data);
+    }
+    if (url.startsWith('/orders/') && method === 'patch') {
+      const parts = url.split('/');
+      const id = parts[parts.length - 1] || parts[parts.length - 2];
+      const order = mockOrders.find(o => o.id === id || String(o.id) === String(id));
+      if (order) {
+        Object.assign(order, data);
+        return mockResponse(200, order);
+      }
+      return mockResponse(404, { message: 'Order not found' });
+    }
+    if (url === '/medicines' && method === 'post') {
+      const newMed = {
+        id: Math.floor(1000 + Math.random() * 9000),
+        category_name: 'General',
+        ...data
+      };
+      mockMedicines.push(newMed);
+      return mockResponse(201, newMed);
+    }
+    if (url.startsWith('/medicines/') && method === 'patch') {
+      const parts = url.split('/');
+      const id = parts[parts.length - 1] || parts[parts.length - 2];
+      const med = mockMedicines.find(m => m.id === id || String(m.id) === String(id));
+      if (med) {
+        Object.assign(med, data);
+        return mockResponse(200, med);
+      }
+      return mockResponse(404, { message: 'Medicine not found' });
+    }
+    if (url.startsWith('/medicines/') && method === 'delete') {
+      const parts = url.split('/');
+      const id = parts[parts.length - 1] || parts[parts.length - 2];
+      const idx = mockMedicines.findIndex(m => m.id === id || String(m.id) === String(id));
+      if (idx !== -1) {
+        mockMedicines.splice(idx, 1);
+        return mockResponse(204, null);
+      }
+      return mockResponse(404, { message: 'Medicine not found' });
+    }
     if (url === '/login' && method === 'post') {
       const { email, password } = data || {};
       const userRole = Object.keys(mockUsers).find(

@@ -18,3 +18,20 @@ class MedicineViewSet(viewsets.ModelViewSet):
     filterset_fields = ['category', 'brand']
     search_fields = ['name', 'brand', 'description']
     ordering_fields = ['price', 'discount']
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated and user.role == 'pharmacy_admin':
+            pharm = getattr(user, 'pharmacy_profile', None)
+            if pharm:
+                return self.queryset.filter(pharmacy=pharm)
+            return self.queryset.none()
+        return self.queryset
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        if user.is_authenticated and user.role == 'pharmacy_admin':
+            pharm = getattr(user, 'pharmacy_profile', None)
+            serializer.save(pharmacy=pharm)
+        else:
+            serializer.save()

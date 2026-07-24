@@ -28,6 +28,7 @@ import DoctorDashboard from '../pages/dashboard/doctor/DoctorDashboard';
 import HospitalDashboard from '../pages/dashboard/hospital/HospitalDashboard';
 import AdminDashboard from '../pages/dashboard/admin/AdminDashboard';
 import DiagnosticAdminDashboard from '../pages/dashboard/diagnostics/DiagnosticAdminDashboard';
+import PharmacyAdminDashboard from '../pages/dashboard/pharmacy/PharmacyAdminDashboard';
 
 // Error status pages
 import NotFound from '../pages/errors/NotFound';
@@ -138,6 +139,28 @@ export const AppRoutes = () => {
         <Route path="results" element={<DiagnosticAdminDashboard />} />
         <Route path="inventory" element={<DiagnosticAdminDashboard />} />
         <Route path="settings" element={<DiagnosticAdminDashboard />} />
+      </Route>
+
+      {/* 7. PROTECTED PHARMACY ADMIN ROUTING */}
+      <Route
+        path="/pharmacy-admin"
+        element={
+          <ProtectedRoute allowedRoles={['pharmacy_admin']}>
+            <DashboardLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<PharmacyAdminDashboard />} />
+        <Route path="profile" element={<PharmacyAdminDashboard />} />
+        <Route path="medicines" element={<PharmacyAdminDashboard />} />
+        <Route path="inventory" element={<PharmacyAdminDashboard />} />
+        <Route path="orders" element={<PharmacyAdminDashboard />} />
+        <Route path="prescriptions" element={<PharmacyAdminDashboard />} />
+        <Route path="deliveries" element={<PharmacyAdminDashboard />} />
+        <Route path="billing" element={<PharmacyAdminDashboard />} />
+        <Route path="customers" element={<PharmacyAdminDashboard />} />
+        <Route path="reports" element={<PharmacyAdminDashboard />} />
+        <Route path="settings" element={<PharmacyAdminDashboard />} />
       </Route>
 
       {/* 6. ERROR ROUTING FALLBACKS */}

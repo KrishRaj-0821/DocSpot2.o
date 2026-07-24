@@ -12,6 +12,8 @@ class MedicineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medicine
         fields = [
-            'id', 'name', 'category', 'category_name', 'brand', 'price', 
-            'discount', 'stock', 'dosage_instructions', 'description', 'image'
+            'id', 'name', 'category', 'category_name', 'pharmacy', 'brand', 
+            'generic_name', 'manufacturer', 'batch_number', 'expiry_date', 
+            'purchase_price', 'mrp', 'price', 'discount', 'stock', 
+            'dosage_instructions', 'description', 'image', 'prescription_required'
         ]

@@ -63,6 +63,20 @@ export const Sidebar = ({ isMobileOpen, toggleSidebar }) => {
           { path: '/diagnostics-admin/inventory', label: 'Inventory', icon: FiPackage },
           { path: '/diagnostics-admin/settings', label: 'Settings', icon: FiSettings },
         ];
+      case 'pharmacy_admin':
+        return [
+          { path: '/pharmacy-admin/dashboard', label: 'Dashboard', icon: FiGrid },
+          { path: '/pharmacy-admin/profile', label: 'Shop Profile', icon: FiHome },
+          { path: '/pharmacy-admin/medicines', label: 'Medicines', icon: FiActivity },
+          { path: '/pharmacy-admin/inventory', label: 'Inventory', icon: FiPackage },
+          { path: '/pharmacy-admin/orders', label: 'Orders', icon: FiLayers },
+          { path: '/pharmacy-admin/prescriptions', label: 'Prescriptions', icon: FiFileText },
+          { path: '/pharmacy-admin/deliveries', label: 'Deliveries', icon: FiClock },
+          { path: '/pharmacy-admin/billing', label: 'Billing & Payments', icon: FiDollarSign },
+          { path: '/pharmacy-admin/customers', label: 'Customers', icon: FiUsers },
+          { path: '/pharmacy-admin/reports', label: 'Reports', icon: FiFileText },
+          { path: '/pharmacy-admin/settings', label: 'Settings', icon: FiSettings },
+        ];
       default:
         return [];
     }

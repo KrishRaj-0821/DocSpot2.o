@@ -24,3 +24,8 @@ class IsDiagnosticAdmin(BasePermission):
 class IsAmbulanceDriver(BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.is_authenticated and request.user.role == Role.AMBULANCE_DRIVER
+
+class IsPharmacyAdmin(BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated and request.user.role == Role.PHARMACY_ADMIN
+

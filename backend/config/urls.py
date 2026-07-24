@@ -11,7 +11,7 @@ from doctors.views import DoctorProfileViewSet, ReviewViewSet
 from patients.views import PatientProfileViewSet, MedicalRecordViewSet
 from appointments.views import AppointmentViewSet, PrescriptionViewSet
 from medicines.views import MedicineCategoryViewSet, MedicineViewSet
-from pharmacy.views import MedicineOrderViewSet
+from pharmacy.views import MedicineOrderViewSet, PharmacyProfileViewSet
 from diagnostics.views import DiagnosticCenterViewSet, DiagnosticTestViewSet, TestBookingViewSet
 from ambulance.views import AmbulanceViewSet, AmbulanceBookingViewSet
 from payments.views import PaymentTransactionViewSet
@@ -32,6 +32,7 @@ router.register('prescriptions', PrescriptionViewSet, basename='prescription')
 router.register('medicine-categories', MedicineCategoryViewSet, basename='medicine-category')
 router.register('medicines', MedicineViewSet, basename='medicine')
 router.register('orders', MedicineOrderViewSet, basename='order')
+router.register('pharmacies', PharmacyProfileViewSet, basename='pharmacy')
 router.register('diagnostic-centers', DiagnosticCenterViewSet, basename='diagnostic-center')
 router.register('diagnostic-tests', DiagnosticTestViewSet, basename='diagnostic-test')
 router.register('diagnostic-bookings', TestBookingViewSet, basename='diagnostic-booking')

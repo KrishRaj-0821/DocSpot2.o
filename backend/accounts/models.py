@@ -9,8 +9,10 @@ class Role(models.TextChoices):
     DOCTOR = 'doctor', 'Doctor'
     PATIENT = 'patient', 'Patient'
     DIAGNOSTIC_ADMIN = 'diagnostic_admin', 'Diagnostic Admin'
+    PHARMACY_ADMIN = 'pharmacy_admin', 'Pharmacy Admin'
     DELIVERY_PARTNER = 'delivery_partner', 'Delivery Partner'
     AMBULANCE_DRIVER = 'ambulance_driver', 'Ambulance Driver'
+
 
 class User(AbstractUser):
     role = models.CharField(
