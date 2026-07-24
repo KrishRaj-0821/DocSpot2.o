@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { 
   FiGrid, FiCalendar, FiFileText, FiPackage, FiUser, 
   FiSettings, FiUsers, FiClock, FiLayers, FiCheckSquare, 
-  FiHome, FiLogOut, FiActivity, FiArrowLeft 
+  FiHome, FiLogOut, FiActivity, FiArrowLeft, FiDollarSign 
 } from 'react-icons/fi';
 
 export const Sidebar = ({ isMobileOpen, toggleSidebar }) => {
