@@ -52,6 +52,17 @@ export const Sidebar = ({ isMobileOpen, toggleSidebar }) => {
           { path: '/admin/diagnostics', label: 'Lab Bookings', icon: FiFileText },
           { path: '/admin/settings', label: 'Global Settings', icon: FiSettings },
         ];
+      case 'diagnostic_admin':
+        return [
+          { path: '/diagnostics-admin/dashboard', label: 'Dashboard', icon: FiGrid },
+          { path: '/diagnostics-admin/patients', label: 'Patients', icon: FiUser },
+          { path: '/diagnostics-admin/orders', label: 'Test Orders', icon: FiFileText },
+          { path: '/diagnostics-admin/samples', label: 'Sample Collection', icon: FiActivity },
+          { path: '/diagnostics-admin/tests', label: 'Laboratory Tests', icon: FiLayers },
+          { path: '/diagnostics-admin/results', label: 'Result Entry', icon: FiCheckSquare },
+          { path: '/diagnostics-admin/inventory', label: 'Inventory', icon: FiPackage },
+          { path: '/diagnostics-admin/settings', label: 'Settings', icon: FiSettings },
+        ];
       default:
         return [];
     }

@@ -503,6 +503,13 @@ export const mockUsers = {
     role: "admin",
     name: "Global Administrator",
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150",
+  },
+  diagnostic_admin: {
+    email: "labs@purniacare.com",
+    password: "password123",
+    role: "diagnostic_admin",
+    name: "Lal Path Lab Technician",
+    avatar: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=150",
   }
 };
 

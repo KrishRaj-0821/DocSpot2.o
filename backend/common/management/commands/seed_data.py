@@ -39,7 +39,7 @@ class Command(BaseCommand):
         # Clear specific users first
         User.objects.filter(email__in=[
             "patient@purniacare.com", "doctor@purniacare.com", 
-            "hospital@purniacare.com", "admin@purniacare.com"
+            "hospital@purniacare.com", "admin@purniacare.com", "labs@purniacare.com"
         ]).delete()
 
         admin_user = User.objects.create_user(
@@ -86,6 +86,17 @@ class Command(BaseCommand):
             phone="+91 98765 43210",
             blood_group="O+ve",
             dob=date(1994, 8, 15)
+        )
+
+        lab_user = User.objects.create_user(
+            username="pc_lab_tech",
+            email="labs@purniacare.com",
+            password="password123",
+            first_name="Lal Path",
+            last_name="Technician",
+            role=Role.DIAGNOSTIC_ADMIN,
+            city="Purnia",
+            phone="+91 99887 76655"
         )
 
         # 2. Seeding Hospitals

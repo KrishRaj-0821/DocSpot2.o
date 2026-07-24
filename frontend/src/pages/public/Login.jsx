@@ -50,6 +50,15 @@ const demoUsers = [
     badgeColor: 'bg-rose-50 text-rose-700 border-rose-200/50 dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-900/50',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150',
     desc: 'Platform administration, security logs & users management'
+  },
+  {
+    role: 'diagnostic_admin',
+    name: 'Lal Path Lab Technician',
+    email: 'labs@purniacare.com',
+    icon: FiActivity,
+    badgeColor: 'bg-violet-50 text-violet-700 border-violet-200/50 dark:bg-violet-950/30 dark:text-violet-400 dark:border-violet-900/50',
+    avatar: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=150',
+    desc: 'Manage diagnostic requests, result entries & pathologist reports'
   }
 ];
 
@@ -86,6 +95,7 @@ export const Login = () => {
         else if (res.user.role === 'doctor') navigate('/doctor/dashboard');
         else if (res.user.role === 'hospital') navigate('/hospital/dashboard');
         else if (res.user.role === 'admin') navigate('/admin/dashboard');
+        else if (res.user.role === 'diagnostic_admin') navigate('/diagnostics-admin/dashboard');
       } else {
         navigate(from, { replace: true });
       }
@@ -132,6 +142,7 @@ export const Login = () => {
       else if (res.user.role === 'doctor') navigate('/doctor/dashboard');
       else if (res.user.role === 'hospital') navigate('/hospital/dashboard');
       else if (res.user.role === 'admin') navigate('/admin/dashboard');
+      else if (res.user.role === 'diagnostic_admin') navigate('/diagnostics-admin/dashboard');
     } else {
       toast.error(res.message);
     }
