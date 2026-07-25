@@ -12,6 +12,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { SEO } from '../../../components/SEO';
+import { generateInvoicePDF } from '../../../utils/generateInvoicePDF';
+import { generateReportPDF } from '../../../utils/generateReportPDF';
 
 export const PharmacyAdminDashboard = () => {
   const { user } = useAuth();
@@ -961,9 +963,12 @@ export const PharmacyAdminDashboard = () => {
                 <div className="flex items-center space-x-4">
                   <span className="text-xs font-black text-slate-800 dark:text-white">₹{parseFloat(o.total).toFixed(2)}</span>
                   <button 
-                    onClick={() => toast.success("Invoice generated & downloaded!")}
+                    onClick={() => {
+                      generateInvoicePDF(o, pharmacy);
+                      toast.success(`Invoice INV-PHM-${o.id} downloaded!`);
+                    }}
                     className="p-1.5 text-slate-450 hover:text-emerald-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer"
-                    title="Download Receipt"
+                    title="Download PDF Invoice"
                   >
                     <FiDownload className="w-4.5 h-4.5" />
                   </button>
@@ -1002,9 +1007,21 @@ export const PharmacyAdminDashboard = () => {
 
       {activeTab === 'reports' && (
         <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-850 shadow-sm space-y-6">
-          <div className="border-b border-slate-100 dark:border-slate-850 pb-4">
-            <h3 className="text-sm font-bold text-slate-850 dark:text-white">Analytics Reports</h3>
-            <p className="text-xs text-slate-400 mt-1">Gross sales, margins, and taxes overview</p>
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-850 pb-4">
+            <div>
+              <h3 className="text-sm font-bold text-slate-850 dark:text-white">Analytics Reports</h3>
+              <p className="text-xs text-slate-400 mt-1">Gross sales, margins, and taxes overview</p>
+            </div>
+            <button
+              onClick={() => {
+                generateReportPDF(orders, medicines, pharmacy);
+                toast.success('Monthly analytics report PDF downloaded!');
+              }}
+              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl cursor-pointer shadow-md transition-all active:scale-95"
+            >
+              <FiDownload className="w-4 h-4" />
+              Download PDF Report
+            </button>
           </div>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="p-4 rounded-xl border border-slate-150 bg-slate-50 dark:bg-slate-900 dark:border-slate-850/40">
@@ -1013,11 +1030,64 @@ export const PharmacyAdminDashboard = () => {
             </div>
             <div className="p-4 rounded-xl border border-slate-150 bg-slate-50 dark:bg-slate-900 dark:border-slate-850/40">
               <span className="text-[10px] font-bold text-slate-400 block uppercase">Estimated Net Profit</span>
-              <span className="text-lg font-black text-emerald-650 mt-1 block font-bold">₹{(totalRevenue * 0.25).toFixed(2)} (25%)</span>
+              <span className="text-lg font-black text-emerald-600 mt-1 block">₹{(totalRevenue * 0.25).toFixed(2)} (25%)</span>
             </div>
             <div className="p-4 rounded-xl border border-slate-150 bg-slate-50 dark:bg-slate-900 dark:border-slate-850/40">
               <span className="text-[10px] font-bold text-slate-400 block uppercase">CGST / SGST Tax collected</span>
-              <span className="text-lg font-black text-slate-800 dark:text-white mt-1 block font-bold">₹{(totalRevenue * 0.05).toFixed(2)} (5%)</span>
+              <span className="text-lg font-black text-slate-800 dark:text-white mt-1 block">₹{(totalRevenue * 0.05).toFixed(2)} (5%)</span>
+            </div>
+          </div>
+
+          {/* Orders breakdown table */}
+          <div className="mt-2">
+            <h4 className="text-xs font-bold text-slate-500 uppercase mb-3">Orders Breakdown</h4>
+            <div className="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-800">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-slate-50 dark:bg-slate-900 text-[10px] font-bold uppercase text-slate-400 tracking-wider">
+                    <th className="px-4 py-3 text-left">Order ID</th>
+                    <th className="px-4 py-3 text-left">Customer</th>
+                    <th className="px-4 py-3 text-left">Date</th>
+                    <th className="px-4 py-3 text-center">Status</th>
+                    <th className="px-4 py-3 text-right">Total</th>
+                    <th className="px-4 py-3 text-right">Invoice</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/40">
+                  {orders.map(o => (
+                    <tr key={o.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
+                      <td className="px-4 py-3 font-mono font-bold text-slate-700 dark:text-slate-300">#{o.id}</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">@{o.user_name}</td>
+                      <td className="px-4 py-3 text-slate-500">{o.date}</td>
+                      <td className="px-4 py-3 text-center">
+                        <span className={`text-[9px] uppercase font-extrabold px-2 py-0.5 rounded-full ${
+                          o.status === 'Delivered' ? 'bg-emerald-50 text-emerald-700' :
+                          o.status === 'Pending' ? 'bg-amber-50 text-amber-700' :
+                          o.status === 'Cancelled' ? 'bg-red-50 text-red-700' : 'bg-sky-50 text-sky-700'
+                        }`}>{o.status}</span>
+                      </td>
+                      <td className="px-4 py-3 text-right font-bold text-slate-800 dark:text-white">₹{parseFloat(o.total).toFixed(2)}</td>
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          onClick={() => {
+                            generateInvoicePDF(o, pharmacy);
+                            toast.success(`Invoice INV-PHM-${o.id} downloaded!`);
+                          }}
+                          className="p-1.5 text-slate-400 hover:text-emerald-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer inline-flex items-center gap-1 text-[10px] font-bold"
+                          title="Download PDF Invoice"
+                        >
+                          <FiDownload className="w-3.5 h-3.5" /> PDF
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {orders.length === 0 && (
+                    <tr>
+                      <td colSpan="6" className="text-center py-8 text-slate-400">No orders yet.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

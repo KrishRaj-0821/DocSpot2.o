@@ -31,10 +31,51 @@ class Appointment(BasePurniaModel):
     def __str__(self):
         return f"{self.patient.username} - {self.doctor.user.username} ({self.date})"
 
+
 class Prescription(BasePurniaModel):
     appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name='prescription')
-    notes = models.TextField()
-    medicines = models.JSONField(default=list)  # format: [{"name": "...", "dosage": "..."}]
+
+    # Core clinical fields
+    diagnosis = models.TextField(default='')
+    notes = models.TextField(blank=True)
+    advice = models.TextField(blank=True)
+    follow_up_date = models.DateField(null=True, blank=True)
+
+    # Structured JSON fields
+    # medicines format: [{"name": "...", "dosage": "...", "frequency": "...", "duration": "..."}]
+    medicines = models.JSONField(default=list)
+    # tests format: ["CBC", "Dengue NS1", ...]
+    tests = models.JSONField(default=list)
 
     class Meta:
         db_table = 'purnia_prescriptions'
+
+    def __str__(self):
+        return f"Rx for {self.appointment} — {self.diagnosis[:40]}"
+
+
+class Medicine(BasePurniaModel):
+    """
+    Optional normalized medicine rows (alternative to JSONField).
+    Used for advanced pharmacy integration and medicine ordering.
+    """
+    prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE, related_name='medicine_items')
+    medicine_name = models.CharField(max_length=200)
+    dosage = models.CharField(max_length=100)
+    frequency = models.CharField(max_length=100, default='Once daily')
+    duration = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        db_table = 'purnia_prescription_medicines'
+
+
+class TestRecommendation(BasePurniaModel):
+    """
+    Optional normalized test rows (alternative to JSONField).
+    Used for diagnostic booking integration.
+    """
+    prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE, related_name='test_items')
+    test_name = models.CharField(max_length=200)
+
+    class Meta:
+        db_table = 'purnia_prescription_tests'

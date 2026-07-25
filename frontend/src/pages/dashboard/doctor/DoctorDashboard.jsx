@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
-import { 
-  FiUsers, FiDollarSign, FiCalendar, FiClock, 
-  FiPlusCircle, FiCheck, FiInfo, FiUser, FiHeart 
+import { generatePrescriptionPDF } from '../../../utils/pdfUtils';
+import {
+  FiUsers, FiDollarSign, FiCalendar, FiClock,
+  FiPlusCircle, FiCheck, FiInfo, FiUser, FiHeart,
+  FiFileText, FiDownload, FiPrinter, FiX, FiActivity,
+  FiTrash2
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+
+const FREQUENCY_OPTIONS = ['Morning', 'Afternoon', 'Night', 'Morning & Night', 'Morning, Afternoon, Night', 'Twice daily', 'SOS', 'Once daily', 'As directed'];
 
 export const DoctorDashboard = () => {
   const { user, updateProfile } = useAuth();
@@ -22,9 +27,14 @@ export const DoctorDashboard = () => {
   const [docQual, setDocQual] = useState(user?.qualification || 'MD, DM - AIIMS');
   const [docExp, setDocExp] = useState(user?.experience || 15);
 
-  // Prescription Form state
+  // Enhanced Prescription Form state
   const [activePrescribeApt, setActivePrescribeApt] = useState(null);
-  const [medsList, setMedsList] = useState([{ name: '', dosage: '' }]);
+  const [diagnosis, setDiagnosis] = useState('');
+  const [medsList, setMedsList] = useState([{ name: '', dosage: '', frequency: 'Morning', duration: '' }]);
+  const [testsList, setTestsList] = useState([]);
+  const [testInput, setTestInput] = useState('');
+  const [advice, setAdvice] = useState('');
+  const [followUpDate, setFollowUpDate] = useState('');
   const [clinicalNotes, setClinicalNotes] = useState('');
   const [submitLoading, setSubmitLoading] = useState(false);
 
@@ -48,7 +58,7 @@ export const DoctorDashboard = () => {
   }, [user]);
 
   const handleAddMedRow = () => {
-    setMedsList([...medsList, { name: '', dosage: '' }]);
+    setMedsList([...medsList, { name: '', dosage: '', frequency: 'Morning', duration: '' }]);
   };
 
   const handleMedChange = (idx, field, val) => {
@@ -61,35 +71,84 @@ export const DoctorDashboard = () => {
     setMedsList(prev => prev.filter((_, i) => i !== idx));
   };
 
+  const handleAddTest = () => {
+    if (!testInput.trim()) return;
+    setTestsList(prev => [...prev, testInput.trim()]);
+    setTestInput('');
+  };
+
+  const handleRemoveTest = (idx) => {
+    setTestsList(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  const resetPrescriptionForm = () => {
+    setDiagnosis('');
+    setMedsList([{ name: '', dosage: '', frequency: 'Morning', duration: '' }]);
+    setTestsList([]);
+    setTestInput('');
+    setAdvice('');
+    setFollowUpDate('');
+    setClinicalNotes('');
+  };
+
+  const buildPrescriptionData = (apt) => ({
+    prescriptionId: `PC-${apt.id?.replace('apt-', '').padStart(6, '0')}`,
+    date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }),
+    doctorName: user?.name || apt.doctorName,
+    specialization: user?.specialization || apt.specialization,
+    qualification: user?.qualification || docQual,
+    hospitalName: user?.hospitalName || 'Purnia Care Central Hospital',
+    patientName: apt.patientName,
+    patientAge: apt.patientAge,
+    patientGender: apt.patientGender,
+    diagnosis,
+    medicines: medsList,
+    tests: testsList,
+    advice,
+    followUpDate,
+  });
+
   const handlePrescriptionSubmit = (e) => {
     e.preventDefault();
+    if (!diagnosis.trim()) { toast.error("Please enter a diagnosis."); return; }
     if (medsList.some(m => !m.name || !m.dosage)) {
-      toast.error("Please fill in medicine name and dosage instructions.");
+      toast.error("Please fill in medicine name and dosage for all rows.");
       return;
     }
 
     setSubmitLoading(true);
     setTimeout(() => {
-      setAppointments(prev => prev.map(a => 
-        a.id === activePrescribeApt.id 
-          ? { 
-              ...a, 
-              status: 'Completed', 
-              prescription: { 
-                date: new Date().toISOString().split('T')[0], 
-                notes: clinicalNotes, 
-                medicines: medsList 
-              } 
-            } 
+      const prescriptionData = {
+        id: `rx-${Date.now()}`,
+        date: new Date().toISOString().split('T')[0],
+        diagnosis,
+        medicines: medsList,
+        tests: testsList,
+        advice,
+        followUpDate,
+        notes: clinicalNotes,
+      };
+
+      setAppointments(prev => prev.map(a =>
+        a.id === activePrescribeApt.id
+          ? { ...a, status: 'Completed', prescription: prescriptionData }
           : a
       ));
-      toast.success(`Prescription issued successfully to ${activePrescribeApt.patientName}!`);
-      
+      toast.success(`Prescription issued to ${activePrescribeApt.patientName}!`);
       setActivePrescribeApt(null);
-      setMedsList([{ name: '', dosage: '' }]);
-      setClinicalNotes('');
+      resetPrescriptionForm();
       setSubmitLoading(false);
-    }, 1000);
+    }, 800);
+  };
+
+  const handleGeneratePDF = (apt) => {
+    const rxData = apt.prescription
+      ? { ...buildPrescriptionData(apt), ...apt.prescription, patientName: apt.patientName, patientAge: apt.patientAge, patientGender: apt.patientGender, doctorName: user?.name || apt.doctorName, qualification: docQual }
+      : buildPrescriptionData(apt);
+
+    if (!rxData.diagnosis) { toast.error('No prescription data to generate PDF.'); return; }
+    generatePrescriptionPDF(rxData);
+    toast.success('Prescription PDF downloaded!');
   };
 
   const handleProfileSave = (e) => {
@@ -105,7 +164,6 @@ export const DoctorDashboard = () => {
     );
   }
 
-  // Calculate metrics
   const completed = appointments.filter(a => a.status === 'Completed');
   const upcoming = appointments.filter(a => a.status === 'Upcoming');
   const revenue = completed.reduce((sum, a) => sum + a.fees, 0);
@@ -114,7 +172,7 @@ export const DoctorDashboard = () => {
   if (path === '/doctor/dashboard' || path === '/doctor/appointments' || path === '/doctor') {
     return (
       <div className="space-y-6">
-        
+
         {/* Availability banner */}
         <div className="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-slate-100 dark:bg-slate-800 dark:border-slate-800 gap-4">
           <div>
@@ -188,7 +246,7 @@ export const DoctorDashboard = () => {
                 <tr className="border-b border-slate-100 dark:border-slate-750 text-slate-400 font-bold uppercase tracking-wider">
                   <th className="py-3">Patient Name</th>
                   <th className="py-3">Date/Time</th>
-                  <th className="py-3">Details / symptoms</th>
+                  <th className="py-3">Details / Symptoms</th>
                   <th className="py-3">Status</th>
                   <th className="py-3 text-right">Actions</th>
                 </tr>
@@ -201,8 +259,8 @@ export const DoctorDashboard = () => {
                     <td className="py-4 max-w-[200px] truncate">{apt.reason}</td>
                     <td className="py-4">
                       <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold ${
-                        apt.status === 'Completed' 
-                          ? 'bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400' 
+                        apt.status === 'Completed'
+                          ? 'bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400'
                           : 'bg-accent-50 text-accent-650 dark:bg-accent-950/30'
                       }`}>
                         {apt.status}
@@ -212,15 +270,25 @@ export const DoctorDashboard = () => {
                       <button
                         onClick={() => setSelectedPatientApt(apt)}
                         className="text-slate-400 hover:text-slate-805 p-1 dark:hover:text-white"
+                        title="View Details"
                       >
                         <FiInfo className="h-4.5 w-4.5" />
                       </button>
+                      {apt.prescription && (
+                        <button
+                          onClick={() => handleGeneratePDF(apt)}
+                          className="rounded bg-teal-600 px-2.5 py-1.5 text-[10px] font-bold text-white hover:bg-teal-700 cursor-pointer"
+                          title="Download PDF"
+                        >
+                          <FiDownload className="h-3 w-3 inline mr-1" />PDF
+                        </button>
+                      )}
                       {apt.status === 'Upcoming' && (
                         <button
                           onClick={() => setActivePrescribeApt(apt)}
                           className="rounded bg-primary-600 px-3 py-1.5 text-[10px] font-bold text-white hover:bg-primary-750 cursor-pointer"
                         >
-                          Prescribe
+                          <FiFileText className="h-3 w-3 inline mr-1" />Prescribe
                         </button>
                       )}
                     </td>
@@ -231,60 +299,189 @@ export const DoctorDashboard = () => {
           </div>
         </div>
 
-        {/* Prescription Modal */}
+        {/* ── Enhanced Prescription Modal ──────────────────────── */}
         {activePrescribeApt && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setActivePrescribeApt(null)} />
-            <div className="w-full max-w-lg bg-white rounded-3xl z-10 shadow-2xl overflow-hidden dark:bg-slate-900 border border-slate-150 dark:border-slate-800">
-              <div className="border-b border-slate-100 px-6 py-4 dark:border-slate-800 flex justify-between items-center">
+            <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm" onClick={() => { setActivePrescribeApt(null); resetPrescriptionForm(); }} />
+            <div className="w-full max-w-2xl bg-white rounded-3xl z-10 shadow-2xl overflow-hidden dark:bg-slate-900 border border-slate-150 dark:border-slate-800 max-h-[92vh] flex flex-col">
+
+              {/* Modal Header */}
+              <div className="border-b border-slate-100 px-6 py-4 dark:border-slate-800 flex justify-between items-center bg-gradient-to-r from-primary-600 to-teal-500 shrink-0">
                 <div>
-                  <h3 className="text-base font-bold text-slate-850 dark:text-white">Write Prescription</h3>
-                  <p className="text-[10px] text-slate-400">Patient: {activePrescribeApt.patientName}</p>
+                  <h3 className="text-base font-extrabold text-white flex items-center gap-2">
+                    <FiFileText className="h-4 w-4" /> Write Prescription
+                  </h3>
+                  <p className="text-[10px] text-primary-100">Patient: {activePrescribeApt.patientName} · {activePrescribeApt.date} at {activePrescribeApt.time}</p>
                 </div>
-                <button onClick={() => setActivePrescribeApt(null)} className="text-slate-400 hover:text-slate-800 text-xl font-bold dark:hover:text-white">&times;</button>
+                <button onClick={() => { setActivePrescribeApt(null); resetPrescriptionForm(); }} className="text-white/70 hover:text-white text-xl font-bold">&times;</button>
               </div>
 
-              <form onSubmit={handlePrescriptionSubmit} className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-                <div className="flex justify-between items-center">
-                  <label className="block text-xs font-bold text-slate-500">Medicines list</label>
-                  <button type="button" onClick={handleAddMedRow} className="text-[10px] font-bold text-primary-600 dark:text-primary-400 hover:underline flex items-center space-x-0.5">
-                    <FiPlusCircle /> <span>Add Row</span>
-                  </button>
+              <form onSubmit={handlePrescriptionSubmit} className="p-6 space-y-5 overflow-y-auto flex-1">
+
+                {/* Patient Info */}
+                <div className="grid grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-950 p-3 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400">
+                  <div><span className="text-slate-400 block text-[10px]">Patient</span>{activePrescribeApt.patientName}</div>
+                  <div><span className="text-slate-400 block text-[10px]">Age / Gender</span>{activePrescribeApt.patientAge || '—'} / {activePrescribeApt.patientGender || '—'}</div>
+                  <div><span className="text-slate-400 block text-[10px]">Symptoms</span><span className="truncate block">{activePrescribeApt.reason}</span></div>
                 </div>
 
-                <div className="space-y-2">
-                  {medsList.map((med, idx) => (
-                    <div key={idx} className="flex gap-2 items-center">
-                      <input
-                        type="text" required placeholder="Medicine Name" value={med.name}
-                        onChange={(e) => handleMedChange(idx, 'name', e.target.value)}
-                        className="flex-1 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs dark:border-slate-705 dark:bg-slate-950"
-                      />
-                      <input
-                        type="text" required placeholder="Dosage (e.g. 1-0-1)" value={med.dosage}
-                        onChange={(e) => handleMedChange(idx, 'dosage', e.target.value)}
-                        className="w-1/3 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs dark:border-slate-705 dark:bg-slate-950"
-                      />
-                      {medsList.length > 1 && (
-                        <button type="button" onClick={() => handleRemoveMedRow(idx)} className="text-red-500 text-sm font-bold">&times;</button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
+                {/* Diagnosis */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 mb-1">Clinical Remarks & Directions</label>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                    Diagnosis <span className="text-red-500">*</span>
+                  </label>
                   <textarea
-                    required placeholder="Directions, precautions, diagnostics..." rows="3"
-                    value={clinicalNotes} onChange={(e) => setClinicalNotes(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs dark:border-slate-705 dark:bg-slate-950 resize-none"
+                    required
+                    rows={2}
+                    placeholder="e.g. Viral Fever with URTI, Hypertension Stage 1..."
+                    value={diagnosis}
+                    onChange={e => setDiagnosis(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-950 dark:text-white resize-none focus:border-primary-500 focus:outline-none"
                   />
                 </div>
 
-                <div className="flex space-x-2">
-                  <button type="button" onClick={() => setActivePrescribeApt(null)} className="w-1/3 border border-slate-200 rounded-xl py-3 text-xs font-bold hover:bg-slate-50 dark:border-slate-700">Cancel</button>
-                  <button type="submit" disabled={submitLoading} className="flex-1 bg-primary-600 rounded-xl py-3 text-xs font-bold text-white hover:bg-primary-750">
-                    {submitLoading ? 'Issuing Rx...' : 'Issue Prescription'}
+                {/* Medicines */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-xs font-bold text-slate-600 dark:text-slate-400">
+                      Medicines <span className="text-red-500">*</span>
+                    </label>
+                    <button type="button" onClick={handleAddMedRow} className="text-[10px] font-bold text-primary-600 dark:text-primary-400 hover:underline flex items-center space-x-0.5">
+                      <FiPlusCircle className="mr-0.5" /> Add Medicine
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    {medsList.map((med, idx) => (
+                      <div key={idx} className="grid grid-cols-12 gap-1.5 items-center">
+                        <input
+                          type="text" required placeholder="Medicine Name (e.g. Paracetamol 650mg)" value={med.name}
+                          onChange={e => handleMedChange(idx, 'name', e.target.value)}
+                          className="col-span-4 rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs dark:border-slate-700 dark:bg-slate-950 dark:text-white focus:border-primary-500 focus:outline-none"
+                        />
+                        <input
+                          type="text" required placeholder="Dosage (e.g. 1 tab after food)" value={med.dosage}
+                          onChange={e => handleMedChange(idx, 'dosage', e.target.value)}
+                          className="col-span-3 rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs dark:border-slate-700 dark:bg-slate-950 dark:text-white focus:border-primary-500 focus:outline-none"
+                        />
+                        <select
+                          value={med.frequency}
+                          onChange={e => handleMedChange(idx, 'frequency', e.target.value)}
+                          className="col-span-3 rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs dark:border-slate-700 dark:bg-slate-950 dark:text-white focus:border-primary-500 focus:outline-none"
+                        >
+                          {FREQUENCY_OPTIONS.map(f => <option key={f}>{f}</option>)}
+                        </select>
+                        <input
+                          type="text" placeholder="Duration" value={med.duration}
+                          onChange={e => handleMedChange(idx, 'duration', e.target.value)}
+                          className="col-span-1 rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs dark:border-slate-700 dark:bg-slate-950 dark:text-white focus:border-primary-500 focus:outline-none"
+                        />
+                        {medsList.length > 1 && (
+                          <button type="button" onClick={() => handleRemoveMedRow(idx)} className="col-span-1 text-red-400 hover:text-red-600 flex justify-center">
+                            <FiTrash2 className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[9px] text-slate-400 mt-1.5">Fields: Name · Dosage · Frequency · Duration</p>
+                </div>
+
+                {/* Tests */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">Tests Recommended</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="e.g. CBC, Dengue NS1, Lipid Profile..."
+                      value={testInput}
+                      onChange={e => setTestInput(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddTest(); } }}
+                      className="flex-1 rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs dark:border-slate-700 dark:bg-slate-950 dark:text-white focus:border-primary-500 focus:outline-none"
+                    />
+                    <button type="button" onClick={handleAddTest} className="rounded-xl bg-slate-100 dark:bg-slate-800 px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200">
+                      Add
+                    </button>
+                  </div>
+                  {testsList.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {testsList.map((test, i) => (
+                        <span key={i} className="flex items-center gap-1 rounded-full bg-teal-50 dark:bg-teal-950/40 px-2.5 py-1 text-[10px] font-bold text-teal-700 dark:text-teal-400">
+                          {test}
+                          <button type="button" onClick={() => handleRemoveTest(i)} className="hover:text-red-500">
+                            <FiX className="h-2.5 w-2.5" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Advice */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">Advice / Clinical Remarks</label>
+                  <textarea
+                    placeholder="Dietary advice, precautions, lifestyle modifications..."
+                    rows={2}
+                    value={advice}
+                    onChange={e => setAdvice(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-950 dark:text-white resize-none focus:border-primary-500 focus:outline-none"
+                  />
+                </div>
+
+                {/* Follow-up + Notes */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                      <FiCalendar className="inline mr-1 text-primary-500" />Follow-up Date
+                    </label>
+                    <input
+                      type="date"
+                      value={followUpDate}
+                      min={new Date().toISOString().split('T')[0]}
+                      onChange={e => setFollowUpDate(e.target.value)}
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-950 dark:text-white focus:border-primary-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">Internal Notes (Optional)</label>
+                    <input
+                      type="text"
+                      placeholder="Notes for records..."
+                      value={clinicalNotes}
+                      onChange={e => setClinicalNotes(e.target.value)}
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-950 dark:text-white focus:border-primary-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex space-x-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => { setActivePrescribeApt(null); resetPrescriptionForm(); }}
+                    className="w-1/4 border border-slate-200 rounded-xl py-3 text-xs font-bold hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!diagnosis || medsList.some(m => !m.name)}
+                    onClick={() => {
+                      const rxData = buildPrescriptionData(activePrescribeApt);
+                      generatePrescriptionPDF(rxData);
+                      toast.success('Prescription PDF preview generated!');
+                    }}
+                    className="w-1/3 border border-teal-300 rounded-xl py-3 text-xs font-bold text-teal-700 hover:bg-teal-50 dark:border-teal-700 dark:text-teal-400 dark:hover:bg-teal-950/30 flex items-center justify-center gap-1.5 disabled:opacity-40"
+                  >
+                    <FiPrinter className="h-3.5 w-3.5" /> Preview PDF
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitLoading}
+                    className="flex-1 bg-gradient-to-r from-primary-600 to-teal-500 rounded-xl py-3 text-xs font-extrabold text-white hover:shadow-lg flex items-center justify-center gap-1.5"
+                  >
+                    {submitLoading ? 'Issuing...' : <><FiCheck className="h-3.5 w-3.5" /> Issue Prescription</>}
                   </button>
                 </div>
               </form>
@@ -297,28 +494,44 @@ export const DoctorDashboard = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setSelectedPatientApt(null)} />
             <div className="w-full max-w-md bg-white rounded-3xl z-10 shadow-2xl p-6 dark:bg-slate-900 border border-slate-150">
-              <h3 className="text-base font-bold text-slate-850 dark:text-white border-b pb-3 mb-3">Clinical Case Details</h3>
-              <div className="space-y-3 text-xs font-semibold text-slate-650">
+              <div className="flex justify-between items-center border-b pb-3 mb-4 dark:border-slate-800">
+                <h3 className="text-base font-bold text-slate-850 dark:text-white">Clinical Case Details</h3>
+                <button onClick={() => setSelectedPatientApt(null)} className="text-slate-400 hover:text-slate-800 dark:hover:text-white text-xl">&times;</button>
+              </div>
+              <div className="space-y-3 text-xs font-semibold text-slate-650 dark:text-slate-350">
                 <p><span className="text-slate-400">Patient:</span> {selectedPatientApt.patientName}</p>
+                <p><span className="text-slate-400">Age / Gender:</span> {selectedPatientApt.patientAge || '—'} / {selectedPatientApt.patientGender || '—'}</p>
                 <p><span className="text-slate-400">Phone:</span> {selectedPatientApt.patientPhone}</p>
                 <p><span className="text-slate-400">Symptoms:</span> "{selectedPatientApt.reason}"</p>
                 {selectedPatientApt.prescription && (
-                  <div className="mt-3 bg-slate-50 p-3 rounded-xl dark:bg-slate-950">
-                    <p className="font-bold text-slate-900 dark:text-white">Prescribed Treatment:</p>
-                    <ul className="list-disc pl-4 mt-1">
-                      {selectedPatientApt.prescription.medicines.map((m, i) => (
-                        <li key={i}>{m.name} - {m.dosage}</li>
+                  <div className="mt-3 bg-slate-50 p-3 rounded-xl dark:bg-slate-950 space-y-2">
+                    <p className="font-bold text-slate-900 dark:text-white">Diagnosis: <span className="text-primary-600">{selectedPatientApt.prescription.diagnosis}</span></p>
+                    <p className="font-bold text-slate-900 dark:text-white">Medicines:</p>
+                    <ul className="list-disc pl-4 space-y-0.5">
+                      {selectedPatientApt.prescription.medicines?.map((m, i) => (
+                        <li key={i}>{m.name} — {m.dosage} ({m.frequency}, {m.duration})</li>
                       ))}
                     </ul>
-                    <p className="mt-2 font-bold text-slate-900 dark:text-white">Remarks:</p>
-                    <p className="italic">"{selectedPatientApt.prescription.notes}"</p>
+                    {selectedPatientApt.prescription.tests?.length > 0 && (
+                      <p><span className="text-slate-400">Tests:</span> {selectedPatientApt.prescription.tests.join(', ')}</p>
+                    )}
+                    {selectedPatientApt.prescription.followUpDate && (
+                      <p><span className="text-slate-400">Follow-up:</span> {selectedPatientApt.prescription.followUpDate}</p>
+                    )}
                   </div>
+                )}
+                {selectedPatientApt.prescription && (
+                  <button
+                    onClick={() => { handleGeneratePDF(selectedPatientApt); setSelectedPatientApt(null); }}
+                    className="w-full mt-2 rounded-xl bg-primary-600 py-2.5 text-xs font-bold text-white hover:bg-primary-700 flex items-center justify-center gap-1.5"
+                  >
+                    <FiDownload className="h-3.5 w-3.5" /> Download Prescription PDF
+                  </button>
                 )}
               </div>
             </div>
           </div>
         )}
-
       </div>
     );
   }
@@ -340,15 +553,67 @@ export const DoctorDashboard = () => {
                 <div>
                   <h4 className="font-bold text-slate-900 dark:text-white">{apt.patientName}</h4>
                   <p className="text-[10px] text-slate-450">Phone: {apt.patientPhone} | Consulted: {apt.date}</p>
+                  {apt.prescription?.diagnosis && (
+                    <p className="text-[10px] text-primary-600 mt-0.5">{apt.prescription.diagnosis}</p>
+                  )}
                 </div>
-                <button
-                  onClick={() => setSelectedPatientApt(apt)}
-                  className="rounded border border-slate-200 px-3 py-1 font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300"
-                >
-                  Inspect History
-                </button>
+                <div className="flex gap-2">
+                  {apt.prescription && (
+                    <button
+                      onClick={() => handleGeneratePDF(apt)}
+                      className="rounded border border-teal-200 px-2.5 py-1 font-bold text-teal-600 hover:bg-teal-50 dark:border-teal-700 dark:text-teal-400 flex items-center gap-1"
+                    >
+                      <FiDownload className="h-3 w-3" /> PDF
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setSelectedPatientApt(apt)}
+                    className="rounded border border-slate-200 px-3 py-1 font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300"
+                  >
+                    Inspect History
+                  </button>
+                </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Patient detail Modal */}
+        {selectedPatientApt && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setSelectedPatientApt(null)} />
+            <div className="w-full max-w-md bg-white rounded-3xl z-10 shadow-2xl p-6 dark:bg-slate-900 border border-slate-150">
+              <div className="flex justify-between items-center border-b pb-3 mb-4 dark:border-slate-800">
+                <h3 className="text-base font-bold text-slate-850 dark:text-white">Clinical Case Details</h3>
+                <button onClick={() => setSelectedPatientApt(null)} className="text-slate-400 hover:text-slate-800 text-xl">&times;</button>
+              </div>
+              <div className="space-y-3 text-xs font-semibold text-slate-650">
+                <p><span className="text-slate-400">Patient:</span> {selectedPatientApt.patientName}</p>
+                <p><span className="text-slate-400">Phone:</span> {selectedPatientApt.patientPhone}</p>
+                <p><span className="text-slate-400">Symptoms:</span> "{selectedPatientApt.reason}"</p>
+                {selectedPatientApt.prescription && (
+                  <div className="mt-3 bg-slate-50 p-3 rounded-xl dark:bg-slate-950 space-y-1.5">
+                    <p className="font-bold text-slate-900 dark:text-white">Diagnosis: <span className="text-primary-600">{selectedPatientApt.prescription.diagnosis}</span></p>
+                    <ul className="list-disc pl-4">
+                      {selectedPatientApt.prescription.medicines?.map((m, i) => (
+                        <li key={i}>{m.name} — {m.dosage}</li>
+                      ))}
+                    </ul>
+                    {selectedPatientApt.prescription.advice && (
+                      <p><span className="text-slate-400">Advice:</span> {selectedPatientApt.prescription.advice}</p>
+                    )}
+                  </div>
+                )}
+                {selectedPatientApt.prescription && (
+                  <button
+                    onClick={() => handleGeneratePDF(selectedPatientApt)}
+                    className="w-full mt-2 rounded-xl bg-primary-600 py-2.5 text-xs font-bold text-white hover:bg-primary-700 flex items-center justify-center gap-1.5"
+                  >
+                    <FiDownload className="h-3.5 w-3.5" /> Download PDF
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -385,7 +650,7 @@ export const DoctorDashboard = () => {
             </span>
           </div>
 
-          <button 
+          <button
             onClick={() => toast.success("Availability timetable metrics saved.")}
             className="w-full rounded-xl bg-primary-600 py-3 text-xs font-bold text-white hover:bg-primary-750 transition-colors"
           >
@@ -401,7 +666,7 @@ export const DoctorDashboard = () => {
     return (
       <div className="max-w-2xl rounded-2xl bg-white p-6 shadow-md border border-slate-100 dark:bg-slate-800 dark:border-slate-800">
         <h3 className="text-base font-extrabold text-slate-905 dark:text-white mb-4">Edit Consultation Profile</h3>
-        
+
         <form onSubmit={handleProfileSave} className="space-y-4 text-xs font-bold text-slate-500">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
@@ -409,7 +674,7 @@ export const DoctorDashboard = () => {
               <input
                 type="number"
                 value={docFees}
-                onChange={(e) => setDocFees(parseInt(e.target.value))}
+                onChange={e => setDocFees(parseInt(e.target.value))}
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-800 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </div>
@@ -418,7 +683,7 @@ export const DoctorDashboard = () => {
               <input
                 type="text"
                 value={docQual}
-                onChange={(e) => setDocQual(e.target.value)}
+                onChange={e => setDocQual(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-800 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </div>
@@ -429,7 +694,7 @@ export const DoctorDashboard = () => {
             <input
               type="number"
               value={docExp}
-              onChange={(e) => setDocExp(parseInt(e.target.value))}
+              onChange={e => setDocExp(parseInt(e.target.value))}
               className="w-24 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-800 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
             />
           </div>

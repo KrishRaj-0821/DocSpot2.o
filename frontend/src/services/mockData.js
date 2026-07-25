@@ -527,9 +527,13 @@ export const mockAppointments = [
     patientName: "Aman Verma",
     patientEmail: "patient@purniacare.com",
     patientPhone: "+91 98765 43210",
+    patientAge: 32,
+    patientGender: "Male",
     doctorId: "doc-1",
     doctorName: "Dr. Rajesh Kumar",
     specialization: "Cardiology",
+    qualification: "MD, DM (Cardiology) - AIIMS",
+    hospitalName: "Purnia Care Central Hospital",
     date: "2026-07-22",
     time: "10:30 AM",
     status: "Upcoming",
@@ -541,20 +545,31 @@ export const mockAppointments = [
     patientName: "Aman Verma",
     patientEmail: "patient@purniacare.com",
     patientPhone: "+91 98765 43210",
+    patientAge: 32,
+    patientGender: "Male",
     doctorId: "doc-2",
     doctorName: "Dr. Anjali Sharma",
     specialization: "Pediatrics",
+    qualification: "MD (Pediatrics), DCH - Mumbai University",
+    hospitalName: "Purnia Care Central Hospital",
     date: "2026-07-10",
     time: "03:00 PM",
     status: "Completed",
     fees: 600,
     reason: "Regular vaccination and general checkup for son.",
     prescription: {
+      id: "rx-2001",
       date: "2026-07-10",
-      notes: "General development is excellent. Continue vitamins.",
+      diagnosis: "Viral Fever with Upper Respiratory Tract Infection",
       medicines: [
-        { name: "Multivitamin Drops", dosage: "5 drops daily in the morning" }
-      ]
+        { name: "Paracetamol 650mg", dosage: "1 tablet after food", frequency: "Morning, Afternoon, Night", duration: "5 days" },
+        { name: "Cetirizine 10mg", dosage: "1 tablet at night", frequency: "Night", duration: "5 days" },
+        { name: "Multivitamin Drops", dosage: "5 drops in milk", frequency: "Morning", duration: "30 days" }
+      ],
+      tests: ["CBC", "Dengue NS1 Antigen"],
+      advice: "Drink plenty of water. Avoid cold drinks. Take proper rest. Light diet recommended.",
+      followUpDate: "2026-07-17",
+      notes: "General development is excellent. Continue vitamins. Monitor temperature for 48 hours."
     }
   },
   {
@@ -562,9 +577,13 @@ export const mockAppointments = [
     patientName: "Sita Devi",
     patientEmail: "sita@example.com",
     patientPhone: "+91 88776 22114",
+    patientAge: 55,
+    patientGender: "Female",
     doctorId: "doc-1",
     doctorName: "Dr. Rajesh Kumar",
     specialization: "Cardiology",
+    qualification: "MD, DM (Cardiology) - AIIMS",
+    hospitalName: "Purnia Care Central Hospital",
     date: "2026-07-20",
     time: "11:00 AM",
     status: "Upcoming",
@@ -576,21 +595,63 @@ export const mockAppointments = [
     patientName: "Ramesh Gupta",
     patientEmail: "ramesh@example.com",
     patientPhone: "+91 94321 00987",
+    patientAge: 48,
+    patientGender: "Male",
     doctorId: "doc-1",
     doctorName: "Dr. Rajesh Kumar",
     specialization: "Cardiology",
+    qualification: "MD, DM (Cardiology) - AIIMS",
+    hospitalName: "Purnia Care Central Hospital",
     date: "2026-07-20",
     time: "12:15 PM",
     status: "Completed",
     fees: 800,
     reason: "Mild angina/chest discomfort.",
     prescription: {
+      id: "rx-2002",
       date: "2026-07-20",
-      notes: "Limit salt intake, monitor BP daily.",
+      diagnosis: "Stable Angina Pectoris, Hyperlipidemia",
       medicines: [
-        { name: "Atorvastatin 10mg", dosage: "1 tablet at night" },
-        { name: "Paracetamol 650mg", dosage: "1 tablet if pain occurs" }
-      ]
+        { name: "Atorvastatin 10mg", dosage: "1 tablet", frequency: "Night", duration: "30 days" },
+        { name: "Ecosprin 75mg", dosage: "1 tablet after breakfast", frequency: "Morning", duration: "30 days" },
+        { name: "Paracetamol 650mg", dosage: "1 tablet if pain", frequency: "SOS", duration: "As needed" }
+      ],
+      tests: ["Lipid Profile", "ECG", "2D Echo"],
+      advice: "Limit salt intake. Monitor BP daily. Avoid exertion. Low-fat diet recommended.",
+      followUpDate: "2026-08-05",
+      notes: "Limit salt intake, monitor BP daily."
+    }
+  },
+  {
+    id: "apt-105",
+    patientName: "Aman Verma",
+    patientEmail: "patient@purniacare.com",
+    patientPhone: "+91 98765 43210",
+    patientAge: 32,
+    patientGender: "Male",
+    doctorId: "doc-6",
+    doctorName: "Dr. Sneha Roy",
+    specialization: "Dermatology",
+    qualification: "MD (Dermatology) - Patna Medical College",
+    hospitalName: "Purnia Care Central Hospital",
+    date: "2026-06-28",
+    time: "05:00 PM",
+    status: "Completed",
+    fees: 500,
+    reason: "Acne breakout and itchy skin rash on arms.",
+    prescription: {
+      id: "rx-2003",
+      date: "2026-06-28",
+      diagnosis: "Acne Vulgaris (Grade II), Allergic Contact Dermatitis",
+      medicines: [
+        { name: "Clindamycin Gel 1%", dosage: "Apply thin layer to affected area", frequency: "Morning & Night", duration: "21 days" },
+        { name: "Cetirizine 10mg", dosage: "1 tablet at night", frequency: "Night", duration: "10 days" },
+        { name: "Moisturising Lotion (CeraVe)", dosage: "Apply after bathing", frequency: "Twice daily", duration: "Ongoing" }
+      ],
+      tests: [],
+      advice: "Avoid strong soaps. Use mild face wash. Do not squeeze pimples. Apply sunscreen SPF 50.",
+      followUpDate: "2026-07-19",
+      notes: "Avoid sun exposure. Patch test before applying new cosmetics."
     }
   }
 ];

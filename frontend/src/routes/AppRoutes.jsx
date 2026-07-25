@@ -14,6 +14,7 @@ import Medicines from '../pages/public/Medicines';
 import Ambulance from '../pages/public/Ambulance';
 import About from '../pages/public/About';
 import Contact from '../pages/public/Contact';
+import BookDoctor from '../pages/public/BookDoctor';
 import Login from '../pages/public/Login';
 import Register from '../pages/public/Register';
 
@@ -51,6 +52,7 @@ export const AppRoutes = () => {
         <Route path="/ambulance" element={<Ambulance />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/book-doctor" element={<BookDoctor />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/coming-soon" element={<ComingSoon />} />
@@ -85,6 +87,7 @@ export const AppRoutes = () => {
         <Route path="dashboard" element={<DoctorDashboard />} />
         <Route path="appointments" element={<DoctorDashboard />} />
         <Route path="patients" element={<DoctorDashboard />} />
+        <Route path="prescriptions" element={<DoctorDashboard />} />
         <Route path="schedule" element={<DoctorDashboard />} />
         <Route path="profile" element={<DoctorDashboard />} />
       </Route>
