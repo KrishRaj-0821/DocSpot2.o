@@ -2,11 +2,11 @@ from django.db import models
 from django.conf import settings
 from common.models import BasePurniaModel
 from doctors.models import DoctorProfile
-from hospitals.models import HospitalProfile
-
+from hospitals.models import HospitalProfile, Department
 class Appointment(BasePurniaModel):
     class AppointmentStatus(models.TextChoices):
         UPCOMING = 'Upcoming', 'Upcoming'
+        CHECKED_IN = 'Checked In', 'Checked In'
         COMPLETED = 'Completed', 'Completed'
         CANCELLED = 'Cancelled', 'Cancelled'
         RESCHEDULED = 'Rescheduled', 'Rescheduled'
@@ -14,12 +14,30 @@ class Appointment(BasePurniaModel):
     patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='appointments')
     doctor = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, related_name='appointments')
     hospital = models.ForeignKey(HospitalProfile, on_delete=models.CASCADE, related_name='appointments')
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True, related_name='appointments')
+    appointment_id = models.CharField(max_length=50, unique=True, blank=True)
     date = models.DateField(db_index=True)
     time = models.CharField(max_length=20)
-    reason = models.TextField()
+    reason = models.TextField(blank=True)
+    notes = models.TextField(blank=True)
     fees = models.IntegerField(default=500)
     status = models.CharField(max_length=30, choices=AppointmentStatus.choices, default=AppointmentStatus.UPCOMING)
+    payment_status = models.CharField(max_length=20, default="Pending")
     online_consultation = models.BooleanField(default=False)
+    token_number = models.IntegerField(null=True, blank=True)
+    qr_code = models.ImageField(upload_to="qr_codes/", blank=True, null=True)
+    pdf = models.FileField(upload_to="appointment_pdfs/", blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.appointment_id:
+            import datetime
+            import random
+            import string
+            date_str = datetime.date.today().strftime("%Y%m%d")
+            random_str = ''.join(random.choices(string.digits, k=6))
+            self.appointment_id = f"HMS-{date_str}-{random_str}"
+        super().save(*args, **kwargs)
+
 
     class Meta:
         db_table = 'purnia_appointments'

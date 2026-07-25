@@ -237,26 +237,26 @@ export const DoctorDashboard = () => {
         {/* Appointments Table */}
         <div className="rounded-2xl bg-white p-6 shadow-md border border-slate-100 dark:bg-slate-800 dark:border-slate-800">
           <h3 className="text-sm font-extrabold text-slate-900 dark:text-white border-b pb-3 dark:border-slate-700/60 mb-4">
-            Outpatient Consultations Queue
+            Today's Appointments
           </h3>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-semibold text-slate-650">
               <thead>
                 <tr className="border-b border-slate-100 dark:border-slate-750 text-slate-400 font-bold uppercase tracking-wider">
-                  <th className="py-3">Patient Name</th>
-                  <th className="py-3">Date/Time</th>
-                  <th className="py-3">Details / Symptoms</th>
+                  <th className="py-3">Patient</th>
+                  <th className="py-3">Time</th>
                   <th className="py-3">Status</th>
-                  <th className="py-3 text-right">Actions</th>
+                  <th className="py-3 text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50 dark:divide-slate-750">
-                {appointments.map(apt => (
+                {appointments.map(apt => {
+                  const patientName = apt.patient_details ? `${apt.patient_details.first_name} ${apt.patient_details.last_name}` : apt.patientName;
+                  return (
                   <tr key={apt.id}>
-                    <td className="py-4 font-bold text-slate-900 dark:text-white">{apt.patientName}</td>
-                    <td className="py-4">{apt.date} | {apt.time}</td>
-                    <td className="py-4 max-w-[200px] truncate">{apt.reason}</td>
+                    <td className="py-4 font-bold text-slate-900 dark:text-white">{patientName}</td>
+                    <td className="py-4">{apt.time}</td>
                     <td className="py-4">
                       <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold ${
                         apt.status === 'Completed'
@@ -267,33 +267,47 @@ export const DoctorDashboard = () => {
                       </span>
                     </td>
                     <td className="py-4 text-right space-x-2">
-                      <button
-                        onClick={() => setSelectedPatientApt(apt)}
-                        className="text-slate-400 hover:text-slate-805 p-1 dark:hover:text-white"
-                        title="View Details"
-                      >
-                        <FiInfo className="h-4.5 w-4.5" />
-                      </button>
-                      {apt.prescription && (
-                        <button
-                          onClick={() => handleGeneratePDF(apt)}
-                          className="rounded bg-teal-600 px-2.5 py-1.5 text-[10px] font-bold text-white hover:bg-teal-700 cursor-pointer"
-                          title="Download PDF"
-                        >
-                          <FiDownload className="h-3 w-3 inline mr-1" />PDF
-                        </button>
-                      )}
                       {apt.status === 'Upcoming' && (
-                        <button
-                          onClick={() => setActivePrescribeApt(apt)}
-                          className="rounded bg-primary-600 px-3 py-1.5 text-[10px] font-bold text-white hover:bg-primary-750 cursor-pointer"
-                        >
-                          <FiFileText className="h-3 w-3 inline mr-1" />Prescribe
-                        </button>
+                        <>
+                          <button
+                            onClick={async () => {
+                              try {
+                                await api.patch(`/appointments/${apt.id}/status/`, { status: 'Checked In' });
+                                fetchDoctorAppointments();
+                                toast.success("Marked as Checked In");
+                              } catch (e) {
+                                toast.error("Failed to update status");
+                              }
+                            }}
+                            className="rounded-lg bg-teal-100 px-3 py-1.5 text-[10px] font-bold text-teal-700 hover:bg-teal-200 dark:bg-teal-900 dark:text-teal-300 dark:hover:bg-teal-800 shadow-sm"
+                          >
+                            Check In
+                          </button>
+                          <button
+                            onClick={async () => {
+                              try {
+                                await api.post(`/appointments/${apt.id}/cancel/`);
+                                fetchDoctorAppointments();
+                                toast.success("Appointment Cancelled");
+                              } catch (e) {
+                                toast.error("Failed to cancel");
+                              }
+                            }}
+                            className="rounded-lg bg-red-50 px-3 py-1.5 text-[10px] font-bold text-red-600 hover:bg-red-100 dark:bg-red-950/50 dark:text-red-400 dark:hover:bg-red-900/60 shadow-sm"
+                          >
+                            Cancel
+                          </button>
+                        </>
                       )}
+                      <button
+                        onClick={() => ['Upcoming', 'Checked In'].includes(apt.status) ? setActivePrescribeApt(apt) : setSelectedPatientApt(apt)}
+                        className="rounded-lg bg-slate-100 px-3 py-1.5 text-[10px] font-bold text-slate-700 hover:bg-slate-200 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600 shadow-sm"
+                      >
+                        {['Upcoming', 'Checked In'].includes(apt.status) ? 'Complete Consult' : 'View History'}
+                      </button>
                     </td>
                   </tr>
-                ))}
+                )})}
               </tbody>
             </table>
           </div>
@@ -311,7 +325,7 @@ export const DoctorDashboard = () => {
                   <h3 className="text-base font-extrabold text-white flex items-center gap-2">
                     <FiFileText className="h-4 w-4" /> Write Prescription
                   </h3>
-                  <p className="text-[10px] text-primary-100">Patient: {activePrescribeApt.patientName} · {activePrescribeApt.date} at {activePrescribeApt.time}</p>
+                  <p className="text-[10px] text-primary-100">Patient: {activePrescribeApt.patient_details ? `${activePrescribeApt.patient_details.first_name} ${activePrescribeApt.patient_details.last_name}` : activePrescribeApt.patientName} · {activePrescribeApt.date} at {activePrescribeApt.time}</p>
                 </div>
                 <button onClick={() => { setActivePrescribeApt(null); resetPrescriptionForm(); }} className="text-white/70 hover:text-white text-xl font-bold">&times;</button>
               </div>
@@ -320,9 +334,9 @@ export const DoctorDashboard = () => {
 
                 {/* Patient Info */}
                 <div className="grid grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-950 p-3 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400">
-                  <div><span className="text-slate-400 block text-[10px]">Patient</span>{activePrescribeApt.patientName}</div>
-                  <div><span className="text-slate-400 block text-[10px]">Age / Gender</span>{activePrescribeApt.patientAge || '—'} / {activePrescribeApt.patientGender || '—'}</div>
-                  <div><span className="text-slate-400 block text-[10px]">Symptoms</span><span className="truncate block">{activePrescribeApt.reason}</span></div>
+                  <div><span className="text-slate-400 block text-[10px]">Patient</span>{activePrescribeApt.patient_details ? `${activePrescribeApt.patient_details.first_name} ${activePrescribeApt.patient_details.last_name}` : activePrescribeApt.patientName}</div>
+                  <div><span className="text-slate-400 block text-[10px]">Age / Gender</span>{activePrescribeApt.patient_details?.age || activePrescribeApt.patientAge || '—'} / {activePrescribeApt.patient_details?.gender || activePrescribeApt.patientGender || '—'}</div>
+                  <div><span className="text-slate-400 block text-[10px]">Symptoms</span><span className="truncate block">{activePrescribeApt.reason || activePrescribeApt.notes}</span></div>
                 </div>
 
                 {/* Diagnosis */}

@@ -30,11 +30,11 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = [
-            'id', 'patient', 'patient_details', 'doctor', 'doctor_details',
-            'hospital', 'hospital_details', 'date', 'time', 'reason',
-            'fees', 'status', 'online_consultation', 'prescription'
+            'id', 'appointment_id', 'patient', 'patient_details', 'doctor', 'doctor_details',
+            'hospital', 'hospital_details', 'department', 'date', 'time', 'reason', 'notes',
+            'fees', 'status', 'payment_status', 'online_consultation', 'token_number', 'qr_code', 'pdf', 'prescription'
         ]
-        read_only_fields = ['fees', 'status']
+        read_only_fields = ['fees', 'status', 'payment_status', 'appointment_id', 'qr_code', 'pdf', 'token_number']
 
     def create(self, validated_data):
         doctor = validated_data['doctor']

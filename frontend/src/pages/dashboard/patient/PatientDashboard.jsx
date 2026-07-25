@@ -3,6 +3,7 @@ import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
 import { FiCalendar, FiFileText, FiPackage, FiHeart, FiActivity, FiArrowRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { QRCodeSVG } from 'qrcode.react';
 
 export const PatientDashboard = () => {
   const { user } = useAuth();
@@ -103,31 +104,65 @@ export const PatientDashboard = () => {
         {/* Left Column: Upcoming Appointment & Active Order widgets */}
         <div className="lg:col-span-2 space-y-6">
           
-          {/* Upcoming Appointment Detail */}
+          {/* My Appointments Detail */}
           <div className="rounded-2xl bg-white p-6 shadow-md border border-slate-105 dark:bg-slate-800 dark:border-slate-800">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-3 dark:border-slate-700/60">
-              <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Upcoming Consultation</h3>
-              <Link to="/patient/appointments" className="text-xs font-bold text-primary-600 dark:text-primary-400 flex items-center">
-                <span>All appointments</span>
-                <FiArrowRight className="ml-1" />
-              </Link>
+            <div className="flex justify-center items-center border-b-2 border-dashed border-slate-200 pb-4 mb-4 dark:border-slate-700">
+              <h3 className="text-lg font-extrabold text-slate-900 dark:text-white uppercase tracking-widest text-center">
+                My Appointments
+              </h3>
             </div>
 
             {upcomingApt ? (
-              <div className="mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex flex-col space-y-4">
                 <div className="space-y-1">
-                  <p className="text-sm font-bold text-slate-850 dark:text-white">{upcomingApt.doctorName}</p>
-                  <span className="inline-block rounded bg-primary-50 px-2 py-0.5 text-[9px] font-bold text-primary-750 dark:bg-primary-950/60 dark:text-primary-400">
-                    {upcomingApt.specialization}
-                  </span>
-                  <p className="text-xs text-slate-500 leading-relaxed mt-1">Reason: "{upcomingApt.reason}"</p>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Appointment No.</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">{upcomingApt.appointment_id}</p>
                 </div>
-                <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl dark:bg-slate-900 shrink-0 text-xs">
-                  <FiCalendar className="text-primary-500" />
-                  <div>
-                    <p className="font-bold text-slate-800 dark:text-slate-200">{upcomingApt.date}</p>
-                    <p className="text-slate-400 text-[10px]">{upcomingApt.time}</p>
-                  </div>
+
+                <div className="space-y-1">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Doctor</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">
+                    {upcomingApt.doctor_details ? `Dr. ${upcomingApt.doctor_details.user?.first_name} ${upcomingApt.doctor_details.user?.last_name}` : upcomingApt.doctorName}
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Department</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">
+                    {upcomingApt.department?.name || upcomingApt.doctor_details?.specialization || upcomingApt.specialization}
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Date</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">{upcomingApt.date}</p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Time</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">{upcomingApt.time}</p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Status</p>
+                  <p className="text-sm font-bold text-primary-600">{upcomingApt.status}</p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Payment</p>
+                  <p className="text-sm font-bold text-teal-600">{upcomingApt.payment_status || 'Paid'}</p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100 dark:border-slate-700/60 mt-2">
+                  <a href={upcomingApt.pdf || `http://localhost:8000/api/appointments/${upcomingApt.id}/pdf/`} target="_blank" rel="noreferrer" className="flex-1 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-200 text-center dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600 transition-colors">
+                    View PDF
+                  </a>
+                  <a href={upcomingApt.pdf || `http://localhost:8000/api/appointments/${upcomingApt.id}/pdf/`} download className="flex-1 rounded-xl bg-primary-600 px-4 py-3 text-sm font-bold text-white hover:bg-primary-700 text-center transition-colors shadow-sm">
+                    Download PDF
+                  </a>
+                  <button className="flex-1 rounded-xl border border-red-200 text-red-600 px-4 py-3 text-sm font-bold hover:bg-red-50 text-center transition-colors dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950">
+                    Cancel Appointment
+                  </button>
                 </div>
               </div>
             ) : (
