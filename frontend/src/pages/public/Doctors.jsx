@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import api from '../../services/apiService';
 import { mockHospitals } from '../../services/mockData';
 import { useAuth } from '../../context/AuthContext';
-import { FiFilter, FiSearch, FiCalendar, FiClock, FiDollarSign, FiUser, FiInfo, FiCheckCircle } from 'react-icons/fi';
+import { FiFilter, FiSearch, FiCalendar, FiClock, FiDollarSign, FiUser, FiInfo, FiCheckCircle, FiHome } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { SEO } from '../../components/SEO';
