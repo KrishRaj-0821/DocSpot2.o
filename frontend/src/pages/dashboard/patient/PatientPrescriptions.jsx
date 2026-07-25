@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -57,7 +57,7 @@ export const PatientPrescriptions = () => {
     doctorName: apt.doctorName,
     specialization: apt.specialization,
     qualification: apt.qualification || '',
-    hospitalName: apt.hospitalName || 'Purnia Care Central Hospital',
+    hospitalName: apt.hospitalName || 'DocSpot Central Hospital',
     patientName: apt.patientName,
     patientAge: apt.patientAge,
     patientGender: apt.patientGender,
@@ -229,7 +229,7 @@ export const PatientPrescriptions = () => {
                   <p className="text-[10px] text-slate-400">{selectedPrescription.specialization}</p>
                 </div>
                 <div className="text-right">
-                  <h3 className="text-sm font-black text-slate-850 dark:text-white uppercase">Purnia Care</h3>
+                  <h3 className="text-sm font-black text-slate-850 dark:text-white uppercase">DocSpot</h3>
                   <p className="text-[10px] text-slate-400">NH-31 Line Bazar, Purnia</p>
                   <p className="text-[10px] text-slate-400">Phone: +91 6454 224488</p>
                 </div>

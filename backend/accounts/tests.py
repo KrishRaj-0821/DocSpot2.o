@@ -1,4 +1,4 @@
-from django.urls import reverse
+﻿from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth import get_user_model
@@ -13,7 +13,7 @@ class AuthenticationTests(APITestCase):
         
         self.user_data = {
             "username": "testpatient",
-            "email": "test@purniacare.com",
+            "email": "test@DocSpot.com",
             "password": "strong_password123",
             "first_name": "Test",
             "last_name": "Patient",
@@ -58,4 +58,4 @@ class AuthenticationTests(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
         response = self.client.get(self.profile_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['email'], 'test@purniacare.com')
+        self.assertEqual(response.data['email'], 'test@DocSpot.com')

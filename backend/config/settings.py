@@ -1,4 +1,4 @@
-import os
+﻿import os
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -153,8 +153,8 @@ REST_FRAMEWORK = {
 
 # Swagger/OpenAPI Specs Configs
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Purnia Care Hospital Management API',
-    'DESCRIPTION': 'REST API backend documentation for Purnia Care healthcare platform, providing secure patient portal and clinical dashboards.',
+    'TITLE': 'DocSpot Hospital Management API',
+    'DESCRIPTION': 'REST API backend documentation for DocSpot healthcare platform, providing secure patient portal and clinical dashboards.',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }

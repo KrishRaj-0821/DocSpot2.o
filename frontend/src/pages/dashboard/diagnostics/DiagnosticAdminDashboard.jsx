@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
@@ -113,7 +113,7 @@ export const DiagnosticAdminDashboard = () => {
         name: selectedTest.name,
         category: selectedTest.category,
         price: selectedTest.price,
-        center_details: { name: 'Purnia Care Central Labs' }
+        center_details: { name: 'DocSpot Central Labs' }
       },
       date: walkinDate,
       status: 'Pending',
@@ -426,7 +426,7 @@ export const DiagnosticAdminDashboard = () => {
   if (path === '/diagnostics-admin/patients') {
     // Generate some mock patients for list
     const patientDatabase = [
-      { id: 'usr-patient', name: 'Aman Verma', email: 'patient@purniacare.com', phone: '+91 98765 43210', blood: 'O+ve', history: ['Complete Blood Count', 'HbA1c Fasting'] },
+      { id: 'usr-patient', name: 'Aman Verma', email: 'patient@DocSpot.com', phone: '+91 98765 43210', blood: 'O+ve', history: ['Complete Blood Count', 'HbA1c Fasting'] },
       { id: 'pat-102', name: 'Sita Devi', email: 'sita@example.com', phone: '+91 88776 22114', blood: 'A+ve', history: ['Lipid Profile'] },
       { id: 'pat-103', name: 'Rajesh Mishra', email: 'mishra@example.com', phone: '+91 94312 99011', blood: 'B+ve', history: ['Urine Culture'] }
     ];
@@ -1300,7 +1300,7 @@ export const DiagnosticAdminDashboard = () => {
               <p className="text-sm font-bold text-slate-900 dark:text-white">Laboratory Information Address</p>
               <textarea 
                 rows="2" 
-                defaultValue="Purnia Care Central Labs, NH-31, Line Bazar, Purnia, Bihar - 854301"
+                defaultValue="DocSpot Central Labs, NH-31, Line Bazar, Purnia, Bihar - 854301"
                 className="w-full rounded-xl border border-slate-205 bg-slate-50 p-3 focus:outline-none dark:border-slate-700 dark:bg-slate-955 dark:text-white"
               />
               <button 

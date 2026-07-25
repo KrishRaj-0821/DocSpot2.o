@@ -1,7 +1,7 @@
-import { jsPDF } from 'jspdf';
+﻿import { jsPDF } from 'jspdf';
 
 /**
- * Generates a Purnia Care branded prescription PDF and triggers download.
+ * Generates a DocSpot branded prescription PDF and triggers download.
  * @param {Object} data - Prescription data object
  */
 export const generatePrescriptionPDF = (data) => {
@@ -11,7 +11,7 @@ export const generatePrescriptionPDF = (data) => {
     doctorName,
     specialization,
     qualification,
-    hospitalName = 'Purnia Care Central Hospital',
+    hospitalName = 'DocSpot Central Hospital',
     patientName,
     patientAge,
     patientGender,
@@ -78,7 +78,7 @@ export const generatePrescriptionPDF = (data) => {
   pdf.rect(margin, y, contentWidth, 22, 'F');
 
   // Hospital name
-  text('Purnia Care', margin + 5, y + 7, { size: 14, bold: true, color: [255, 255, 255] });
+  text('DocSpot', margin + 5, y + 7, { size: 14, bold: true, color: [255, 255, 255] });
   text('Advanced Healthcare Platform · Purnia, Bihar', margin + 5, y + 13, { size: 7, color: [200, 240, 235] });
   text('NH-31, Line Bazar, Purnia — +91 6454 224488', margin + 5, y + 18, { size: 6.5, color: [200, 240, 235] });
 
@@ -244,7 +244,7 @@ export const generatePrescriptionPDF = (data) => {
   // ── Footer ────────────────────────────────────────────────────
   line(margin, y, pageWidth - margin, y, teal, 0.4);
   y += 4;
-  text('Purnia Care Healthcare Platform · www.purniacare.com · helpdesk@purniacare.com', pageWidth / 2, y, {
+  text('DocSpot Healthcare Platform · www.DocSpot.com · helpdesk@DocSpot.com', pageWidth / 2, y, {
     size: 6.5, color: [...midSlate], align: 'center'
   });
   text('In case of emergency: +91 6454 224488', pageWidth / 2, y + 4.5, {
@@ -252,6 +252,6 @@ export const generatePrescriptionPDF = (data) => {
   });
 
   // ── Save the PDF ──────────────────────────────────────────────
-  const fileName = `PurniaCare_Rx_${(prescriptionId || Date.now()).toString().replace(/\s/g, '_')}.pdf`;
+  const fileName = `DocSpot_Rx_${(prescriptionId || Date.now()).toString().replace(/\s/g, '_')}.pdf`;
   pdf.save(fileName);
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../../../services/apiService';
 import { 
@@ -237,9 +237,9 @@ export const AdminDashboard = () => {
   if (path === '/admin/users') {
     // Generate some mock users
     const mockUserDirectory = [
-      { name: "Aman Verma", email: "patient@purniacare.com", role: "Patient", phone: "+91 98765 43210", city: "Purnia" },
-      { name: "Dr. Rajesh Kumar", email: "doctor@purniacare.com", role: "Doctor", phone: "+91 94321 00987", city: "Purnia" },
-      { name: "Purnia Care Central Hospital", email: "hospital@purniacare.com", role: "Hospital", phone: "+91 6454 224488", city: "Purnia" },
+      { name: "Aman Verma", email: "patient@DocSpot.com", role: "Patient", phone: "+91 98765 43210", city: "Purnia" },
+      { name: "Dr. Rajesh Kumar", email: "doctor@DocSpot.com", role: "Doctor", phone: "+91 94321 00987", city: "Purnia" },
+      { name: "DocSpot Central Hospital", email: "hospital@DocSpot.com", role: "Hospital", phone: "+91 6454 224488", city: "Purnia" },
       { name: "Dr. Anjali Sharma", email: "anjali@example.com", role: "Doctor", phone: "+91 99887 76655", city: "Katihar" },
       { name: "Sita Devi", email: "sita@example.com", role: "Patient", phone: "+91 88776 22114", city: "Araria" }
     ];

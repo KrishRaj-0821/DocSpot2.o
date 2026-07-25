@@ -1,4 +1,4 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 import { 
   mockDoctors, 
   mockHospitals, 
@@ -18,7 +18,7 @@ export const mockDiagnosticBookings = [
     patient_details: {
       first_name: "Aman",
       last_name: "Verma",
-      email: "patient@purniacare.com",
+      email: "patient@DocSpot.com",
       phone: "+91 98765 43210"
     },
     test: "tst-1",
@@ -27,7 +27,7 @@ export const mockDiagnosticBookings = [
       name: "Complete Blood Count (CBC)",
       category: "Pathology",
       price: 350,
-      center_details: { name: "Purnia Care Central Labs" }
+      center_details: { name: "DocSpot Central Labs" }
     },
     date: "2026-07-24",
     status: "Pending",
@@ -39,7 +39,7 @@ export const mockDiagnosticBookings = [
     patient_details: {
       first_name: "Aman",
       last_name: "Verma",
-      email: "patient@purniacare.com",
+      email: "patient@DocSpot.com",
       phone: "+91 98765 43210"
     },
     test: "tst-2",
@@ -48,7 +48,7 @@ export const mockDiagnosticBookings = [
       name: "HbA1c (Glycated Haemoglobin)",
       category: "Diabetology",
       price: 450,
-      center_details: { name: "Purnia Care Central Labs" }
+      center_details: { name: "DocSpot Central Labs" }
     },
     date: "2026-07-25",
     status: "Completed",
@@ -153,14 +153,14 @@ if (useMock) {
     if (url === '/pharmacies' && method === 'get') {
       const mockProfile = {
         id: 'phm-1',
-        name: 'Purnia Care Central Pharmacy',
+        name: 'DocSpot Central Pharmacy',
         owner_name: 'Sanjay Gupta',
         drug_license_number: 'DL-98765-PUR',
         gst_number: '20AAECP9876F1Z5',
         address: 'Line Bazar Chowk, Purnia, Bihar - 854301',
         city: 'Purnia',
         phone: '+91 99999 55555',
-        email: 'pharmacy@purniacare.com',
+        email: 'pharmacy@DocSpot.com',
         store_timings: '8:00 AM - 10:00 PM',
         home_delivery_available: true,
         logo: 'https://images.unsplash.com/photo-1607619056574-7b8f304b3b8f?auto=format&fit=crop&q=80&w=150',
@@ -222,7 +222,7 @@ if (useMock) {
       if (userRole) {
         return mockResponse(200, { token: 'mock-jwt-token', user: mockUsers[userRole] });
       }
-      return mockResponse(401, { message: 'Invalid credentials. Try patient@purniacare.com / password123' });
+      return mockResponse(401, { message: 'Invalid credentials. Try patient@DocSpot.com / password123' });
     }
     if (url === '/reports' && method === 'get') {
       return mockResponse(200, mockReports);

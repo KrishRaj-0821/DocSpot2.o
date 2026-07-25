@@ -1,12 +1,12 @@
-# Technical Architecture & System Design Document
+﻿# Technical Architecture & System Design Document
 
-## Purnia Care Healthcare Platform
+## DocSpot Healthcare Platform
 
 ---
 
 ## 1. System Overview
 
-**Purnia Care** is an enterprise-grade digital healthcare platform engineered as a decoupled full-stack architecture. The platform features a **Django 5 REST Framework** backend providing stateless API endpoints and a **React 19 SPA (Single Page Application)** frontend built with Vite and Tailwind CSS v4.
+**DocSpot** is an enterprise-grade digital healthcare platform engineered as a decoupled full-stack architecture. The platform features a **Django 5 REST Framework** backend providing stateless API endpoints and a **React 19 SPA (Single Page Application)** frontend built with Vite and Tailwind CSS v4.
 
 ---
 

@@ -1,6 +1,6 @@
-# Purnia Care - Frontend Application (React 19 + Vite + Tailwind v4)
+﻿# DocSpot - Frontend Application (React 19 + Vite + Tailwind v4)
 
-This directory contains the user interface and SPA frontend for the **Purnia Care** Healthcare Platform, built using React 19, Vite, Tailwind CSS v4, Framer Motion, and Chart.js.
+This directory contains the user interface and SPA frontend for the **DocSpot** Healthcare Platform, built using React 19, Vite, Tailwind CSS v4, Framer Motion, and Chart.js.
 
 ---
 

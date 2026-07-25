@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { FiMail, FiPhone, FiMapPin, FiClock, FiSend } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { SEO } from '../../components/SEO';
@@ -32,7 +32,7 @@ export const Contact = () => {
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-900 transition-colors duration-250">
       <SEO 
         title="Contact Support" 
-        description="Get in touch with Purnia Care hospital network for general queries, technical support, partner requests, or emergency assistance." 
+        description="Get in touch with DocSpot hospital network for general queries, technical support, partner requests, or emergency assistance." 
       />
       
       {/* Header */}
@@ -82,8 +82,8 @@ export const Contact = () => {
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">Email Address</h3>
               <p className="text-xs text-slate-500 mt-1">
-                support@purniacare.com <br />
-                admin@purniacare.com
+                support@DocSpot.com <br />
+                admin@DocSpot.com
               </p>
             </div>
           </div>

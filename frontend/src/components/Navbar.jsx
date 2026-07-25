@@ -5,7 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useCart } from '../context/CartContext';
 import { 
   FiMenu, FiX, FiShoppingCart, FiSun, FiMoon, 
-  FiUser, FiLogOut, FiActivity, FiBriefcase, 
+  FiUser, FiLogOut, FiBriefcase, 
   FiHome, FiFolderPlus, FiPlusSquare 
 } from 'react-icons/fi';
 
@@ -49,10 +49,10 @@ export const Navbar = () => {
         <div className="flex h-16 justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2 text-primary-700 dark:text-primary-400">
-              <FiActivity className="h-7 w-7 stroke-[2.5]" />
+            <Link to="/" className="flex items-center space-x-2">
+              <img src="/favicon.svg" alt="DocSpot" className="h-8 w-8" />
               <span className="font-sans text-xl font-bold tracking-tight text-slate-800 dark:text-white">
-                Purnia<span className="text-primary-600 dark:text-primary-400 font-extrabold">Care</span>
+                Doc<span className="text-primary-600 dark:text-primary-400 font-extrabold">Spot</span>
               </span>
             </Link>
           </div>

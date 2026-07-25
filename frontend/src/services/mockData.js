@@ -1,4 +1,4 @@
-// Mock Data for Purnia Care Hospital Management System
+﻿// Mock Data for DocSpot Hospital Management System
 
 export const mockDoctors = [
   {
@@ -12,7 +12,7 @@ export const mockDoctors = [
     reviewsCount: 142,
     city: "Purnia",
     hospitalId: "hosp-1",
-    hospitalName: "Purnia Care Central Hospital",
+    hospitalName: "DocSpot Central Hospital",
     availableDays: ["Mon", "Wed", "Fri"],
     availableTime: "10:00 AM - 01:00 PM",
     photo: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=300",
@@ -29,7 +29,7 @@ export const mockDoctors = [
     reviewsCount: 198,
     city: "Purnia",
     hospitalId: "hosp-1",
-    hospitalName: "Purnia Care Central Hospital",
+    hospitalName: "DocSpot Central Hospital",
     availableDays: ["Mon", "Tue", "Thu", "Sat"],
     availableTime: "02:00 PM - 05:00 PM",
     photo: "https://images.unsplash.com/photo-1594824813573-246434de83fb?auto=format&fit=crop&q=80&w=300",
@@ -97,7 +97,7 @@ export const mockDoctors = [
     reviewsCount: 110,
     city: "Purnia",
     hospitalId: "hosp-1",
-    hospitalName: "Purnia Care Central Hospital",
+    hospitalName: "DocSpot Central Hospital",
     availableDays: ["Tue", "Thu", "Fri"],
     availableTime: "04:30 PM - 07:30 PM",
     photo: "https://images.unsplash.com/photo-1591604021695-0c69b7c05981?auto=format&fit=crop&q=80&w=300",
@@ -114,7 +114,7 @@ export const mockDoctors = [
     reviewsCount: 76,
     city: "Purnia",
     hospitalId: "hosp-1",
-    hospitalName: "Purnia Care Central Hospital",
+    hospitalName: "DocSpot Central Hospital",
     availableDays: ["Mon", "Thu"],
     availableTime: "12:00 PM - 03:00 PM",
     photo: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300",
@@ -142,7 +142,7 @@ export const mockDoctors = [
 export const mockHospitals = [
   {
     id: "hosp-1",
-    name: "Purnia Care Central Hospital",
+    name: "DocSpot Central Hospital",
     address: "NH-31, Line Bazar, Purnia, Bihar - 854301",
     rating: 4.7,
     reviewsCount: 450,
@@ -150,10 +150,10 @@ export const mockHospitals = [
     image: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=600",
     departments: ["Cardiology", "Pediatrics", "Dermatology", "Oncology", "General Medicine", "Emergency Care"],
     contact: "+91 6454 224488",
-    email: "info@purniacare.com",
+    email: "info@DocSpot.com",
     bedsCount: 250,
     facilities: ["24/7 ICU", "Blood Bank", "Trauma Center", "Emergency Pharmacy", "Ambulance Hub"],
-    description: "Purnia Care Central Hospital is the region's leading tertiary care facility, offering comprehensive healthcare services, state-of-the-art diagnostics, and highly qualified specialists.",
+    description: "DocSpot Central Hospital is the region's leading tertiary care facility, offering comprehensive healthcare services, state-of-the-art diagnostics, and highly qualified specialists.",
   },
   {
     id: "hosp-2",
@@ -308,7 +308,7 @@ export const mockDiagnostics = [
     description: "Evaluates overall health; screens for anemia, infections, leukemia, and platelet disorders.",
     category: "Blood Test",
     price: 299,
-    comparison: { purniaCare: 299, othersAvg: 450 },
+    comparison: { DocSpot: 299, othersAvg: 450 },
     duration: "Same Day (4 Hours)",
     instructions: "No fasting required."
   },
@@ -318,7 +318,7 @@ export const mockDiagnostics = [
     description: "Measures average blood sugar levels over the past 3 months; vital for monitoring diabetes control.",
     category: "Diabetic Profile",
     price: 349,
-    comparison: { purniaCare: 349, othersAvg: 550 },
+    comparison: { DocSpot: 349, othersAvg: 550 },
     duration: "Same Day (6 Hours)",
     instructions: "No fasting required."
   },
@@ -328,7 +328,7 @@ export const mockDiagnostics = [
     description: "Measures levels of good and bad cholesterol and triglycerides in blood to check heart risk.",
     category: "Heart Profile",
     price: 499,
-    comparison: { purniaCare: 499, othersAvg: 799 },
+    comparison: { DocSpot: 499, othersAvg: 799 },
     duration: "Next Day",
     instructions: "10-12 hours overnight fasting mandatory."
   },
@@ -338,7 +338,7 @@ export const mockDiagnostics = [
     description: "Assesses liver enzymes, protein, and bilirubin levels to check liver health.",
     category: "Liver Profile",
     price: 599,
-    comparison: { purniaCare: 599, othersAvg: 900 },
+    comparison: { DocSpot: 599, othersAvg: 900 },
     duration: "Same Day",
     instructions: "Fasting recommended but not compulsory."
   },
@@ -348,17 +348,17 @@ export const mockDiagnostics = [
     description: "Evaluates thyroid gland function; helpful for diagnosing hypo- or hyper-thyroidism.",
     category: "Hormone Profile",
     price: 450,
-    comparison: { purniaCare: 450, othersAvg: 650 },
+    comparison: { DocSpot: 450, othersAvg: 650 },
     duration: "Same Day",
     instructions: "Fasting not required, morning sample preferred."
   },
   {
     id: "test-6",
-    name: "Full Body Health Checkup (Purnia Care Platinum)",
+    name: "Full Body Health Checkup (DocSpot Platinum)",
     description: "Includes 72 parameters: CBC, LFT, KFT, Lipid Profile, Thyroid, Blood Sugar, Iron Levels, and Urine Routine.",
     category: "Full Body Package",
     price: 1499,
-    comparison: { purniaCare: 1499, othersAvg: 2999 },
+    comparison: { DocSpot: 1499, othersAvg: 2999 },
     duration: "24 Hours",
     instructions: "10-12 hours overnight fasting is strictly required."
   }
@@ -418,7 +418,7 @@ export const mockFAQs = [
   },
   {
     question: "Is there an additional charge for booking ambulances online?",
-    answer: "No, Purnia Care offers direct booking from local operators with flat per-kilometer pricing and zero booking fee. You pay only for the distance traveled directly to the driver.",
+    answer: "No, DocSpot offers direct booking from local operators with flat per-kilometer pricing and zero booking fee. You pay only for the distance traveled directly to the driver.",
   },
   {
     question: "How long does it take for medicine orders to arrive?",
@@ -441,7 +441,7 @@ export const mockReviews = [
     role: "Patient",
     avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150",
     rating: 5,
-    comment: "Purnia Care made it so easy to book an appointment for my mother's cardiac checkup. Dr. Rajesh Kumar is highly professional, and our test results came in 4 hours on the portal!",
+    comment: "DocSpot made it so easy to book an appointment for my mother's cardiac checkup. Dr. Rajesh Kumar is highly professional, and our test results came in 4 hours on the portal!",
   },
   {
     id: "rev-2",
@@ -464,7 +464,7 @@ export const mockReviews = [
 // Preloaded mock accounts
 export const mockUsers = {
   patient: {
-    email: "patient@purniacare.com",
+    email: "patient@DocSpot.com",
     password: "password123",
     role: "patient",
     name: "Aman Verma",
@@ -476,7 +476,7 @@ export const mockUsers = {
     dob: "1994-08-15"
   },
   doctor: {
-    email: "doctor@purniacare.com",
+    email: "doctor@DocSpot.com",
     password: "password123",
     role: "doctor",
     id: "doc-1",
@@ -484,38 +484,38 @@ export const mockUsers = {
     specialization: "Cardiology",
     qualification: "MD, DM (Cardiology) - AIIMS",
     experience: 15,
-    hospitalName: "Purnia Care Central Hospital",
+    hospitalName: "DocSpot Central Hospital",
     avatar: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=150",
   },
   hospital: {
-    email: "hospital@purniacare.com",
+    email: "hospital@DocSpot.com",
     password: "password123",
     role: "hospital",
     id: "hosp-1",
-    name: "Purnia Care Central Hospital",
+    name: "DocSpot Central Hospital",
     address: "NH-31, Line Bazar, Purnia, Bihar",
     phone: "+91 6454 224488",
     avatar: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=150",
   },
   admin: {
-    email: "admin@purniacare.com",
+    email: "admin@DocSpot.com",
     password: "password123",
     role: "admin",
     name: "Global Administrator",
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150",
   },
   diagnostic_admin: {
-    email: "labs@purniacare.com",
+    email: "labs@DocSpot.com",
     password: "password123",
     role: "diagnostic_admin",
     name: "Lal Path Lab Technician",
     avatar: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=150",
   },
   pharmacy_admin: {
-    email: "pharmacy@purniacare.com",
+    email: "pharmacy@DocSpot.com",
     password: "password123",
     role: "pharmacy_admin",
-    name: "Purnia Care Pharmacy Store",
+    name: "DocSpot Pharmacy Store",
     avatar: "https://images.unsplash.com/photo-1607619056574-7b8f304b3b8f?auto=format&fit=crop&q=80&w=150",
   }
 };
@@ -525,7 +525,7 @@ export const mockAppointments = [
   {
     id: "apt-101",
     patientName: "Aman Verma",
-    patientEmail: "patient@purniacare.com",
+    patientEmail: "patient@DocSpot.com",
     patientPhone: "+91 98765 43210",
     patientAge: 32,
     patientGender: "Male",
@@ -533,7 +533,7 @@ export const mockAppointments = [
     doctorName: "Dr. Rajesh Kumar",
     specialization: "Cardiology",
     qualification: "MD, DM (Cardiology) - AIIMS",
-    hospitalName: "Purnia Care Central Hospital",
+    hospitalName: "DocSpot Central Hospital",
     date: "2026-07-22",
     time: "10:30 AM",
     status: "Upcoming",
@@ -543,7 +543,7 @@ export const mockAppointments = [
   {
     id: "apt-102",
     patientName: "Aman Verma",
-    patientEmail: "patient@purniacare.com",
+    patientEmail: "patient@DocSpot.com",
     patientPhone: "+91 98765 43210",
     patientAge: 32,
     patientGender: "Male",
@@ -551,7 +551,7 @@ export const mockAppointments = [
     doctorName: "Dr. Anjali Sharma",
     specialization: "Pediatrics",
     qualification: "MD (Pediatrics), DCH - Mumbai University",
-    hospitalName: "Purnia Care Central Hospital",
+    hospitalName: "DocSpot Central Hospital",
     date: "2026-07-10",
     time: "03:00 PM",
     status: "Completed",
@@ -583,7 +583,7 @@ export const mockAppointments = [
     doctorName: "Dr. Rajesh Kumar",
     specialization: "Cardiology",
     qualification: "MD, DM (Cardiology) - AIIMS",
-    hospitalName: "Purnia Care Central Hospital",
+    hospitalName: "DocSpot Central Hospital",
     date: "2026-07-20",
     time: "11:00 AM",
     status: "Upcoming",
@@ -601,7 +601,7 @@ export const mockAppointments = [
     doctorName: "Dr. Rajesh Kumar",
     specialization: "Cardiology",
     qualification: "MD, DM (Cardiology) - AIIMS",
-    hospitalName: "Purnia Care Central Hospital",
+    hospitalName: "DocSpot Central Hospital",
     date: "2026-07-20",
     time: "12:15 PM",
     status: "Completed",
@@ -625,7 +625,7 @@ export const mockAppointments = [
   {
     id: "apt-105",
     patientName: "Aman Verma",
-    patientEmail: "patient@purniacare.com",
+    patientEmail: "patient@DocSpot.com",
     patientPhone: "+91 98765 43210",
     patientAge: 32,
     patientGender: "Male",
@@ -633,7 +633,7 @@ export const mockAppointments = [
     doctorName: "Dr. Sneha Roy",
     specialization: "Dermatology",
     qualification: "MD (Dermatology) - Patna Medical College",
-    hospitalName: "Purnia Care Central Hospital",
+    hospitalName: "DocSpot Central Hospital",
     date: "2026-06-28",
     time: "05:00 PM",
     status: "Completed",
@@ -659,7 +659,7 @@ export const mockAppointments = [
 export const mockOrders = [
   {
     id: "ord-8801",
-    userEmail: "patient@purniacare.com",
+    userEmail: "patient@DocSpot.com",
     date: "2026-07-18",
     items: [
       { id: "med-1", name: "Paracetamol 650mg (Dolo)", quantity: 2, price: 32, discount: 15 },
@@ -675,7 +675,7 @@ export const mockOrders = [
   },
   {
     id: "ord-8802",
-    userEmail: "patient@purniacare.com",
+    userEmail: "patient@DocSpot.com",
     date: "2026-07-20",
     items: [
       { id: "med-8", name: "Multivitamin Capsules (Zincovit)", quantity: 3, price: 110, discount: 10 }
@@ -693,11 +693,11 @@ export const mockOrders = [
 export const mockReports = [
   {
     id: "rep-201",
-    userEmail: "patient@purniacare.com",
+    userEmail: "patient@DocSpot.com",
     testName: "Complete Blood Count (CBC)",
     date: "2026-07-12",
     status: "Verified",
-    labName: "Purnia Care Central Labs",
+    labName: "DocSpot Central Labs",
     patientName: "Aman Verma",
     results: [
       { parameter: "Haemoglobin", value: "14.2 g/dL", range: "13.0 - 17.0 g/dL", status: "Normal" },
@@ -708,11 +708,11 @@ export const mockReports = [
   },
   {
     id: "rep-202",
-    userEmail: "patient@purniacare.com",
+    userEmail: "patient@DocSpot.com",
     testName: "HbA1c (Glycated Haemoglobin)",
     date: "2026-07-12",
     status: "Verified",
-    labName: "Purnia Care Central Labs",
+    labName: "DocSpot Central Labs",
     patientName: "Aman Verma",
     results: [
       { parameter: "HbA1c Value", value: "5.8 %", range: "< 5.7 % Normal, 5.7-6.4 % Prediabetic", status: "Prediabetic" },

@@ -1,5 +1,5 @@
-"""
-Purnia Care — Prescription PDF Generator (Backend)
+﻿"""
+DocSpot — Prescription PDF Generator (Backend)
 Uses ReportLab to produce professionally formatted prescription PDFs.
 
 Usage:
@@ -9,7 +9,7 @@ Usage:
     return FileResponse(
         io.BytesIO(pdf_bytes),
         content_type='application/pdf',
-        filename=f"PurniaCare_Rx_{prescription.id}.pdf"
+        filename=f"DocSpot_Rx_{prescription.id}.pdf"
     )
 """
 
@@ -19,7 +19,7 @@ from datetime import date as date_type
 
 def generate_prescription_pdf(prescription) -> bytes:
     """
-    Generate a Purnia Care branded prescription PDF.
+    Generate a DocSpot branded prescription PDF.
 
     Args:
         prescription: Prescription model instance with related appointment.
@@ -92,13 +92,13 @@ def generate_prescription_pdf(prescription) -> bytes:
     doctor_name = f"Dr. {doctor.user.get_full_name() or doctor.user.username}"
     doctor_spec = str(doctor.specialization) if doctor.specialization else ''
     doctor_qual = doctor.qualification or ''
-    hospital_name = hospital.name if hospital else 'Purnia Care'
+    hospital_name = hospital.name if hospital else 'DocSpot'
     patient_name = patient.get_full_name() or patient.username
     patient_phone = getattr(patient, 'phone', '')
 
     # ── Header: teal background with hospital name ────────────
     header_data = [[
-        Paragraph(f"<b>Purnia Care</b>", title_style),
+        Paragraph(f"<b>DocSpot</b>", title_style),
         Paragraph("<b>Rₓ</b>", p_style('rx', fontSize=20, textColor=colors.white, fontName='Helvetica-Bold', alignment=TA_RIGHT))
     ]]
     header_table = Table(header_data, colWidths=['85%', '15%'])
@@ -276,7 +276,7 @@ def generate_prescription_pdf(prescription) -> bytes:
     story.append(HRFlowable(width='100%', thickness=0.4, color=TEAL))
     story.append(Spacer(1, 2 * mm))
     story.append(Paragraph(
-        "Purnia Care Healthcare Platform · www.purniacare.com · helpdesk@purniacare.com · Emergency: +91 6454 224488",
+        "DocSpot Healthcare Platform · www.DocSpot.com · helpdesk@DocSpot.com · Emergency: +91 6454 224488",
         p_style('footer', fontSize=6.5, textColor=MID_SLATE, alignment=TA_CENTER)
     ))
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { 
@@ -19,7 +19,7 @@ const demoUsers = [
   {
     role: 'patient',
     name: 'Aman Verma',
-    email: 'patient@purniacare.com',
+    email: 'patient@DocSpot.com',
     icon: FiUser,
     badgeColor: 'bg-teal-50 text-teal-700 border-teal-200/50 dark:bg-teal-950/30 dark:text-teal-400 dark:border-teal-900/50',
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150',
@@ -28,7 +28,7 @@ const demoUsers = [
   {
     role: 'doctor',
     name: 'Dr. Rajesh Kumar',
-    email: 'doctor@purniacare.com',
+    email: 'doctor@DocSpot.com',
     icon: FiActivity,
     badgeColor: 'bg-sky-50 text-sky-700 border-sky-200/50 dark:bg-sky-950/30 dark:text-sky-400 dark:border-sky-900/50',
     avatar: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=150',
@@ -36,8 +36,8 @@ const demoUsers = [
   },
   {
     role: 'hospital',
-    name: 'Purnia Care Central Hospital',
-    email: 'hospital@purniacare.com',
+    name: 'DocSpot Central Hospital',
+    email: 'hospital@DocSpot.com',
     icon: FiPlusSquare,
     badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200/50 dark:bg-indigo-950/30 dark:text-indigo-400 dark:border-indigo-900/50',
     avatar: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=150',
@@ -46,7 +46,7 @@ const demoUsers = [
   {
     role: 'admin',
     name: 'Global Administrator',
-    email: 'admin@purniacare.com',
+    email: 'admin@DocSpot.com',
     icon: FiShield,
     badgeColor: 'bg-rose-50 text-rose-700 border-rose-200/50 dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-900/50',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150',
@@ -55,7 +55,7 @@ const demoUsers = [
   {
     role: 'diagnostic_admin',
     name: 'Lal Path Lab Technician',
-    email: 'labs@purniacare.com',
+    email: 'labs@DocSpot.com',
     icon: FiActivity,
     badgeColor: 'bg-violet-50 text-violet-700 border-violet-200/50 dark:bg-violet-950/30 dark:text-violet-400 dark:border-violet-900/50',
     avatar: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=150',
@@ -63,8 +63,8 @@ const demoUsers = [
   },
   {
     role: 'pharmacy_admin',
-    name: 'Purnia Care Pharmacy Store',
-    email: 'pharmacy@purniacare.com',
+    name: 'DocSpot Pharmacy Store',
+    email: 'pharmacy@DocSpot.com',
     icon: FiPackage,
     badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200/50 dark:bg-emerald-950/30 dark:text-emerald-450 dark:border-emerald-900/50',
     avatar: 'https://images.unsplash.com/photo-1607619056574-7b8f304b3b8f?auto=format&fit=crop&q=80&w=150',

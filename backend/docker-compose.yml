@@ -1,4 +1,4 @@
-version: '3.8'
+﻿version: '3.8'
 
 services:
   db:
@@ -6,7 +6,7 @@ services:
     container_name: pc_mysql_db
     restart: always
     environment:
-      MYSQL_DATABASE: purnia_care
+      MYSQL_DATABASE: docspot
       MYSQL_ROOT_PASSWORD: rootpassword
     ports:
       - "3306:3306"
@@ -27,9 +27,9 @@ services:
       - "8000:8000"
     environment:
       - DEBUG=True
-      - SECRET_KEY=django-insecure-purnia-care-backend-development-secret-key-1994
+      - SECRET_KEY=django-insecure-docspot-backend-development-secret-key-1994
       - DB_ENGINE=mysql
-      - DB_NAME=purnia_care
+      - DB_NAME=docspot
       - DB_USER=root
       - DB_PASSWORD=rootpassword
       - DB_HOST=db

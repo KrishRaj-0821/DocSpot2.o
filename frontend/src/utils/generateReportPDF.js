@@ -1,4 +1,4 @@
-/**
+﻿/**
  * generateReportPDF
  * Generates a monthly sales analytics report PDF for the pharmacy admin.
  */
@@ -32,12 +32,12 @@ export const generateReportPDF = (orders, medicines, pharmacy) => {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(18);
   doc.setTextColor(...white);
-  doc.text('PurniaCare — Pharmacy Analytics Report', margin + 16, y + 30);
+  doc.text('DocSpot — Pharmacy Analytics Report', margin + 16, y + 30);
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
   doc.setTextColor(210, 245, 230);
-  const pharmName = pharmacy?.name || 'Purnia Care Central Pharmacy';
+  const pharmName = pharmacy?.name || 'DocSpot Central Pharmacy';
   doc.text(`${pharmName}  |  Generated: ${new Date().toLocaleString('en-IN')}`, margin + 16, y + 50);
 
   y += 90;
@@ -223,7 +223,7 @@ export const generateReportPDF = (orders, medicines, pharmacy) => {
   doc.setFontSize(7.5);
   doc.setTextColor(...slate500);
   doc.text(
-    `PurniaCare — ${pharmName}  •  Confidential Report`,
+    `DocSpot — ${pharmName}  •  Confidential Report`,
     pageWidth / 2,
     footerY,
     { align: 'center' }
@@ -236,5 +236,5 @@ export const generateReportPDF = (orders, medicines, pharmacy) => {
   );
 
   // ─── Save ─────────────────────────────────────────────────────────────────
-  doc.save(`PurniaCare_Report_${Date.now()}.pdf`);
+  doc.save(`DocSpot_Report_${Date.now()}.pdf`);
 };

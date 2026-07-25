@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../../services/apiService';
@@ -50,7 +50,7 @@ export const Home = () => {
     <div className="bg-slate-50 dark:bg-slate-900 transition-colors duration-250">
       <SEO 
         title="Home" 
-        description="Purnia Care connects you with the finest local doctors, advanced diagnostics, same-day pharmacy, and 24/7 emergency response in Seemanchal." 
+        description="DocSpot connects you with the finest local doctors, advanced diagnostics, same-day pharmacy, and 24/7 emergency response in Seemanchal." 
       />
       
       {/* 1. HERO SECTION */}
@@ -90,7 +90,7 @@ export const Home = () => {
                 transition={{ delay: 0.2 }}
                 className="text-base text-teal-100 sm:text-lg max-w-xl leading-relaxed"
               >
-                Purnia Care connects you instantly with the finest local doctors, advanced diagnostics, same-day pharmacy services, and 24/7 emergency response in Seemanchal.
+                DocSpot connects you instantly with the finest local doctors, advanced diagnostics, same-day pharmacy services, and 24/7 emergency response in Seemanchal.
               </motion.p>
 
               {/* Emergency Banner */}
@@ -327,10 +327,10 @@ export const Home = () => {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
           <div>
             <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">
-              Why Purnia Care?
+              Why DocSpot?
             </h2>
             <p className="mt-4 text-sm text-slate-550 dark:text-slate-400 leading-relaxed">
-              We understand that seeking medical care locally is often stressful. Purnia Care was engineered to eliminate lines, hidden pricing, and medical availability confusion by bridging patient demands directly to reliable partners.
+              We understand that seeking medical care locally is often stressful. DocSpot was engineered to eliminate lines, hidden pricing, and medical availability confusion by bridging patient demands directly to reliable partners.
             </p>
 
             <ul className="mt-8 space-y-4">
@@ -390,7 +390,7 @@ export const Home = () => {
               Patient Testimonials
             </h2>
             <p className="mt-2 text-slate-550 dark:text-slate-400 max-w-2xl mx-auto text-sm">
-              Read honest stories from residents who trusted Purnia Care.
+              Read honest stories from residents who trusted DocSpot.
             </p>
           </div>
 

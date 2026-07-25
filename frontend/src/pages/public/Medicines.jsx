@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
@@ -107,7 +107,7 @@ export const Medicines = () => {
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="text-center sm:text-left">
           <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Purnia Care Pharmacy Store
+            DocSpot Pharmacy Store
           </h1>
           <p className="mt-2 text-sm text-slate-550 dark:text-slate-400">
             Order prescription and over-the-counter medicines from authorized local vendors.

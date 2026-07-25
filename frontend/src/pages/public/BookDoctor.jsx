@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../../services/apiService';
 import { useAuth } from '../../context/AuthContext';
@@ -225,7 +225,7 @@ export const BookDoctor = () => {
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 rounded-full bg-primary-100 px-4 py-1.5 text-xs font-bold text-primary-700 dark:bg-primary-950/50 dark:text-primary-400 mb-3">
             <FiActivity className="h-3.5 w-3.5" />
-            Purnia Care · Online Booking
+            DocSpot · Online Booking
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">Book a Doctor Consultation</h1>
           <p className="text-sm text-slate-500 mt-1.5">Search · Select · Confirm — in under 2 minutes</p>

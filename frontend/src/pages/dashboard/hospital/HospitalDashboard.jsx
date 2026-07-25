@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
@@ -75,7 +75,7 @@ export const HospitalDashboard = () => {
       availableTime: "11:00 AM - 02:00 PM",
       photo: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300",
       hospitalId: user?.id || 'hosp-1',
-      hospitalName: user?.name || 'Purnia Care Central Hospital'
+      hospitalName: user?.name || 'DocSpot Central Hospital'
     };
 
     setDoctors([...doctors, newDoc]);

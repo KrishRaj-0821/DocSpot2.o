@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { FiUser, FiMail, FiLock, FiPhone, FiMapPin, FiActivity } from 'react-icons/fi';
@@ -55,7 +55,7 @@ export const Register = () => {
     <div className="flex min-h-[85vh] items-center justify-center bg-slate-50 dark:bg-slate-900 px-4 py-12 transition-colors duration-250">
       <SEO 
         title="Register Account" 
-        description="Create your patient or provider profile on Purnia Care to start booking services online." 
+        description="Create your patient or provider profile on DocSpot to start booking services online." 
       />
       <div className="w-full max-w-lg space-y-8 rounded-3xl bg-white p-8 shadow-xl border border-slate-100 dark:bg-slate-800 dark:border-slate-800">
         
@@ -236,7 +236,7 @@ export const Register = () => {
             disabled={submitting}
             className="w-full rounded-xl bg-primary-600 py-3.5 text-xs font-bold text-white shadow-lg hover:bg-primary-750 transition-colors cursor-pointer"
           >
-            {submitting ? 'Registering account...' : 'Create Purnia Care Account'}
+            {submitting ? 'Registering account...' : 'Create DocSpot Account'}
           </button>
         </form>
 

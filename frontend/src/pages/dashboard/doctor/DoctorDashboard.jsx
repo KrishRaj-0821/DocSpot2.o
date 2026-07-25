@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
@@ -97,7 +97,7 @@ export const DoctorDashboard = () => {
     doctorName: user?.name || apt.doctorName,
     specialization: user?.specialization || apt.specialization,
     qualification: user?.qualification || docQual,
-    hospitalName: user?.hospitalName || 'Purnia Care Central Hospital',
+    hospitalName: user?.hospitalName || 'DocSpot Central Hospital',
     patientName: apt.patientName,
     patientAge: apt.patientAge,
     patientGender: apt.patientGender,

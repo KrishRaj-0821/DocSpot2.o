@@ -1,4 +1,4 @@
-# Purnia Care - Healthcare & Hospital Management Platform
+﻿# DocSpot - Healthcare & Hospital Management Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Hosted on Vercel](https://img.shields.io/badge/Hosted%20on-Vercel-000000?logo=vercel&logoColor=white)](https://vercel.com)
@@ -6,10 +6,10 @@
 [![React](https://img.shields.io/badge/Frontend-React%2019%20%2B%20Vite-61DAFB?logo=react)](frontend/)
 [![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20v4-38BDF8?logo=tailwindcss)](frontend/)
 
-**Purnia Care** is an all-in-one digital healthcare ecosystem designed for regional health networks, patients, doctors, hospitals, pharmacies, diagnostic centers, and ambulance providers. It seamlessly connects clinical appointment bookings, real-time hospital bed availability tracking, emergency ambulance dispatch, online pharmacy inventory with shopping cart ordering, diagnostic package tests, and multi-role analytical dashboards.
+**DocSpot** is an all-in-one digital healthcare ecosystem designed for regional health networks, patients, doctors, hospitals, pharmacies, diagnostic centers, and ambulance providers. It seamlessly connects clinical appointment bookings, real-time hospital bed availability tracking, emergency ambulance dispatch, online pharmacy inventory with shopping cart ordering, diagnostic package tests, and multi-role analytical dashboards.
 
 > [!NOTE]  
-> **Deployment Target**: The Purnia Care web application is optimized for deployment on **Vercel** with a root `vercel.json` configuration and automated client-side routing rewrites.
+> **Deployment Target**: The DocSpot web application is optimized for deployment on **Vercel** with a root `vercel.json` configuration and automated client-side routing rewrites.
 
 ---
 
@@ -177,12 +177,12 @@ Open `http://localhost:5173/` in your browser.
 
 | Role | Username / Email | Password | Access Level |
 |---|---|---|---|
-| **Patient** | `aman_verma` / `patient@purniacare.com` | `password123` | Patient Profile, Medical Records, Cart, Appointments |
-| **Doctor** | `dr_kumar` / `doctor@purniacare.com` | `password123` | Prescription Issuer, OPD Schedule, Patient Consultations |
-| **Hospital Admin** | `hosp_admin` / `hospital@purniacare.com` | `password123` | Bed Management, Department Specs, Admission Requests |
-| **Super Admin** | `pc_admin` / `admin@purniacare.com` | `password123` | Global Platform Metrics, Users Management, Master Controls |
-| **Diagnostic Admin**| `diag_admin` / `diagnostic@purniacare.com` | `password123` | Test Package Catalog, Lab Report Uploads, Slot Booking |
-| **Ambulance Driver**| `driver_ramesh` / `driver@purniacare.com` | `password123` | Dispatch Requests, Emergency Location, Trip Status |
+| **Patient** | `aman_verma` / `patient@DocSpot.com` | `password123` | Patient Profile, Medical Records, Cart, Appointments |
+| **Doctor** | `dr_kumar` / `doctor@DocSpot.com` | `password123` | Prescription Issuer, OPD Schedule, Patient Consultations |
+| **Hospital Admin** | `hosp_admin` / `hospital@DocSpot.com` | `password123` | Bed Management, Department Specs, Admission Requests |
+| **Super Admin** | `pc_admin` / `admin@DocSpot.com` | `password123` | Global Platform Metrics, Users Management, Master Controls |
+| **Diagnostic Admin**| `diag_admin` / `diagnostic@DocSpot.com` | `password123` | Test Package Catalog, Lab Report Uploads, Slot Booking |
+| **Ambulance Driver**| `driver_ramesh` / `driver@DocSpot.com` | `password123` | Dispatch Requests, Emergency Location, Trip Status |
 
 ---
 

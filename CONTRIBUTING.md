@@ -1,6 +1,6 @@
-# Contributing to Purnia Care
+﻿# Contributing to DocSpot
 
-Thank you for your interest in contributing to **Purnia Care**! We welcome all bug reports, feature suggestions, UI enhancements, documentation improvements, and pull requests.
+Thank you for your interest in contributing to **DocSpot**! We welcome all bug reports, feature suggestions, UI enhancements, documentation improvements, and pull requests.
 
 Please take a moment to review this document before submitting your contribution.
 

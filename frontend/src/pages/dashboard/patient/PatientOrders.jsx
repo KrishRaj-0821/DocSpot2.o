@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
 import { FiPackage, FiTruck, FiMapPin, FiEye, FiDownload, FiDollarSign, FiClock } from 'react-icons/fi';
@@ -128,7 +128,7 @@ export const PatientOrders = () => {
                     }`} />
                     <div>
                       <p className="text-xs font-bold text-slate-905 dark:text-white">In Transit</p>
-                      <span className="text-[10px] text-slate-400">Dispatched from Purnia Care central vendor</span>
+                      <span className="text-[10px] text-slate-400">Dispatched from DocSpot central vendor</span>
                     </div>
                   </div>
 

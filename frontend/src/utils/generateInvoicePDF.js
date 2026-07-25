@@ -1,4 +1,4 @@
-/**
+﻿/**
  * generateInvoicePDF
  * Generates a professional pharmacy invoice PDF using jsPDF + autoTable.
  * Works purely client-side — no server needed.
@@ -34,7 +34,7 @@ export const generateInvoicePDF = (order, pharmacy) => {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
   doc.setTextColor(...white);
-  doc.text('PurniaCare', margin + 16, y + 28);
+  doc.text('DocSpot', margin + 16, y + 28);
 
   // Tag line
   doc.setFont('helvetica', 'normal');
@@ -63,7 +63,7 @@ export const generateInvoicePDF = (order, pharmacy) => {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8.5);
   doc.setTextColor(...slate500);
-  const pharmName = pharmacy?.name || 'Purnia Care Central Pharmacy';
+  const pharmName = pharmacy?.name || 'DocSpot Central Pharmacy';
   const pharmAddr = pharmacy?.address || 'Purnia, Bihar';
   const pharmPhone = pharmacy?.phone || '+91 99999 55555';
   const pharmGST = pharmacy?.gst_number || '20AAECP9876F1Z5';
@@ -240,7 +240,7 @@ export const generateInvoicePDF = (order, pharmacy) => {
     { align: 'center' }
   );
   doc.text(
-    'Thank you for choosing PurniaCare! For support: support@purniacare.com',
+    'Thank you for choosing DocSpot! For support: support@DocSpot.com',
     pageWidth / 2,
     footerY + 24,
     { align: 'center' }

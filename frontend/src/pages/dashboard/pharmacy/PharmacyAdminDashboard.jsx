@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
@@ -72,10 +72,10 @@ export const PharmacyAdminDashboard = () => {
       } else {
         // Mock fallback profile
         const mockProfile = {
-          id: 'phm-1', name: 'Purnia Care Central Pharmacy', owner_name: 'Sanjay Gupta',
+          id: 'phm-1', name: 'DocSpot Central Pharmacy', owner_name: 'Sanjay Gupta',
           drug_license_number: 'DL-98765-PUR', gst_number: '20AAECP9876F1Z5',
           address: 'Line Bazar Chowk, Purnia, Bihar - 854301', city: 'Purnia',
-          phone: '+91 99999 55555', email: 'pharmacy@purniacare.com',
+          phone: '+91 99999 55555', email: 'pharmacy@DocSpot.com',
           store_timings: '8:00 AM - 10:00 PM', home_delivery_available: true,
           logo: 'https://images.unsplash.com/photo-1607619056574-7b8f304b3b8f?auto=format&fit=crop&q=80&w=150',
           kyc_status: 'Approved', delivery_charges: 30.00,
@@ -97,10 +97,10 @@ export const PharmacyAdminDashboard = () => {
       console.error("Failed to load local database, applying mock data", err);
       // Fallback mocks
       setPharmacy({
-        name: 'Purnia Care Central Pharmacy', owner_name: 'Sanjay Gupta',
+        name: 'DocSpot Central Pharmacy', owner_name: 'Sanjay Gupta',
         drug_license_number: 'DL-98765-PUR', gst_number: '20AAECP9876F1Z5',
         address: 'Line Bazar Chowk, Purnia, Bihar - 854301', city: 'Purnia',
-        phone: '+91 99999 55555', email: 'pharmacy@purniacare.com',
+        phone: '+91 99999 55555', email: 'pharmacy@DocSpot.com',
         store_timings: '8:00 AM - 10:00 PM', home_delivery_available: true,
         logo: 'https://images.unsplash.com/photo-1607619056574-7b8f304b3b8f?auto=format&fit=crop&q=80&w=150',
         kyc_status: 'Approved', delivery_charges: 30,
@@ -249,8 +249,8 @@ export const PharmacyAdminDashboard = () => {
   return (
     <div className="space-y-6">
       <SEO 
-        title="Pharmacy Dashboard | Purnia Care" 
-        description="Purnia Care Medicine Shopkeeper panel. Manage inventories, verify prescriptions, and dispatch orders." 
+        title="Pharmacy Dashboard | DocSpot" 
+        description="DocSpot Medicine Shopkeeper panel. Manage inventories, verify prescriptions, and dispatch orders." 
       />
 
       {/* Profile Header */}
@@ -993,7 +993,7 @@ export const PharmacyAdminDashboard = () => {
                 </div>
                 <div>
                   <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Aman Verma</span>
-                  <p className="text-[10px] text-slate-400">patient@purniacare.com | +91 98765 43210</p>
+                  <p className="text-[10px] text-slate-400">patient@DocSpot.com | +91 98765 43210</p>
                 </div>
               </div>
               <div className="text-right">

@@ -1,5 +1,5 @@
-"""
-Purnia Care — Appointment Confirmation PDF Generator
+﻿"""
+DocSpot — Appointment Confirmation PDF Generator
 Uses ReportLab to produce professionally formatted appointment confirmation PDFs with a QR code.
 """
 

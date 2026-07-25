@@ -7,7 +7,7 @@ export const PageLoader = () => {
       <div className="flex flex-col items-center space-y-4">
         <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-600 border-t-transparent dark:border-primary-400"></div>
         <p className="text-sm font-bold text-slate-700 dark:text-slate-300 animate-pulse">
-          Purnia Care is processing...
+          DocSpot is processing...
         </p>
       </div>
     </div>

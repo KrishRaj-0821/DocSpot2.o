@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import api from '../../services/apiService';
 import { FiCheckCircle, FiFileText, FiUpload, FiDollarSign, FiClock, FiSearch } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -103,7 +103,7 @@ export const Diagnostics = () => {
             <div className="absolute right-0 bottom-0 translate-x-6 translate-y-6 opacity-10">
               <FiCheckCircle className="h-48 w-48" />
             </div>
-            <h3 className="text-lg font-bold">Purnia Care Price Guarantee</h3>
+            <h3 className="text-lg font-bold">DocSpot Price Guarantee</h3>
             <p className="mt-1.5 text-xs text-teal-150 leading-relaxed">
               We partner directly with NABL-accredited diagnostic centers in Line Bazar. You get up to 50% discount on standard scanning and blood profiles.
             </p>
@@ -121,7 +121,7 @@ export const Diagnostics = () => {
             <div className="space-y-4">
               {filteredTests.map((test) => {
                 const savingsPercent = Math.round(
-                  ((test.comparison.othersAvg - test.comparison.purniaCare) / test.comparison.othersAvg) * 100
+                  ((test.comparison.othersAvg - test.comparison.DocSpot) / test.comparison.othersAvg) * 100
                 );
                 return (
                   <div 

@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -19,7 +19,7 @@ from payments.models import PaymentTransaction, Invoice
 User = get_user_model()
 
 class Command(BaseCommand):
-    help = "Seed database with mock medical data for Purnia Care dashboards"
+    help = "Seed database with mock medical data for DocSpot dashboards"
 
     def handle(self, *args, **kwargs):
         self.stdout.write(self.style.WARNING("Clearing existing databases (except users)..."))
@@ -38,14 +38,14 @@ class Command(BaseCommand):
         
         # Clear specific users first
         User.objects.filter(email__in=[
-            "patient@purniacare.com", "doctor@purniacare.com", 
-            "hospital@purniacare.com", "admin@purniacare.com", "labs@purniacare.com",
-            "pharmacy@purniacare.com"
+            "patient@DocSpot.com", "doctor@DocSpot.com", 
+            "hospital@DocSpot.com", "admin@DocSpot.com", "labs@DocSpot.com",
+            "pharmacy@DocSpot.com"
         ]).delete()
 
         admin_user = User.objects.create_user(
             username="pc_admin",
-            email="admin@purniacare.com",
+            email="admin@DocSpot.com",
             password="password123",
             first_name="Admin",
             last_name="System",
@@ -56,7 +56,7 @@ class Command(BaseCommand):
 
         doc_user = User.objects.create_user(
             username="dr_kumar",
-            email="doctor@purniacare.com",
+            email="doctor@DocSpot.com",
             password="password123",
             first_name="Rajesh",
             last_name="Kumar",
@@ -67,9 +67,9 @@ class Command(BaseCommand):
 
         hosp_user = User.objects.create_user(
             username="hosp_admin",
-            email="hospital@purniacare.com",
+            email="hospital@DocSpot.com",
             password="password123",
-            first_name="Purnia Care",
+            first_name="DocSpot",
             last_name="Admin",
             role=Role.HOSPITAL_ADMIN,
             city="Purnia",
@@ -78,7 +78,7 @@ class Command(BaseCommand):
 
         patient_user = User.objects.create_user(
             username="aman_verma",
-            email="patient@purniacare.com",
+            email="patient@DocSpot.com",
             password="password123",
             first_name="Aman",
             last_name="Verma",
@@ -91,7 +91,7 @@ class Command(BaseCommand):
 
         lab_user = User.objects.create_user(
             username="pc_lab_tech",
-            email="labs@purniacare.com",
+            email="labs@DocSpot.com",
             password="password123",
             first_name="Lal Path",
             last_name="Technician",
@@ -102,9 +102,9 @@ class Command(BaseCommand):
 
         pharmacy_user = User.objects.create_user(
             username="pc_pharmacy",
-            email="pharmacy@purniacare.com",
+            email="pharmacy@DocSpot.com",
             password="password123",
-            first_name="Purnia Care",
+            first_name="DocSpot",
             last_name="Pharmacy",
             role=Role.PHARMACY_ADMIN,
             city="Purnia",
@@ -113,14 +113,14 @@ class Command(BaseCommand):
 
         pharm_profile = PharmacyProfile.objects.create(
             user=pharmacy_user,
-            name="Purnia Care Central Pharmacy",
+            name="DocSpot Central Pharmacy",
             owner_name="Sanjay Gupta",
             drug_license_number="DL-98765-PUR",
             gst_number="20AAECP9876F1Z5",
             address="Line Bazar Chowk, Purnia, Bihar - 854301",
             city="Purnia",
             phone="+91 99999 55555",
-            email="pharmacy@purniacare.com",
+            email="pharmacy@DocSpot.com",
             store_timings="8:00 AM - 10:00 PM",
             home_delivery_available=True,
             kyc_status=PharmacyProfile.KycStatus.APPROVED,
@@ -130,11 +130,11 @@ class Command(BaseCommand):
         # 2. Seeding Hospitals
         self.stdout.write("Seeding Hospitals & Departments...")
         h1 = HospitalProfile.objects.create(
-            name="Purnia Care Central Hospital",
+            name="DocSpot Central Hospital",
             address="NH-31, Line Bazar, Purnia, Bihar - 854301",
             city="Purnia",
             phone="+91 6454 224488",
-            email="info@purniacare.com",
+            email="info@DocSpot.com",
             beds_count=250,
             image="https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=600",
             description="Leading tertiary care facility offering comprehensive medical services."
@@ -257,11 +257,11 @@ class Command(BaseCommand):
         # 6. Diagnostics Centers
         self.stdout.write("Seeding Laboratory Diagnostics...")
         dc = DiagnosticCenter.objects.create(
-            name="Purnia Care Central Labs",
+            name="DocSpot Central Labs",
             address="NH-31, Line Bazar, Purnia",
             city="Purnia",
             phone="+91 6454 224499",
-            email="labs@purniacare.com",
+            email="labs@DocSpot.com",
             image="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=600"
         )
 
@@ -376,4 +376,4 @@ class Command(BaseCommand):
             discount=15
         )
 
-        self.stdout.write(self.style.SUCCESS("Database successfully seeded with Purnia Care clinical mock datasets!"))
+        self.stdout.write(self.style.SUCCESS("Database successfully seeded with DocSpot clinical mock datasets!"))

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiActivity, FiMail, FiPhone, FiMapPin, FiClock } from 'react-icons/fi';
+import { FiMail, FiPhone, FiMapPin, FiClock } from 'react-icons/fi';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -13,14 +13,14 @@ export const Footer = () => {
           
           {/* Column 1: Info & Logo */}
           <div className="space-y-4">
-            <Link to="/" className="flex items-center space-x-2 text-primary-700 dark:text-primary-400">
-              <FiActivity className="h-6 w-6 stroke-[2.5]" />
+            <Link to="/" className="flex items-center space-x-2">
+              <img src="/favicon.svg" alt="DocSpot" className="h-7 w-7" />
               <span className="font-sans text-lg font-bold tracking-tight text-slate-800 dark:text-white">
-                Purnia<span className="text-primary-600 dark:text-primary-400 font-extrabold">Care</span>
+                Doc<span className="text-primary-600 dark:text-primary-400 font-extrabold">Spot</span>
               </span>
             </Link>
             <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-              Simplifying healthcare access across Purnia and Seemanchal regions. Book doctors, query diagnostics, get medicines, and summon emergency care in one click.
+              Connecting patients with the right doctors, diagnostics, medicines, and emergency care — all in one spot.
             </p>
             <div className="flex space-x-3 text-sm text-slate-500 dark:text-slate-400">
               <FiClock className="h-4.5 w-4.5 mt-0.5 text-primary-600 dark:text-primary-400" />
@@ -118,7 +118,7 @@ export const Footer = () => {
               </li>
               <li className="flex items-center">
                 <FiMail className="mr-2 h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
-                <span>support@purniacare.com</span>
+                <span>support@DocSpot.com</span>
               </li>
             </ul>
             <div className="mt-4 rounded-lg bg-red-50 p-3 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30">
@@ -134,7 +134,7 @@ export const Footer = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row text-xs">
             <p className="text-slate-500 dark:text-slate-400">
-              &copy; {currentYear} Purnia Care. All rights reserved. Made for the people of Purnia.
+              &copy; {currentYear} DocSpot. All rights reserved. Locating Care. Connecting Hearts.
             </p>
             <div className="flex space-x-4 text-slate-500 dark:text-slate-400">
               <a href="#privacy" className="hover:text-primary-600 hover:underline">Privacy Policy</a>

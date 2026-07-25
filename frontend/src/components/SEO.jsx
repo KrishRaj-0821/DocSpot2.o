@@ -4,8 +4,8 @@ export const SEO = ({ title, description, keywords }) => {
   useEffect(() => {
     // 1. Update Title
     const formattedTitle = title 
-      ? `${title} | Purnia Care` 
-      : 'Purnia Care | Modern Hospital Management & Patient Portal';
+      ? `${title} | DocSpot` 
+      : 'DocSpot | Find Doctors, Book Appointments & Healthcare Services';
     if (document.title !== formattedTitle) {
       document.title = formattedTitle;
     }
@@ -17,7 +17,7 @@ export const SEO = ({ title, description, keywords }) => {
       metaDescription.name = 'description';
       document.head.appendChild(metaDescription);
     }
-    const targetDesc = description || 'Purnia Care connects you with the finest local doctors, advanced diagnostics, same-day pharmacy, and 24/7 emergency response in Seemanchal.';
+    const targetDesc = description || 'DocSpot connects you with the best doctors, diagnostics, pharmacy, and 24/7 emergency care near you.';
     metaDescription.setAttribute('content', targetDesc);
 
     // 3. Update/Create Meta Keywords
@@ -27,7 +27,7 @@ export const SEO = ({ title, description, keywords }) => {
       metaKeywords.name = 'keywords';
       document.head.appendChild(metaKeywords);
     }
-    const targetKeywords = keywords || 'healthcare, doctors, booking, ambulance, pharmacy, diagnostics, Purnia Care';
+    const targetKeywords = keywords || 'healthcare, doctors, booking, ambulance, pharmacy, diagnostics, DocSpot';
     metaKeywords.setAttribute('content', targetKeywords);
 
   }, [title, description, keywords]);

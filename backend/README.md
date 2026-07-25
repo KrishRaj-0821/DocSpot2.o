@@ -1,6 +1,6 @@
-# Purnia Care Hospital Management System - Backend (Django)
+﻿# DocSpot Hospital Management System - Backend (Django)
 
-This is the production-ready REST API backend for the **Purnia Care** healthcare platform, built using Django 5+ and Django REST Framework.
+This is the production-ready REST API backend for the **DocSpot** healthcare platform, built using Django 5+ and Django REST Framework.
 
 ## Features
 
@@ -83,10 +83,10 @@ Use these credentials to retrieve JWT access tokens from `/api/token/`:
 
 | Role | Username / Email | Password |
 |---|---|---|
-| **Patient** | `aman_verma` / `patient@purniacare.com` | `password123` |
-| **Doctor** | `dr_kumar` / `doctor@purniacare.com` | `password123` |
-| **Hospital Admin** | `hosp_admin` / `hospital@purniacare.com` | `password123` |
-| **Super Admin** | `pc_admin` / `admin@purniacare.com` | `password123` |
+| **Patient** | `aman_verma` / `patient@DocSpot.com` | `password123` |
+| **Doctor** | `dr_kumar` / `doctor@DocSpot.com` | `password123` |
+| **Hospital Admin** | `hosp_admin` / `hospital@DocSpot.com` | `password123` |
+| **Super Admin** | `pc_admin` / `admin@DocSpot.com` | `password123` |
 
 ---
 

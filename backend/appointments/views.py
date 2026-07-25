@@ -1,4 +1,4 @@
-import io
+﻿import io
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -232,7 +232,7 @@ class PrescriptionViewSet(viewsets.ModelViewSet):
             from appointments.pdf_utils import generate_prescription_pdf
             pdf_bytes = generate_prescription_pdf(prescription)
             buffer = io.BytesIO(pdf_bytes)
-            filename = f"PurniaCare_Rx_{str(prescription.id)[:8].upper()}.pdf"
+            filename = f"DocSpot_Rx_{str(prescription.id)[:8].upper()}.pdf"
             response = FileResponse(
                 buffer,
                 content_type='application/pdf',
