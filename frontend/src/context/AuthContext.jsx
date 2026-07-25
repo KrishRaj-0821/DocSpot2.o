@@ -4,23 +4,33 @@ import api from '../services/apiService';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('purnia_token') || null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Restore session on mount
+  const [token, setToken] = useState(() => localStorage.getItem('purnia_token') || null);
+  const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('purnia_user');
-    if (savedUser && savedUser !== 'undefined' && token) {
+    if (savedUser && savedUser !== 'undefined') {
       try {
-        setUser(JSON.parse(savedUser));
+        return JSON.parse(savedUser);
       } catch (e) {
         console.error("Failed to parse saved user from localStorage", e);
         localStorage.removeItem('purnia_user');
       }
     }
-    setLoading(false);
-  }, [token]);
+    return null;
+  });
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (token && !user) {
+      const savedUser = localStorage.getItem('purnia_user');
+      if (savedUser && savedUser !== 'undefined') {
+        try {
+          setUser(JSON.parse(savedUser));
+        } catch (e) {
+          console.error("Failed to parse saved user from localStorage", e);
+        }
+      }
+    }
+  }, [token, user]);
 
   const login = async (email, password) => {
     try {
