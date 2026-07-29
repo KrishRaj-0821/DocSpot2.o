@@ -30,9 +30,15 @@ export const Home = () => {
       try {
         const res = await api.get('/doctors');
         // slice to top 3 doctors
-        setPopularDoctors(res.data.slice(0, 3));
+        if (res.data && Array.isArray(res.data)) {
+          setPopularDoctors(res.data.slice(0, 3));
+        } else {
+          console.warn('API returned non-array for doctors', res.data);
+          setPopularDoctors([]);
+        }
       } catch (err) {
         console.error(err);
+        setPopularDoctors([]);
       } finally {
         setLoading(false);
       }
@@ -324,7 +330,7 @@ export const Home = () => {
             </div>
           ) : (
             <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {popularDoctors.map((doc) => (
+              {Array.isArray(popularDoctors) && popularDoctors.map((doc) => (
                 <div 
                   key={doc.id}
                   className="overflow-hidden rounded-2xl bg-white shadow-lg border border-slate-100 dark:bg-slate-900 dark:border-slate-800 transition-all hover:scale-[1.01]"
