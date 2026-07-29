@@ -41,8 +41,12 @@ router.register('ambulance-bookings', AmbulanceBookingViewSet, basename='ambulan
 router.register('payments', PaymentTransactionViewSet, basename='payment')
 router.register('notifications', NotificationViewSet, basename='notification')
 
+from seo.views import dynamic_sitemap_xml, robots_txt
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('sitemap.xml', dynamic_sitemap_xml, name='sitemap_xml'),
+    path('robots.txt', robots_txt, name='robots_txt'),
     
     # 1. JWT Authentication Endpoints
     path('api/login', LoginView.as_view(), name='auth_login_no_slash'),

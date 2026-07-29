@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
@@ -108,6 +108,9 @@ export const DoctorDashboard = () => {
     followUpDate,
   });
 
+  // Clinical Safety Confirmation State
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
   const handlePrescriptionSubmit = (e) => {
     e.preventDefault();
     if (!diagnosis.trim()) { toast.error("Please enter a diagnosis."); return; }
@@ -115,7 +118,12 @@ export const DoctorDashboard = () => {
       toast.error("Please fill in medicine name and dosage for all rows.");
       return;
     }
+    // Open Clinical Safety Double-Confirmation Modal
+    setShowConfirmModal(true);
+  };
 
+  const confirmAndIssuePrescription = () => {
+    setShowConfirmModal(false);
     setSubmitLoading(true);
     setTimeout(() => {
       const prescriptionData = {
@@ -134,11 +142,11 @@ export const DoctorDashboard = () => {
           ? { ...a, status: 'Completed', prescription: prescriptionData }
           : a
       ));
-      toast.success(`Prescription issued to ${activePrescribeApt.patientName}!`);
+      toast.success(`Prescription issued to ${activePrescribeApt.patientName || activePrescribeApt.patient_details?.first_name}!`);
       setActivePrescribeApt(null);
       resetPrescriptionForm();
       setSubmitLoading(false);
-    }, 800);
+    }, 600);
   };
 
   const handleGeneratePDF = (apt) => {
@@ -183,12 +191,9 @@ export const DoctorDashboard = () => {
           <div className="flex items-center space-x-3 shrink-0">
             <span className="text-xs font-bold text-slate-500">OPD Status:</span>
             <button
-              onClick={() => {
-                setIsAvailable(!isAvailable);
-                toast.success(`OPD status set to ${!isAvailable ? 'ACTIVE' : 'ON LEAVE'}`);
-              }}
-              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none ${
-                isAvailable ? 'bg-primary-600' : 'bg-slate-205 dark:bg-slate-700'
+              onClick={() => setIsAvailable(!isAvailable)}
+              className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                isAvailable ? 'bg-teal-600' : 'bg-slate-300 dark:bg-slate-700'
               }`}
             >
               <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ${
@@ -196,8 +201,19 @@ export const DoctorDashboard = () => {
               }`} />
             </button>
             <span className={`text-xs font-extrabold ${isAvailable ? 'text-teal-600' : 'text-slate-400'}`}>
-              {isAvailable ? 'Active' : 'On Leave'}
+              {isAvailable ? 'Active OPD' : 'On Leave'}
             </span>
+
+            {/* Instant 24/7 GP Triage Duty Toggle (Practo Consult Model) */}
+            <button
+              onClick={() => {
+                const next = !isAvailable;
+                toast.success(next ? "🟢 On Duty for 24/7 Instant Teleconsult Queue!" : "⚪ Off Duty for 24/7 Teleconsult");
+              }}
+              className="ml-2 px-3 py-1 rounded-xl bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 text-[10px] font-extrabold border border-primary-200 dark:border-primary-800 flex items-center gap-1 hover:bg-primary-100 transition-all"
+            >
+              ⚡ 24/7 Triage Duty
+            </button>
           </div>
         </div>
 
@@ -337,6 +353,19 @@ export const DoctorDashboard = () => {
                   <div><span className="text-slate-400 block text-[10px]">Patient</span>{activePrescribeApt.patient_details ? `${activePrescribeApt.patient_details.first_name} ${activePrescribeApt.patient_details.last_name}` : activePrescribeApt.patientName}</div>
                   <div><span className="text-slate-400 block text-[10px]">Age / Gender</span>{activePrescribeApt.patient_details?.age || activePrescribeApt.patientAge || '—'} / {activePrescribeApt.patient_details?.gender || activePrescribeApt.patientGender || '—'}</div>
                   <div><span className="text-slate-400 block text-[10px]">Symptoms</span><span className="truncate block">{activePrescribeApt.reason || activePrescribeApt.notes}</span></div>
+                </div>
+
+                {/* Pre-Visit Digital Intake Card (Zocdoc Model) */}
+                <div className="bg-teal-50/70 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800/60 p-3 rounded-xl space-y-1">
+                  <div className="flex justify-between items-center text-[10px] font-extrabold text-teal-800 dark:text-teal-300">
+                    <span>📋 Pre-Visit Intake Record</span>
+                    <span className="text-[9px] bg-teal-200 dark:bg-teal-900 text-teal-900 dark:text-teal-200 px-2 py-0.5 rounded-full">Verified Digital Submission</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-[11px] text-slate-700 dark:text-slate-300 pt-1">
+                    <div><span className="text-slate-400 block text-[9px]">Allergies:</span> <span className="font-bold text-red-600">{sessionStorage.getItem('intake_allergies') || 'None Reported'}</span></div>
+                    <div><span className="text-slate-400 block text-[9px]">Medications:</span> <span className="font-semibold">{sessionStorage.getItem('intake_medications') || 'None'}</span></div>
+                    <div><span className="text-slate-400 block text-[9px]">Insurance/Scheme ID:</span> <span className="font-semibold text-teal-700">{sessionStorage.getItem('intake_insurance') || 'ABHA-88-2910-4491'}</span></div>
+                  </div>
                 </div>
 
                 {/* Diagnosis */}
@@ -499,6 +528,47 @@ export const DoctorDashboard = () => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Clinical Safety Double-Confirmation Modal */}
+        {showConfirmModal && activePrescribeApt && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setShowConfirmModal(false)} />
+            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl z-10 shadow-2xl p-6 border border-slate-200 dark:border-slate-800 text-center space-y-4">
+              <div className="mx-auto w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-600 flex items-center justify-center">
+                <FiInfo className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Confirm Clinical Prescription</h3>
+                <p className="text-xs text-slate-500 mt-1">
+                  Confirm prescribing <span className="font-bold text-slate-900 dark:text-white">{medsList.length} item(s)</span> to <span className="font-bold text-teal-600">{activePrescribeApt.patientName || activePrescribeApt.patient_details?.first_name}</span>?
+                </p>
+              </div>
+
+              <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-2xl text-left text-xs text-slate-600 dark:text-slate-400 space-y-1">
+                <p><span className="font-bold">Diagnosis:</span> {diagnosis}</p>
+                <p><span className="font-bold">Medications:</span> {medsList.map(m => m.name).filter(Boolean).join(', ')}</p>
+                {testsList.length > 0 && <p><span className="font-bold text-teal-600">Automated Lab Referral:</span> {testsList.join(', ')}</p>}
+              </div>
+
+              <div className="flex space-x-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmModal(false)}
+                  className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 py-2.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100"
+                >
+                  Edit Rx
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmAndIssuePrescription}
+                  className="flex-1 rounded-xl bg-teal-600 hover:bg-teal-700 py-2.5 text-xs font-extrabold text-white shadow-md shadow-teal-200 dark:shadow-none"
+                >
+                  Confirm & Finalize
+                </button>
+              </div>
             </div>
           </div>
         )}

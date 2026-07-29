@@ -18,6 +18,7 @@ import BookDoctor from '../pages/public/BookDoctor';
 import Login from '../pages/public/Login';
 import Register from '../pages/public/Register';
 import VerifyAppointment from '../pages/public/VerifyAppointment';
+import DoctorDetail from '../pages/public/DoctorDetail';
 
 // Dashboard Pages
 import PatientDashboard from '../pages/dashboard/patient/PatientDashboard';
@@ -54,6 +55,7 @@ export const AppRoutes = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/book-doctor" element={<BookDoctor />} />
+        <Route path="/doctor/:doctor_slug" element={<DoctorDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/appointment/:appointment_id" element={<VerifyAppointment />} />

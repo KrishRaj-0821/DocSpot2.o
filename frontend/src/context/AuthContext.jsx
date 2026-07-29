@@ -42,7 +42,24 @@ export const AuthProvider = ({ children }) => {
       
       setToken(jwtToken);
       setUser(userData);
-      return { success: true, user: userData };
+
+      // Healthcare Professional role routing
+      let targetPath = '/patient/dashboard';
+      const role = (userData.role || '').toLowerCase();
+
+      if (['doctor'].includes(role)) {
+        targetPath = '/doctor/dashboard';
+      } else if (['hospital', 'hospital_admin', 'clinic_admin'].includes(role)) {
+        targetPath = '/hospital/dashboard';
+      } else if (['admin', 'super_admin'].includes(role)) {
+        targetPath = '/admin/dashboard';
+      } else if (['diagnostic_admin'].includes(role)) {
+        targetPath = '/diagnostics-admin/dashboard';
+      } else if (['pharmacy_admin'].includes(role)) {
+        targetPath = '/pharmacy-admin/dashboard';
+      }
+
+      return { success: true, user: userData, targetPath };
     } catch (error) {
       const msg = error?.response?.data?.message || 'Login failed. Please check your credentials.';
       return { success: false, message: msg };

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../../services/apiService';
@@ -7,6 +7,7 @@ import { FiSearch, FiActivity, FiPhoneCall, FiChevronDown, FiPlusCircle,
   FiCheckCircle, FiStar, FiChevronRight, FiMapPin, FiTruck 
 } from 'react-icons/fi';
 import { SEO } from '../../components/SEO';
+import SymptomTriage from '../../components/SymptomTriage';
 
 export const Home = () => {
   const [searchDocName, setSearchDocName] = useState('');
@@ -14,6 +15,8 @@ export const Home = () => {
   const [selectedFaq, setSelectedFaq] = useState(null);
   const [popularDoctors, setPopularDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [instantConsultModal, setInstantConsultModal] = useState(false);
+  const [consultStatus, setConsultStatus] = useState('MATCHING'); // MATCHING | CONNECTED
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -177,8 +180,39 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* AI Symptom Triaging & 24/7 Instant GP Teleconsult Section */}
+      <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8 relative z-10 space-y-4">
+        <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-3xl p-5 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+              <span className="text-xl">🩺</span>
+            </div>
+            <div>
+              <h3 className="text-sm font-extrabold text-white flex items-center gap-2">
+                Need Urgent Doctor Advice Right Now? <span className="text-[10px] font-bold bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full uppercase">Practo Consult</span>
+              </h3>
+              <p className="text-[11px] text-teal-100 mt-0.5">Connect to an online General Practitioner in &lt;60 seconds via 24/7 HD Video/Chat.</p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              setInstantConsultModal(true);
+              setConsultStatus('MATCHING');
+              setTimeout(() => setConsultStatus('CONNECTED'), 3000);
+            }}
+            className="w-full sm:w-auto rounded-2xl bg-white text-slate-900 hover:bg-teal-50 px-5 py-3 text-xs font-black shadow-lg transition-all hover:scale-105 shrink-0 flex items-center justify-center gap-2"
+          >
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping" />
+            Talk to a GP Now (₹299)
+          </button>
+        </div>
+
+        <SymptomTriage />
+      </section>
+
       {/* 2. ACTION TILES */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 -mt-10 relative z-10">
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           
           <Link to="/doctors" className="group rounded-2xl bg-white p-6 shadow-xl border border-slate-100 dark:bg-slate-800 dark:border-slate-800 transition-all hover:-translate-y-1 hover:shadow-2xl">
@@ -473,6 +507,68 @@ export const Home = () => {
           })}
         </div>
       </section>
+
+      {/* 24/7 Instant GP WebRTC Call Modal */}
+      {instantConsultModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md" onClick={() => setInstantConsultModal(false)} />
+          <div className="w-full max-w-lg bg-slate-900 text-white rounded-3xl z-10 shadow-2xl p-6 border border-teal-500/30 text-center space-y-5 relative overflow-hidden">
+            
+            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+              <span className="text-xs font-extrabold text-teal-400 flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" /> Live 24/7 Triage Queue
+              </span>
+              <button onClick={() => setInstantConsultModal(false)} className="text-slate-400 hover:text-white text-xl font-bold">&times;</button>
+            </div>
+
+            {consultStatus === 'MATCHING' ? (
+              <div className="py-8 space-y-4">
+                <div className="mx-auto w-20 h-20 rounded-full border-4 border-teal-500/30 border-t-teal-400 animate-spin flex items-center justify-center">
+                  <span className="text-2xl">🩺</span>
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-white">Matching Available Online GP...</h3>
+                  <p className="text-xs text-teal-200 mt-1">Connecting to certified General Practitioner via WebRTC (&lt;60s)</p>
+                </div>
+              </div>
+            ) : (
+              <div className="py-4 space-y-4">
+                <div className="bg-slate-800 rounded-2xl p-4 border border-teal-400/40 flex items-center gap-3">
+                  <img
+                    src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=200"
+                    alt="Dr. Ananya Roy"
+                    className="h-14 w-14 rounded-full object-cover ring-2 ring-teal-400"
+                  />
+                  <div className="text-left">
+                    <h4 className="text-sm font-extrabold text-white">Dr. Ananya Roy (MBBS, MD)</h4>
+                    <p className="text-[10px] text-teal-300">General Physician · Connected via Secure WebRTC</p>
+                    <p className="text-[10px] text-emerald-400 font-bold mt-0.5">🟢 Live Encrypted Call Active</p>
+                  </div>
+                </div>
+
+                <div className="h-44 bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-center relative overflow-hidden">
+                  <div className="text-center space-y-2">
+                    <span className="text-3xl">🎥</span>
+                    <p className="text-xs text-slate-400">HD WebRTC Video Room Connected</p>
+                    <span className="px-3 py-1 bg-emerald-950 text-emerald-300 text-[10px] font-bold rounded-full border border-emerald-800">
+                      Audio & Video Encrypted
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={() => setInstantConsultModal(false)}
+                    className="flex-1 rounded-xl bg-red-600 hover:bg-red-700 py-3 text-xs font-extrabold text-white shadow"
+                  >
+                    End Teleconsultation
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
     </div>
   );

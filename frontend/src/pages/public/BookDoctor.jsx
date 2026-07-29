@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../../services/apiService';
 import { useAuth } from '../../context/AuthContext';
@@ -14,11 +14,10 @@ const SPECIALITIES = [
   'Neurology', 'Dermatology', 'Oncology', 'Ophthalmology', 'General Medicine'
 ];
 const CITIES = ['All Cities', 'Purnia', 'Katihar'];
-const TIME_SLOTS = [
-  '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
-  '12:00 PM', '12:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM',
-  '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM'
-];
+const MORNING_SLOTS = ['09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM'];
+const AFTERNOON_SLOTS = ['12:00 PM', '12:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM'];
+const EVENING_SLOTS = ['04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM'];
+const TIME_SLOTS = [...MORNING_SLOTS, ...AFTERNOON_SLOTS, ...EVENING_SLOTS];
 
 const StepIndicator = ({ currentStep, totalSteps }) => {
   const labels = ['Search', 'Select Doctor', 'Pick Slot', 'Confirm', 'Done'];
@@ -421,24 +420,72 @@ export const BookDoctor = () => {
               </div>
             </div>
 
-            {/* Time slots */}
-            <div>
-              <p className="text-xs font-bold text-slate-500 mb-2">Available Time Slots</p>
-              <div className="grid grid-cols-4 gap-2">
-                {TIME_SLOTS.map(t => (
-                  <SlotButton
-                    key={t}
-                    time={t}
-                    selected={selectedSlot === t}
-                    booked={bookedSlots.includes(t)}
-                    onSelect={setSelectedSlot}
-                  />
-                ))}
+            {/* Time slots segmented into Morning, Afternoon, Evening */}
+            <div className="space-y-4">
+              <div>
+                <p className="text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-amber-400" /> Morning Slots (09:00 AM - 11:30 AM)
+                </p>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                  {MORNING_SLOTS.map(t => (
+                    <SlotButton
+                      key={t}
+                      time={t}
+                      selected={selectedSlot === t}
+                      booked={bookedSlots.includes(t)}
+                      onSelect={setSelectedSlot}
+                    />
+                  ))}
+                </div>
               </div>
-              <div className="flex gap-4 mt-3 text-[10px] font-semibold">
-                <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded bg-primary-600 inline-block" /> Selected</span>
-                <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded bg-slate-100 dark:bg-slate-700 border border-slate-200 inline-block" /> Available</span>
-                <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded bg-red-100 inline-block" /> Booked</span>
+
+              <div>
+                <p className="text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-primary-500" /> Afternoon Slots (12:00 PM - 03:30 PM)
+                </p>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                  {AFTERNOON_SLOTS.map(t => (
+                    <SlotButton
+                      key={t}
+                      time={t}
+                      selected={selectedSlot === t}
+                      booked={bookedSlots.includes(t)}
+                      onSelect={setSelectedSlot}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-teal-500" /> Evening Slots (04:00 PM - 05:30 PM)
+                </p>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                  {EVENING_SLOTS.map(t => (
+                    <SlotButton
+                      key={t}
+                      time={t}
+                      selected={selectedSlot === t}
+                      booked={bookedSlots.includes(t)}
+                      onSelect={setSelectedSlot}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex gap-4 text-[10px] font-semibold">
+                  <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded bg-primary-600 inline-block" /> Selected</span>
+                  <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded bg-white border border-primary-600 inline-block" /> Available</span>
+                  <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded bg-slate-100 border border-slate-200 inline-block" /> Booked</span>
+                </div>
+
+                <button
+                  onClick={() => toast.success(`🔔 Added to Smart Waitlist for ${selectedDoctor?.name}! You will be alerted instantly if a slot is cancelled.`)}
+                  className="text-[10px] font-extrabold text-amber-700 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-300 px-3 py-1.5 rounded-xl border border-amber-200 dark:border-amber-800 flex items-center gap-1 transition-all"
+                >
+                  ⚡ Join Smart Cancellation Waitlist
+                </button>
               </div>
             </div>
 
@@ -463,8 +510,8 @@ export const BookDoctor = () => {
               </button>
             </div>
 
-            {/* Booking summary card */}
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 dark:border-primary-900/30 dark:bg-primary-950/20 p-4 space-y-2">
+            {/* Booking & Price Breakdown Card */}
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 dark:border-primary-900/30 dark:bg-primary-950/20 p-4 space-y-2.5">
               <div className="flex justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
                 <span>Doctor</span><span>{selectedDoctor?.name}</span>
               </div>
@@ -475,16 +522,25 @@ export const BookDoctor = () => {
                 <span>Hospital</span><span>{selectedDoctor?.hospitalName}</span>
               </div>
               <div className="flex justify-between text-xs text-slate-500">
-                <span>Date</span><span className="font-bold text-slate-700 dark:text-slate-300">{searchDate || 'Next Available'}</span>
+                <span>Date & Time</span><span className="font-bold text-slate-700 dark:text-slate-300">{searchDate || 'Today'} at {selectedSlot}</span>
               </div>
               <div className="flex justify-between text-xs text-slate-500">
-                <span>Time</span><span className="font-bold text-slate-700 dark:text-slate-300">{selectedSlot}</span>
+                <span>Consultation Mode</span><span>{isOnline ? '🎥 Online / Video' : '🏥 In-Person OPD'}</span>
               </div>
-              <div className="flex justify-between text-xs text-slate-500">
-                <span>Mode</span><span>{isOnline ? '🎥 Online / Video' : '🏥 In-Person OPD'}</span>
-              </div>
-              <div className="border-t border-primary-100 dark:border-primary-900/50 pt-2 flex justify-between text-sm font-extrabold text-teal-600">
-                <span>Consultation Fee</span><span>₹{selectedDoctor?.fees}</span>
+
+              <div className="border-t border-primary-200 dark:border-primary-800/60 pt-2 space-y-1 text-xs">
+                <div className="flex justify-between text-slate-600 dark:text-slate-400">
+                  <span>Consultation Fee</span><span>₹{selectedDoctor?.fees}</span>
+                </div>
+                <div className="flex justify-between text-slate-600 dark:text-slate-400">
+                  <span>Platform & Processing Fee</span><span>₹50</span>
+                </div>
+                <div className="flex justify-between text-emerald-600 font-semibold">
+                  <span>DocSpot Welcome Discount</span><span>-₹50</span>
+                </div>
+                <div className="border-t border-primary-200 dark:border-primary-800/60 pt-2 flex justify-between text-sm font-black text-teal-600">
+                  <span>Total Amount Payable</span><span>₹{selectedDoctor?.fees}</span>
+                </div>
               </div>
             </div>
 
@@ -517,11 +573,54 @@ export const BookDoctor = () => {
                 <textarea
                   value={reason}
                   onChange={e => setReason(e.target.value)}
-                  rows={3}
+                  rows={2}
                   required
                   className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-3 text-sm focus:border-primary-500 focus:outline-none dark:text-white resize-none"
                   placeholder="Describe your symptoms or reason for consultation..."
                 />
+              </div>
+
+              {/* Pre-Visit Digital Intake (Zocdoc Model) */}
+              <div className="rounded-2xl border border-teal-100 bg-teal-50/60 dark:border-teal-900/40 dark:bg-teal-950/20 p-4 space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-extrabold text-teal-800 dark:text-teal-300 flex items-center gap-1.5">
+                    <FiShield className="h-4 w-4 text-teal-600" /> Optional Pre-Visit Digital Intake
+                  </span>
+                  <span className="text-[9px] font-bold bg-teal-200 dark:bg-teal-900 text-teal-800 dark:text-teal-200 px-2 py-0.5 rounded-full">
+                    Saves OPD Time
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 mb-1">Known Allergies</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Penicillin, Sulfa, Dust..."
+                      className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs focus:outline-none dark:text-white"
+                      onChange={e => sessionStorage.setItem('intake_allergies', e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 mb-1">Current Medications</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Amlodipine 5mg, Metformin..."
+                      className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs focus:outline-none dark:text-white"
+                      onChange={e => sessionStorage.setItem('intake_medications', e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 mb-1">Insurance Policy / Ayushman Bharat ID</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. ABHA-12-3456-7890 or Star Health #987213"
+                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs focus:outline-none dark:text-white"
+                    onChange={e => sessionStorage.setItem('intake_insurance', e.target.value)}
+                  />
+                </div>
               </div>
             </div>
 

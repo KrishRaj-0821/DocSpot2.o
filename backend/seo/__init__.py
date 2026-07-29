@@ -1,0 +1,1 @@
+# DocSpot SEO App Module

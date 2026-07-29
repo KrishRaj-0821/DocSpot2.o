@@ -7,6 +7,8 @@ import { SEO } from '../../components/SEO';
 export const Ambulance = () => {
   const [pickup, setPickup] = useState('');
   const [destination, setDestination] = useState('');
+  const [dispatchMode, setDispatchMode] = useState('EMERGENCY'); // EMERGENCY | SCHEDULED_NEMT
+  const [nemtTime, setNemtTime] = useState('09:00 AM');
   const [ambulanceType, setAmbulanceType] = useState('Basic Life Support (BLS)');
   const [bookingDetails, setBookingDetails] = useState(null);
   const [bookingLoading, setBookingLoading] = useState(false);
@@ -25,40 +27,42 @@ export const Ambulance = () => {
       setBookingDetails({
         pickup,
         destination,
+        dispatchMode,
+        nemtTime,
         ambulanceType,
         driver: matched.driver,
         vehicleNumber: matched.vehicleNumber,
         phone: matched.phone,
-        eta: matched.etaMinutes,
+        eta: dispatchMode === 'EMERGENCY' ? matched.etaMinutes : `Scheduled for ${nemtTime}`,
         location: matched.locationName
       });
       setBookingLoading(false);
-      toast.success("Emergency ride dispatched! The driver is on the way.");
-    }, 1500);
+      toast.success(dispatchMode === 'EMERGENCY' ? "🚨 Emergency ride dispatched! Driver is on the way." : `🚘 Scheduled NEMT ride confirmed for ${nemtTime}!`);
+    }, 1200);
   };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-900 transition-colors duration-250">
       <SEO 
-        title="Emergency Ambulance Dispatch" 
-        description="Get 24/7 emergency ambulance dispatch. Track driver status, ETA, and book immediate critical transport services." 
+        title="Emergency & NEMT Medical Transportation" 
+        description="Book 24/7 emergency ambulance dispatch or schedule non-emergency medical transportation (NEMT) for elderly, dialysis, and post-op care." 
       />
       
       {/* Header */}
       <div className="text-center sm:text-left">
         <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          24/7 Emergency Ambulance Booking
+          Medical Transportation & Fleet Dispatch
         </h1>
         <p className="mt-2 text-sm text-slate-550 dark:text-slate-400">
-          Book immediate ambulance dispatch with live routing updates and upfront distance billing.
+          Instant 24/7 Emergency Ambulance Dispatch & Uber Health-style Scheduled NEMT Assistance.
         </p>
       </div>
 
       {/* Emergency Helpline Banner */}
       <div className="mt-6 rounded-2xl bg-red-600 p-6 text-white shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
-          <h3 className="text-lg font-bold">Need Immediate Help? Dial Medical Helpline</h3>
-          <p className="text-xs text-red-105 mt-1">If you have a life-threatening situation, skip the forms and call our dispatch hub immediately.</p>
+          <h3 className="text-lg font-bold">Need Immediate Life-Saving Emergency Transit?</h3>
+          <p className="text-xs text-red-105 mt-1">For acute trauma, stroke, or heart attack, call our emergency dispatch hotline immediately.</p>
         </div>
         <a
           href="tel:+919110000911"
@@ -73,8 +77,37 @@ export const Ambulance = () => {
         
         {/* Left: Dispatch Form */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="rounded-2xl bg-white p-6 shadow-md border border-slate-100 dark:bg-slate-800 dark:border-slate-800">
-            <h3 className="text-base font-extrabold text-slate-900 dark:text-white mb-4">Request Ambulance Dispatch</h3>
+          <div className="rounded-2xl bg-white p-6 shadow-md border border-slate-100 dark:bg-slate-800 dark:border-slate-800 space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Request Transport</h3>
+              <span className="text-[10px] font-bold bg-primary-50 text-primary-600 px-2 py-0.5 rounded-full">Uber Health Integration</span>
+            </div>
+
+            {/* Mode Selector */}
+            <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-slate-900 rounded-xl">
+              <button
+                type="button"
+                onClick={() => setDispatchMode('EMERGENCY')}
+                className={`py-2 text-xs font-extrabold rounded-lg transition-all ${
+                  dispatchMode === 'EMERGENCY'
+                    ? 'bg-red-600 text-white shadow-sm'
+                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                🚨 Emergency Dispatch
+              </button>
+              <button
+                type="button"
+                onClick={() => setDispatchMode('SCHEDULED_NEMT')}
+                className={`py-2 text-xs font-extrabold rounded-lg transition-all ${
+                  dispatchMode === 'SCHEDULED_NEMT'
+                    ? 'bg-teal-600 text-white shadow-sm'
+                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                🚘 Scheduled NEMT Ride
+              </button>
+            </div>
             
             <form onSubmit={handleBooking} className="space-y-4">
               <div>
@@ -84,48 +117,66 @@ export const Ambulance = () => {
                   <input
                     type="text"
                     required
-                    placeholder="Enter pickup landmarks (e.g. Bhatta Bazar)"
+                    placeholder="Enter pickup address / landmark..."
                     value={pickup}
                     onChange={(e) => setPickup(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-xs focus:border-primary-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-xs focus:border-primary-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Destination Hospital</label>
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Destination Hospital / Clinic</label>
                 <div className="relative">
                   <FiNavigation className="absolute top-3 left-3 text-slate-400" />
                   <input
                     type="text"
                     required
-                    placeholder="Enter destination hospital (e.g. Line Bazar Care)"
+                    placeholder="Enter target hospital..."
                     value={destination}
                     onChange={(e) => setDestination(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-xs focus:border-primary-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-xs focus:border-primary-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Ambulance Equipment Type</label>
-                <select
-                  value={ambulanceType}
-                  onChange={(e) => setAmbulanceType(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs focus:border-primary-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900"
-                >
-                  <option value="Basic Life Support (BLS)">Basic Life Support (BLS) - Oxygen, Stretchers</option>
-                  <option value="Advanced Life Support (ALS)">Advanced Life Support (ALS) - ICU Wards, Ventilators</option>
-                  <option value="Neonatal/Pediatric Ambulance">Neonatal/Pediatric - Baby Incubators</option>
-                </select>
-              </div>
+              {dispatchMode === 'SCHEDULED_NEMT' ? (
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Scheduled Pickup Time</label>
+                  <select
+                    value={nemtTime}
+                    onChange={(e) => setNemtTime(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs focus:border-primary-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                  >
+                    <option value="08:00 AM">08:00 AM (Pre-OPD)</option>
+                    <option value="10:00 AM">10:00 AM (Dialysis Shift)</option>
+                    <option value="02:00 PM">02:00 PM (Afternoon OPD)</option>
+                    <option value="05:00 PM">05:00 PM (Post-Op Discharge)</option>
+                  </select>
+                </div>
+              ) : (
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Ambulance Equipment Type</label>
+                  <select
+                    value={ambulanceType}
+                    onChange={(e) => setAmbulanceType(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs focus:border-primary-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                  >
+                    <option value="Basic Life Support (BLS)">Basic Life Support (BLS) - Oxygen, Stretchers</option>
+                    <option value="Advanced Life Support (ALS)">Advanced Life Support (ALS) - ICU Wards, Ventilators</option>
+                    <option value="Neonatal/Pediatric Ambulance">Neonatal/Pediatric - Baby Incubators</option>
+                  </select>
+                </div>
+              )}
 
               <button
                 type="submit"
                 disabled={bookingLoading}
-                className="w-full rounded-xl bg-primary-600 py-3.5 text-xs font-bold text-white shadow-lg hover:bg-primary-750 transition-all cursor-pointer"
+                className={`w-full rounded-xl py-3.5 text-xs font-extrabold text-white shadow-lg transition-all cursor-pointer ${
+                  dispatchMode === 'EMERGENCY' ? 'bg-red-600 hover:bg-red-700' : 'bg-teal-600 hover:bg-teal-700'
+                }`}
               >
-                {bookingLoading ? 'Routing nearest ride...' : 'Dispatch Ambulance Now'}
+                {bookingLoading ? 'Processing telemetry...' : (dispatchMode === 'EMERGENCY' ? '🚨 Dispatch Ambulance Now' : '🚘 Schedule NEMT Transport')}
               </button>
             </form>
           </div>

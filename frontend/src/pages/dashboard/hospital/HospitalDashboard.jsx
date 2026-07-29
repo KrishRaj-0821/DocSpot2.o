@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
@@ -30,6 +30,34 @@ export const HospitalDashboard = () => {
   const [newDocSpecialty, setNewDocSpecialty] = useState('');
   const [newDocFees, setNewDocFees] = useState('');
   const [newDeptName, setNewDeptName] = useState('');
+
+  // Emergency Bed Inventory Management
+  const [beds, setBeds] = useState([
+    { id: 'icu-01', bedNumber: 'ICU Bed #01', category: 'ICU Bed', status: 'AVAILABLE', patient: null },
+    { id: 'icu-02', bedNumber: 'ICU Bed #02', category: 'ICU Bed', status: 'OCCUPIED', patient: 'Patient #302 (Rajesh G.)' },
+    { id: 'oxy-01', bedNumber: 'Oxygen Bed #01', category: 'Oxygen Bed', status: 'AVAILABLE', patient: null },
+    { id: 'oxy-02', bedNumber: 'Oxygen Bed #02', category: 'Oxygen Bed', status: 'OCCUPIED', patient: 'Patient #408 (Sunita R.)' },
+    { id: 'vent-01', bedNumber: 'Ventilator Bed #01', category: 'Ventilator', status: 'AVAILABLE', patient: null },
+    { id: 'gen-01', bedNumber: 'General Ward Bed #01', category: 'General Ward', status: 'AVAILABLE', patient: null },
+  ]);
+  const [confirmBedModal, setConfirmBedModal] = useState(null);
+
+  const handleToggleBedStatus = (bed) => {
+    const nextStatus = bed.status === 'AVAILABLE' ? 'OCCUPIED' : 'AVAILABLE';
+    setConfirmBedModal({ bed, nextStatus });
+  };
+
+  const confirmBedStatusChange = () => {
+    if (!confirmBedModal) return;
+    const { bed, nextStatus } = confirmBedModal;
+    setBeds(prev => prev.map(b => b.id === bed.id ? {
+      ...b,
+      status: nextStatus,
+      patient: nextStatus === 'OCCUPIED' ? 'Admitted Patient' : null
+    } : b));
+    toast.success(`${bed.bedNumber} status changed to ${nextStatus}!`);
+    setConfirmBedModal(null);
+  };
 
   const fetchHospitalData = async () => {
     try {
@@ -214,6 +242,81 @@ export const HospitalDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Emergency ICU & Oxygen Bed Inventory Manager */}
+        <div className="rounded-2xl bg-white p-6 shadow-md border border-slate-100 dark:bg-slate-800 dark:border-slate-800 space-y-4">
+          <div className="flex justify-between items-center border-b pb-3 dark:border-slate-700/60">
+            <div>
+              <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Emergency Bed & ICU Inventory</h3>
+              <p className="text-[10px] text-slate-400">Live occupancy monitoring for ICU, Oxygen, Ventilator, and General Beds.</p>
+            </div>
+            <span className="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-full">
+              {beds.filter(b => b.status === 'AVAILABLE').length} / {beds.length} Available
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {beds.map(bed => (
+              <div key={bed.id} className="rounded-2xl border border-slate-100 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-900/50 flex flex-col justify-between space-y-3">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">{bed.bedNumber}</h4>
+                    <p className="text-[10px] font-semibold text-slate-400">{bed.category}</p>
+                  </div>
+                  <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase ${
+                    bed.status === 'AVAILABLE'
+                      ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400'
+                      : 'bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-400'
+                  }`}>
+                    {bed.status}
+                  </span>
+                </div>
+
+                {bed.patient && (
+                  <p className="text-[10px] text-slate-500 font-semibold truncate">Occupied by: {bed.patient}</p>
+                )}
+
+                <button
+                  onClick={() => handleToggleBedStatus(bed)}
+                  className={`w-full rounded-xl py-2 text-xs font-extrabold transition-all shadow-sm ${
+                    bed.status === 'AVAILABLE'
+                      ? 'bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 dark:bg-red-950/40 dark:border-red-800 dark:text-red-300'
+                      : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300'
+                  }`}
+                >
+                  {bed.status === 'AVAILABLE' ? 'Mark Occupied' : 'Set Available'}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Safety Toggle Confirmation Modal */}
+        {confirmBedModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm" onClick={() => setConfirmBedModal(null)} />
+            <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl z-10 shadow-2xl p-6 border border-slate-200 dark:border-slate-800 text-center space-y-4">
+              <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Confirm Bed Status Toggle</h3>
+              <p className="text-xs text-slate-500">
+                Change status of <span className="font-bold text-slate-900 dark:text-white">{confirmBedModal.bed.bedNumber}</span> to <span className="font-bold text-teal-600">{confirmBedModal.nextStatus}</span>?
+              </p>
+              <div className="flex space-x-2 pt-2">
+                <button
+                  onClick={() => setConfirmBedModal(null)}
+                  className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 py-2.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmBedStatusChange}
+                  className="flex-1 rounded-xl bg-teal-600 hover:bg-teal-700 py-2.5 text-xs font-extrabold text-white shadow-md shadow-teal-200 dark:shadow-none"
+                >
+                  Confirm Change
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

@@ -1,6 +1,6 @@
 from rest_framework.renderers import JSONRenderer
 
-class PurniaJSONRenderer(JSONRenderer):
+class DocSpotJSONRenderer(JSONRenderer):
     def render(self, data, accepted_media_type=None, renderer_context=None):
         if not renderer_context:
             return super().render(data, accepted_media_type, renderer_context)
@@ -36,3 +36,7 @@ class PurniaJSONRenderer(JSONRenderer):
             formatted_data["errors"] = errors
 
         return super().render(formatted_data, accepted_media_type, renderer_context)
+
+# Alias for backward compatibility
+PurniaJSONRenderer = DocSpotJSONRenderer
+
