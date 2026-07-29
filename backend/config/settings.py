@@ -82,15 +82,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database Configuration (Supabase PostgreSQL in production, local SQLite fallback)
 DATABASE_URL = os.environ.get("DATABASE_URL")
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
-    }
-else:
+use_postgres = False
+
+if DATABASE_URL and '[YOUR_DB_PASSWORD]' not in DATABASE_URL:
+    try:
+        DATABASES = {
+            'default': dj_database_url.config(
+                default=DATABASE_URL,
+                conn_max_age=600,
+                conn_health_checks=True,
+            )
+        }
+        use_postgres = True
+    except Exception:
+        use_postgres = False
+
+if not use_postgres:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -183,3 +190,9 @@ SIMPLE_JWT = {
     'VERIFYING_KEY': None,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+# Supabase Managed Database & Auth Credentials
+SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://mdwqohgyqizxequsdovz.supabase.co')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY', 'sb_publishable_UkQftb3vYy5Qa8N2_VCb4g_EF_CnREy')
+SUPABASE_SECRET_KEY = os.environ.get('SUPABASE_SECRET_KEY', '')
+SUPABASE_JWKS_URL = os.environ.get('SUPABASE_JWKS_URL', 'https://mdwqohgyqizxequsdovz.supabase.co/auth/v1/.well-known/jwks.json')
