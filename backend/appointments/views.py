@@ -2,7 +2,7 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.http import FileResponse
+from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from appointments.models import Appointment, Prescription
 from appointments.serializers import (
@@ -130,7 +130,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     def pdf(self, request, pk=None):
         try:
             apt = self.get_object()
-        except Exception:
+        except (Http404, ValueError, TypeError):
             # Fallback if they used appointment_id instead of primary key
             from django.shortcuts import get_object_or_404
             apt = get_object_or_404(self.get_queryset(), appointment_id=pk)
