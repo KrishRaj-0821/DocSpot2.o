@@ -293,6 +293,18 @@ if (!useMock) {
   });
 }
 
+function getCurrentUserEmail() {
+  try {
+    const savedUser = localStorage.getItem('purnia_user');
+    if (savedUser) {
+      return JSON.parse(savedUser).email || '';
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return '';
+}
+
 // Response Interceptor to handle both mock rejections and production response wrapping
 api.interceptors.response.use(
   (response) => {
@@ -328,15 +340,7 @@ api.interceptors.response.use(
             specialization: apt.doctor_details?.specialization_name || ''
           }));
         } else if (url.includes('/orders/')) {
-          let currentUserEmail = '';
-          try {
-            const savedUser = localStorage.getItem('purnia_user');
-            if (savedUser) {
-              currentUserEmail = JSON.parse(savedUser).email || '';
-            }
-          } catch (e) {
-            console.error(e);
-          }
+          const currentUserEmail = getCurrentUserEmail();
           response.data = response.data.map(order => ({
             ...order,
             userEmail: currentUserEmail,
@@ -350,15 +354,7 @@ api.interceptors.response.use(
             }))
           }));
         } else if (url.includes('/medical-records/')) {
-          let currentUserEmail = '';
-          try {
-            const savedUser = localStorage.getItem('purnia_user');
-            if (savedUser) {
-              currentUserEmail = JSON.parse(savedUser).email || '';
-            }
-          } catch (e) {
-            console.error(e);
-          }
+          const currentUserEmail = getCurrentUserEmail();
           response.data = response.data.map(rec => ({
             ...rec,
             userEmail: currentUserEmail
