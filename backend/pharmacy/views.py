@@ -43,16 +43,20 @@ class MedicineOrderViewSet(viewsets.ModelViewSet):
         if not items_data:
             return Response({"detail": "No items provided for the order"}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Fetch all medicines in a single query
+        medicine_ids = [item['medicine'] for item in items_data]
+        medicines_dict = Medicine.objects.in_bulk(medicine_ids)
+
         # Compute totals
         subtotal = 0
         order_items_to_create = []
 
         for item in items_data:
-            try:
-                med = Medicine.objects.get(id=item['medicine'])
-            except Medicine.DoesNotExist:
-                return Response({"detail": f"Medicine with id {item['medicine']} not found"}, status=status.HTTP_400_BAD_REQUEST)
+            med_id = item['medicine']
+            if med_id not in medicines_dict:
+                return Response({"detail": f"Medicine with id {med_id} not found"}, status=status.HTTP_400_BAD_REQUEST)
             
+            med = medicines_dict[med_id]
             qty = int(item.get('quantity', 1))
             final_price = med.price - (med.price * med.discount / 100)
             subtotal += final_price * qty
@@ -64,8 +68,9 @@ class MedicineOrderViewSet(viewsets.ModelViewSet):
                 "discount": med.discount
             })
 
-        tax = subtotal * 0.05
-        delivery = 30
+        from decimal import Decimal
+        tax = subtotal * Decimal('0.05')
+        delivery = Decimal('30')
         total = subtotal + tax + delivery
 
         # Get pharmacy
