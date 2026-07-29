@@ -114,6 +114,7 @@ logs/
 # Secrets / environment files
 .env
 .env.*
+!.env.example
 secrets.json
 credentials/
 
