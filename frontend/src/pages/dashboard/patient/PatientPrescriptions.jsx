@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -136,8 +136,8 @@ export const PatientPrescriptions = () => {
                       Dx: {apt.prescription.diagnosis}
                     </p>
                   )}
-                  <p className="text-[10px] text-slate-500 truncate mt-0.5">
-                    💊 {apt.prescription?.medicines?.map(m => m.name).join(', ')}
+                  <p className="text-[10px] text-slate-500 truncate mt-0.5 font-semibold">
+                    <span className="text-primary-600 font-bold">Rx:</span> {apt.prescription?.medicines?.map(m => m.name).join(', ')}
                   </p>
                 </div>
 
@@ -363,7 +363,7 @@ export const PatientPrescriptions = () => {
           <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setRatingModal(null)} />
           <div className="w-full max-w-sm bg-white rounded-3xl z-10 shadow-2xl p-6 dark:bg-slate-900 border border-slate-150 dark:border-slate-800">
             <div className="text-center mb-5">
-              <div className="text-4xl mb-2">⭐</div>
+              <FiStar className="h-10 w-10 text-amber-400 fill-amber-400 mx-auto mb-2" />
               <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Rate Your Doctor</h3>
               <p className="text-xs text-slate-500 mt-1">How was your experience with <strong>{ratingModal.doctorName}</strong>?</p>
             </div>

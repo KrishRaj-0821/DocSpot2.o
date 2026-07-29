@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiPhoneCall, FiMapPin, FiTruck, FiNavigation, FiClock, FiCheckSquare } from 'react-icons/fi';
+import { FiPhoneCall, FiMapPin, FiTruck, FiNavigation, FiClock, FiCheckSquare, FiAlertCircle, FiUser } from 'react-icons/fi';
 import { mockAmbulances } from '../../services/mockData';
 import toast from 'react-hot-toast';
 import { SEO } from '../../components/SEO';
@@ -88,24 +88,24 @@ export const Ambulance = () => {
               <button
                 type="button"
                 onClick={() => setDispatchMode('EMERGENCY')}
-                className={`py-2 text-xs font-extrabold rounded-lg transition-all ${
+                className={`py-2 text-xs font-extrabold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                   dispatchMode === 'EMERGENCY'
                     ? 'bg-red-600 text-white shadow-sm'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                🚨 Emergency Dispatch
+                <FiAlertCircle className="h-3.5 w-3.5" /> Emergency Dispatch
               </button>
               <button
                 type="button"
                 onClick={() => setDispatchMode('SCHEDULED_NEMT')}
-                className={`py-2 text-xs font-extrabold rounded-lg transition-all ${
+                className={`py-2 text-xs font-extrabold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                   dispatchMode === 'SCHEDULED_NEMT'
                     ? 'bg-teal-600 text-white shadow-sm'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                🚘 Scheduled NEMT Ride
+                <FiTruck className="h-3.5 w-3.5" /> Scheduled NEMT Ride
               </button>
             </div>
             
@@ -172,11 +172,11 @@ export const Ambulance = () => {
               <button
                 type="submit"
                 disabled={bookingLoading}
-                className={`w-full rounded-xl py-3.5 text-xs font-extrabold text-white shadow-lg transition-all cursor-pointer ${
+                className={`w-full rounded-xl py-3.5 text-xs font-extrabold text-white shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2 ${
                   dispatchMode === 'EMERGENCY' ? 'bg-red-600 hover:bg-red-700' : 'bg-teal-600 hover:bg-teal-700'
                 }`}
               >
-                {bookingLoading ? 'Processing telemetry...' : (dispatchMode === 'EMERGENCY' ? '🚨 Dispatch Ambulance Now' : '🚘 Schedule NEMT Transport')}
+                {bookingLoading ? 'Processing telemetry...' : (dispatchMode === 'EMERGENCY' ? <><FiAlertCircle className="h-4 w-4" /> Dispatch Ambulance Now</> : <><FiTruck className="h-4 w-4" /> Schedule NEMT Transport</>)}
               </button>
             </form>
           </div>
@@ -232,8 +232,8 @@ export const Ambulance = () => {
               {/* Driver profile */}
               <div className="flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-700/60">
                 <div className="flex items-center space-x-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-55 dark:bg-slate-900 text-2xl">
-                    👨‍✈️
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/40">
+                    <FiUser className="text-primary-600 dark:text-primary-400 h-6 w-6" />
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-slate-900 dark:text-white">{bookingDetails.driver}</h4>

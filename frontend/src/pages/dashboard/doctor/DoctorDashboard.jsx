@@ -208,11 +208,11 @@ export const DoctorDashboard = () => {
             <button
               onClick={() => {
                 const next = !isAvailable;
-                toast.success(next ? "🟢 On Duty for 24/7 Instant Teleconsult Queue!" : "⚪ Off Duty for 24/7 Teleconsult");
+                toast.success(next ? "On Duty for 24/7 Instant Teleconsult Queue!" : "Off Duty for 24/7 Teleconsult");
               }}
               className="ml-2 px-3 py-1 rounded-xl bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 text-[10px] font-extrabold border border-primary-200 dark:border-primary-800 flex items-center gap-1 hover:bg-primary-100 transition-all"
             >
-              ⚡ 24/7 Triage Duty
+              <FiZap className="h-3 w-3 text-amber-500" /> 24/7 Triage Duty
             </button>
           </div>
         </div>
@@ -358,7 +358,7 @@ export const DoctorDashboard = () => {
                 {/* Pre-Visit Digital Intake Card (Zocdoc Model) */}
                 <div className="bg-teal-50/70 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800/60 p-3 rounded-xl space-y-1">
                   <div className="flex justify-between items-center text-[10px] font-extrabold text-teal-800 dark:text-teal-300">
-                    <span>📋 Pre-Visit Intake Record</span>
+                    <span className="flex items-center gap-1"><FiFileText className="h-3.5 w-3.5 text-teal-600" /> Pre-Visit Intake Record</span>
                     <span className="text-[9px] bg-teal-200 dark:bg-teal-900 text-teal-900 dark:text-teal-200 px-2 py-0.5 rounded-full">Verified Digital Submission</span>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-[11px] text-slate-700 dark:text-slate-300 pt-1">

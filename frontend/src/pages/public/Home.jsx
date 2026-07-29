@@ -4,8 +4,10 @@ import { motion } from 'framer-motion';
 import api from '../../services/apiService';
 import { mockFAQs, mockReviews } from '../../services/mockData';
 import { FiSearch, FiActivity, FiPhoneCall, FiChevronDown, FiPlusCircle, 
-  FiCheckCircle, FiStar, FiChevronRight, FiMapPin, FiTruck 
+  FiCheckCircle, FiStar, FiChevronRight, FiMapPin, FiTruck, FiVideo, FiCheck
 } from 'react-icons/fi';
+import { FaStethoscope } from 'react-icons/fa';
+import { BsCameraVideo, BsShieldCheck, BsFillRecordCircleFill } from 'react-icons/bs';
 import { SEO } from '../../components/SEO';
 import SymptomTriage from '../../components/SymptomTriage';
 
@@ -185,7 +187,7 @@ export const Home = () => {
         <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-3xl p-5 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
-              <span className="text-xl">🩺</span>
+              <FaStethoscope className="text-white h-5 w-5" />
             </div>
             <div>
               <h3 className="text-sm font-extrabold text-white flex items-center gap-2">
@@ -524,7 +526,7 @@ export const Home = () => {
             {consultStatus === 'MATCHING' ? (
               <div className="py-8 space-y-4">
                 <div className="mx-auto w-20 h-20 rounded-full border-4 border-teal-500/30 border-t-teal-400 animate-spin flex items-center justify-center">
-                  <span className="text-2xl">🩺</span>
+                  <FaStethoscope className="text-teal-400 h-8 w-8" />
                 </div>
                 <div>
                   <h3 className="text-base font-extrabold text-white">Matching Available Online GP...</h3>
@@ -542,13 +544,15 @@ export const Home = () => {
                   <div className="text-left">
                     <h4 className="text-sm font-extrabold text-white">Dr. Ananya Roy (MBBS, MD)</h4>
                     <p className="text-[10px] text-teal-300">General Physician · Connected via Secure WebRTC</p>
-                    <p className="text-[10px] text-emerald-400 font-bold mt-0.5">🟢 Live Encrypted Call Active</p>
+                    <p className="text-[10px] text-emerald-400 font-bold mt-0.5 flex items-center gap-1">
+                      <BsFillRecordCircleFill className="h-2 w-2 text-emerald-400 animate-ping" /> Live Encrypted Call Active
+                    </p>
                   </div>
                 </div>
 
                 <div className="h-44 bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-center relative overflow-hidden">
                   <div className="text-center space-y-2">
-                    <span className="text-3xl">🎥</span>
+                    <BsCameraVideo className="h-10 w-10 text-teal-400 mx-auto" />
                     <p className="text-xs text-slate-400">HD WebRTC Video Room Connected</p>
                     <span className="px-3 py-1 bg-emerald-950 text-emerald-300 text-[10px] font-bold rounded-full border border-emerald-800">
                       Audio & Video Encrypted

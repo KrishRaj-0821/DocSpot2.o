@@ -481,10 +481,10 @@ export const BookDoctor = () => {
                 </div>
 
                 <button
-                  onClick={() => toast.success(`🔔 Added to Smart Waitlist for ${selectedDoctor?.name}! You will be alerted instantly if a slot is cancelled.`)}
+                  onClick={() => toast.success(`Added to Smart Waitlist for ${selectedDoctor?.name}! You will be alerted instantly if a slot is cancelled.`)}
                   className="text-[10px] font-extrabold text-amber-700 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-300 px-3 py-1.5 rounded-xl border border-amber-200 dark:border-amber-800 flex items-center gap-1 transition-all"
                 >
-                  ⚡ Join Smart Cancellation Waitlist
+                  <FiZap className="h-3.5 w-3.5 text-amber-500" /> Join Smart Cancellation Waitlist
                 </button>
               </div>
             </div>
