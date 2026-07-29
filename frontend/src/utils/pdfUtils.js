@@ -1,4 +1,4 @@
-﻿import { jsPDF } from 'jspdf';
+import { jsPDF } from 'jspdf';
 
 /**
  * Generates a DocSpot branded prescription PDF and triggers download.
@@ -207,9 +207,7 @@ export const generatePrescriptionPDF = (data) => {
     y += 5;
     pdf.setFillColor(254, 243, 199);
     pdf.roundedRect(margin, y, contentWidth * 0.45, 10, 2, 2, 'F');
-    // Calendar icon placeholder
-    text('📅', margin + 3, y + 7.5, { size: 9 });
-    text(`Next visit: ${new Date(followUpDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}`, margin + 12, y + 7, { size: 8.5, bold: true, color: [146, 64, 14] });
+    text(`Next visit: ${new Date(followUpDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}`, margin + 5, y + 7, { size: 8.5, bold: true, color: [146, 64, 14] });
     y += 15;
   }
 

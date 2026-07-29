@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../../services/apiService';
 import { useAuth } from '../../../context/AuthContext';
 import { FiCalendar, FiFileText, FiPackage, FiHeart, FiActivity, FiArrowRight } from 'react-icons/fi';
+import { BsTruck } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 
@@ -187,8 +188,9 @@ export const PatientDashboard = () => {
                   <p className="text-xs text-slate-500">Items: {activeOrder.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</p>
                   <p className="text-[10px] text-slate-400 font-semibold mt-1">Payment: {activeOrder.paymentMethod} | Amount: ₹{activeOrder.total}</p>
                 </div>
-                <div className="rounded bg-teal-50 px-3 py-1.5 text-xs text-teal-800 dark:bg-teal-950/60 dark:text-teal-400 font-bold shrink-0 animate-pulse">
-                  🚚 {activeOrder.status}
+                <div className="rounded bg-teal-50 px-3 py-1.5 text-xs text-teal-800 dark:bg-teal-950/60 dark:text-teal-400 font-bold shrink-0 animate-pulse flex items-center gap-1.5">
+                  <BsTruck className="h-3.5 w-3.5" />
+                  <span>{activeOrder.status}</span>
                 </div>
               </div>
             ) : (

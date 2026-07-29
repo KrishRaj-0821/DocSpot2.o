@@ -49,8 +49,10 @@ export const Navbar = () => {
         <div className="flex h-16 justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <img src="/favicon.svg" alt="DocSpot" className="h-8 w-8" />
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white p-1 shadow-sm ring-1 ring-slate-200/80 dark:bg-slate-800 dark:ring-slate-700/80 transition-transform group-hover:scale-105">
+                <img src="/favicon.svg" alt="DocSpot Logo" className="h-full w-full object-contain" />
+              </div>
               <span className="font-sans text-xl font-bold tracking-tight text-slate-800 dark:text-white">
                 Doc<span className="text-primary-600 dark:text-primary-400 font-extrabold">Spot</span>
               </span>

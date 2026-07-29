@@ -89,10 +89,12 @@ export const Sidebar = ({ isMobileOpen, toggleSidebar }) => {
       <div className="px-4 py-6">
         {/* Brand/Role title */}
         <div className="flex items-center justify-between">
-          <NavLink to="/" className="flex items-center space-x-2 text-primary-700 dark:text-primary-400">
-            <FiActivity className="h-6 w-6 stroke-[2.5]" />
+          <NavLink to="/" className="flex items-center space-x-2.5 group">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white p-1 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700 transition-transform group-hover:scale-105">
+              <img src="/favicon.svg" alt="DocSpot Logo" className="h-full w-full object-contain" />
+            </div>
             <span className="font-sans text-lg font-bold text-slate-850 dark:text-white">
-              Purnia<span className="text-primary-600 dark:text-primary-400 font-extrabold">Care</span>
+              Doc<span className="text-primary-600 dark:text-primary-400 font-extrabold">Spot</span>
             </span>
           </NavLink>
         </div>

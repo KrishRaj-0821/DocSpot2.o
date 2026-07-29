@@ -7,7 +7,10 @@ import { FiSearch, FiActivity, FiPhoneCall, FiChevronDown, FiPlusCircle,
   FiCheckCircle, FiStar, FiChevronRight, FiMapPin, FiTruck, FiVideo, FiCheck
 } from 'react-icons/fi';
 import { FaStethoscope } from 'react-icons/fa';
-import { BsCameraVideo, BsShieldCheck, BsFillRecordCircleFill } from 'react-icons/bs';
+import { 
+  BsCameraVideo, BsShieldCheck, BsFillRecordCircleFill, 
+  BsHeartPulseFill, BsPersonFill, BsActivity, BsGenderFemale, BsCpuFill, BsStars 
+} from 'react-icons/bs';
 import { SEO } from '../../components/SEO';
 import SymptomTriage from '../../components/SymptomTriage';
 
@@ -43,12 +46,12 @@ export const Home = () => {
   };
 
   const departments = [
-    { name: 'Cardiology', desc: 'Heart care, stents, and ECG diagnostics', icon: '❤️' },
-    { name: 'Pediatrics', desc: 'Vaccinations, child growth and health checks', icon: '👶' },
-    { name: 'Orthopedics', desc: 'Joint replacements, fractures and muscle therapy', icon: '🦴' },
-    { name: 'Gynecology', desc: 'Maternity services and prenatal care solutions', icon: '🤰' },
-    { name: 'Neurology', desc: 'Stroke treatment and nerve disorders specialty', icon: '🧠' },
-    { name: 'Dermatology', desc: 'Skin care, acne therapy, and allergy management', icon: '✨' },
+    { name: 'Cardiology', desc: 'Heart care, stents, and ECG diagnostics', icon: BsHeartPulseFill, color: 'text-rose-500 bg-rose-50 dark:bg-rose-950/40' },
+    { name: 'Pediatrics', desc: 'Vaccinations, child growth and health checks', icon: BsPersonFill, color: 'text-amber-500 bg-amber-50 dark:bg-amber-950/40' },
+    { name: 'Orthopedics', desc: 'Joint replacements, fractures and muscle therapy', icon: BsActivity, color: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/40' },
+    { name: 'Gynecology', desc: 'Maternity services and prenatal care solutions', icon: BsGenderFemale, color: 'text-pink-500 bg-pink-50 dark:bg-pink-950/40' },
+    { name: 'Neurology', desc: 'Stroke treatment and nerve disorders specialty', icon: BsCpuFill, color: 'text-sky-500 bg-sky-50 dark:bg-sky-950/40' },
+    { name: 'Dermatology', desc: 'Skin care, acne therapy, and allergy management', icon: BsStars, color: 'text-teal-500 bg-teal-50 dark:bg-teal-950/40' },
   ];
 
   return (
@@ -74,7 +77,8 @@ export const Home = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="inline-flex items-center rounded-full bg-teal-500/20 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-teal-350 border border-teal-500/30"
               >
-                🩺 Region's Pioneer Healthcare Network
+                <FaStethoscope className="mr-1.5 h-3.5 w-3.5 text-teal-300" />
+                Region's Pioneer Healthcare Network
               </motion.span>
               
               <motion.h1 
@@ -271,18 +275,23 @@ export const Home = () => {
         </div>
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {departments.map((dept, index) => (
-            <div 
-              key={index}
-              className="flex items-start space-x-4 rounded-2xl bg-white p-6 shadow-md border border-slate-100 dark:bg-slate-800 dark:border-slate-800/60"
-            >
-              <span className="text-3xl p-3 bg-slate-50 rounded-xl dark:bg-slate-900">{dept.icon}</span>
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">{dept.name}</h3>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{dept.desc}</p>
+          {departments.map((dept, index) => {
+            const Icon = dept.icon;
+            return (
+              <div 
+                key={index}
+                className="flex items-start space-x-4 rounded-2xl bg-white p-6 shadow-md border border-slate-100 dark:bg-slate-800 dark:border-slate-800/60 transition-all hover:shadow-lg hover:-translate-y-0.5"
+              >
+                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${dept.color}`}>
+                  <Icon className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">{dept.name}</h3>
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{dept.desc}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

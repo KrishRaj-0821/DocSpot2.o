@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { 
@@ -174,10 +174,12 @@ export const Login = () => {
           <div className="space-y-6">
             {/* Brand Header */}
             <div className="text-center md:text-left">
-              <Link to="/" className="inline-flex items-center space-x-2 text-primary-700 dark:text-primary-400">
-                <FiActivity className="h-8 w-8 stroke-[2.5]" />
+              <Link to="/" className="inline-flex items-center space-x-3 group">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white p-1.5 shadow-md ring-1 ring-slate-200/80 dark:bg-slate-800 dark:ring-slate-700 transition-transform group-hover:scale-105">
+                  <img src="/favicon.svg" alt="DocSpot Logo" className="h-full w-full object-contain" />
+                </div>
                 <span className="font-sans text-2xl font-bold tracking-tight text-slate-800 dark:text-white">
-                  Purnia<span className="text-primary-600 dark:text-primary-400 font-extrabold">Care</span>
+                  Doc<span className="text-primary-600 dark:text-primary-400 font-extrabold">Spot</span>
                 </span>
               </Link>
               <h1 className="mt-4 text-xl font-bold text-slate-900 dark:text-white">

@@ -37,7 +37,7 @@ export const Ambulance = () => {
         location: matched.locationName
       });
       setBookingLoading(false);
-      toast.success(dispatchMode === 'EMERGENCY' ? "🚨 Emergency ride dispatched! Driver is on the way." : `🚘 Scheduled NEMT ride confirmed for ${nemtTime}!`);
+      toast.success(dispatchMode === 'EMERGENCY' ? "Emergency ride dispatched! Driver is on the way." : `Scheduled NEMT ride confirmed for ${nemtTime}!`);
     }, 1200);
   };
 

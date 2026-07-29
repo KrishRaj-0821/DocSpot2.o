@@ -6,6 +6,7 @@ import {
   FiCalendar, FiClock, FiDollarSign, FiTrash2, FiEdit2,
   FiPlusCircle, FiActivity, FiFileText, FiDownload, FiExternalLink
 } from 'react-icons/fi';
+import { BsCalendarCheck, BsFlask } from 'react-icons/bs';
 import toast from 'react-hot-toast';
 
 export const PatientAppointments = () => {
@@ -93,26 +94,30 @@ export const PatientAppointments = () => {
       {/* Tab bar */}
       <div className="flex gap-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl w-fit">
         {[
-          { key: 'appointments', label: '📅 Appointments', count: appointments.length },
-          { key: 'reports', label: '🧪 Lab Reports', count: reports.length },
-        ].map(tab => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-bold transition-all ${
-              activeTab === tab.key
-                ? 'bg-white dark:bg-slate-700 text-primary-600 shadow-sm'
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'
-            }`}
-          >
-            {tab.label}
-            <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-extrabold ${
-              activeTab === tab.key
-                ? 'bg-primary-100 text-primary-700 dark:bg-primary-950/40 dark:text-primary-400'
-                : 'bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-400'
-            }`}>{tab.count}</span>
-          </button>
-        ))}
+          { key: 'appointments', label: 'Appointments', icon: BsCalendarCheck, count: appointments.length },
+          { key: 'reports', label: 'Lab Reports', icon: BsFlask, count: reports.length },
+        ].map(tab => {
+          const Icon = tab.icon;
+          return (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-bold transition-all ${
+                activeTab === tab.key
+                  ? 'bg-white dark:bg-slate-700 text-primary-600 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'
+              }`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              <span>{tab.label}</span>
+              <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-extrabold ${
+                activeTab === tab.key
+                  ? 'bg-primary-100 text-primary-700 dark:bg-primary-950/40 dark:text-primary-400'
+                  : 'bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-400'
+              }`}>{tab.count}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* ── APPOINTMENTS TAB ──────────────────────────────────── */}

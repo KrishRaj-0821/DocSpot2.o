@@ -13,8 +13,10 @@ export const Footer = () => {
           
           {/* Column 1: Info & Logo */}
           <div className="space-y-4">
-            <Link to="/" className="flex items-center space-x-2">
-              <img src="/favicon.svg" alt="DocSpot" className="h-7 w-7" />
+            <Link to="/" className="flex items-center space-x-2.5 group">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white p-1 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700 transition-transform group-hover:scale-105">
+                <img src="/favicon.svg" alt="DocSpot Logo" className="h-full w-full object-contain" />
+              </div>
               <span className="font-sans text-lg font-bold tracking-tight text-slate-800 dark:text-white">
                 Doc<span className="text-primary-600 dark:text-primary-400 font-extrabold">Spot</span>
               </span>

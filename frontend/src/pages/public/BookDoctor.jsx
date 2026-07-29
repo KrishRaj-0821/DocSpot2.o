@@ -7,6 +7,7 @@ import {
   FiCheck, FiChevronRight, FiChevronLeft, FiFilter, FiPhone,
   FiVideo, FiHeart, FiActivity, FiAward
 } from 'react-icons/fi';
+import { BsCameraVideo, BsHospital, BsPhone, BsEnvelope, BsCapsule } from 'react-icons/bs';
 import toast from 'react-hot-toast';
 
 const SPECIALITIES = [
@@ -525,7 +526,14 @@ export const BookDoctor = () => {
                 <span>Date & Time</span><span className="font-bold text-slate-700 dark:text-slate-300">{searchDate || 'Today'} at {selectedSlot}</span>
               </div>
               <div className="flex justify-between text-xs text-slate-500">
-                <span>Consultation Mode</span><span>{isOnline ? '🎥 Online / Video' : '🏥 In-Person OPD'}</span>
+                <span>Consultation Mode</span>
+                <span className="flex items-center gap-1.5 font-semibold">
+                  {isOnline ? (
+                    <><BsCameraVideo className="text-sky-500" /> Online / Video</>
+                  ) : (
+                    <><BsHospital className="text-teal-500" /> In-Person OPD</>
+                  )}
+                </span>
               </div>
 
               <div className="border-t border-primary-200 dark:border-primary-800/60 pt-2 space-y-1 text-xs">
@@ -682,16 +690,21 @@ export const BookDoctor = () => {
             {/* Next steps info boxes */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-md mx-auto text-left">
               {[
-                { icon: '📱', label: 'SMS Alert', desc: 'Sent to your registered mobile' },
-                { icon: '📧', label: 'Email Confirmation', desc: 'Sent to your email address' },
-                { icon: '💊', label: 'Post-Consultation', desc: 'Prescription PDF available here' },
-              ].map(item => (
-                <div key={item.label} className="rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 text-center">
-                  <span className="text-2xl">{item.icon}</span>
-                  <p className="text-[10px] font-extrabold text-slate-800 dark:text-white mt-1">{item.label}</p>
-                  <p className="text-[9px] text-slate-400">{item.desc}</p>
-                </div>
-              ))}
+                { icon: BsPhone, label: 'SMS Alert', desc: 'Sent to your registered mobile', color: 'text-sky-500 bg-sky-50 dark:bg-sky-950/40' },
+                { icon: BsEnvelope, label: 'Email Confirmation', desc: 'Sent to your email address', color: 'text-teal-500 bg-teal-50 dark:bg-teal-950/40' },
+                { icon: BsCapsule, label: 'Post-Consultation', desc: 'Prescription PDF available here', color: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/40' },
+              ].map(item => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.label} className="rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 text-center flex flex-col items-center">
+                    <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${item.color} mb-1`}>
+                      <Icon className="h-4.5 w-4.5" />
+                    </div>
+                    <p className="text-[10px] font-extrabold text-slate-800 dark:text-white mt-1">{item.label}</p>
+                    <p className="text-[9px] text-slate-400">{item.desc}</p>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="flex gap-3 justify-center">
