@@ -1,4 +1,4 @@
-﻿import axios from 'axios';
+import axios from 'axios';
 import { 
   mockDoctors, 
   mockHospitals, 
@@ -64,7 +64,7 @@ const api = axios.create({
 // Helper to simulate network delay
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const useMock = import.meta.env.VITE_USE_MOCK !== 'false';
+const useMock = import.meta.env.VITE_USE_MOCK === 'true';
 
 if (useMock) {
   // Intercept requests to mock our backend endpoints
