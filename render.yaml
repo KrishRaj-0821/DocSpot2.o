@@ -1,4 +1,4 @@
-﻿# Render Blueprint Specification to deploy the Django backend.
+# Render Blueprint Specification to deploy the Django backend.
 # Reference: https://render.com/docs/blueprints
 
 services:
@@ -11,27 +11,18 @@ services:
     # Run the production gunicorn server binding to Render's allocated port
     startCommand: "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
       - key: DEBUG
         value: "False"
       - key: SECRET_KEY
         generateValue: true
-      
-      # OPTION A: SQLite with Persistent Disk (Uncomment database disk settings below and set SQLITE_DB_PATH)
-      # - key: SQLITE_DB_PATH
-      #   value: /data/db.sqlite3
-
-      # OPTION B: PostgreSQL Database (Default blueprint configuration)
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,.vercel.app,localhost"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://docspot.vercel.app,https://docspot-pro.vercel.app"
       - key: DATABASE_URL
-        fromDatabase:
-          name: docspot-db
-          property: connectionString
-
-    # OPTION A: Persistent Disk Config for SQLite (Uncomment if you want to use SQLite in production for free)
-    # hasDisk: true
-    # disk:
-    #   name: sqlite-data-volume
-    #   mountPath: /data
-    #   sizeGB: 1
+        sync: false
 
 databases:
   # Provisions a free tier PostgreSQL database for OPTION B
