@@ -296,6 +296,20 @@ if (!useMock) {
 // Response Interceptor to handle both mock rejections and production response wrapping
 api.interceptors.response.use(
   (response) => {
+    // Check if the response is returning an HTML document instead of JSON.
+    // This often happens in SPA fallback when the backend API is unreachable.
+    if (
+      response.data &&
+      typeof response.data === 'string' &&
+      response.data.trim().startsWith('<!doctype html>')
+    ) {
+      return Promise.reject({
+        response,
+        message: 'API returned HTML instead of JSON. Backend might be unreachable.',
+        isHtmlFallback: true
+      });
+    }
+
     // In production, unwrap standard response data.data if it follows PurniaJSONRenderer format
     if (!useMock) {
       if (response.data && typeof response.data === 'object' && 'success' in response.data && 'data' in response.data) {
