@@ -1,0 +1,3 @@
+## 2024-07-30 - Fix N+1 Query in Doctor Profile List View
+**Learning:** In Django Rest Framework, using deeply nested serializers (like `DoctorProfileSerializer` pulling `UserSerializer`, `DepartmentSerializer`, and list of `ReviewSerializer`s) without explicit `select_related` and `prefetch_related` leads to a massive N+1 query problem, increasing query count proportionally to the number of records (e.g. going from 3 to 36 queries for just 5 doctors).
+**Action:** Always inspect the serializer fields when evaluating viewset querysets and ensure any related models (one-to-one, foreign keys) use `select_related` and any reverse-relations or many-to-many fields (like `reviews`) use `prefetch_related`.
