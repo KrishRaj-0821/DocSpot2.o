@@ -4,7 +4,11 @@ from doctors.models import DoctorProfile, Review
 from doctors.serializers import DoctorProfileSerializer, ReviewSerializer
 
 class DoctorProfileViewSet(viewsets.ModelViewSet):
-    queryset = DoctorProfile.objects.all()
+    # ⚡ Bolt Optimization: Fix N+1 query problem by fetching related fields
+    # Expected Impact: Reduces database queries from O(N) to O(1) for list endpoints
+    queryset = DoctorProfile.objects.select_related(
+        'user', 'specialization', 'hospital'
+    ).prefetch_related('reviews')
     serializer_class = DoctorProfileSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
