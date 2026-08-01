@@ -1,0 +1,3 @@
+## 2023-11-20 - DRF Nested Serializer massive N+1 Issue
+**Learning:** In Django Rest Framework, using `SerializerMethodField` or nested serializers (like `UserSerializer`, `DoctorProfileSerializer`, etc.) inside a `ModelViewSet` triggers severe N+1 query problems if the viewset's `queryset` is just `.all()`. For example, `DoctorProfileViewSet` triggered 15 queries for 2 doctors and 63 queries for 10 doctors (scaling linearly).
+**Action:** When working with Django REST Framework viewsets using nested serializers, explicitly use `select_related` for foreign key/one-to-one relations and `prefetch_related` for reverse/many-to-many relations in the queryset to prevent massive N+1 query problems.
