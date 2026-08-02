@@ -4,7 +4,8 @@ from doctors.models import DoctorProfile, Review
 from doctors.serializers import DoctorProfileSerializer, ReviewSerializer
 
 class DoctorProfileViewSet(viewsets.ModelViewSet):
-    queryset = DoctorProfile.objects.all()
+        # ⚡ Bolt: Fix N+1 query problem by eager loading related user, specialization, hospital, and nested review data
+    queryset = DoctorProfile.objects.select_related('user', 'specialization', 'hospital').prefetch_related('reviews', 'reviews__patient')
     serializer_class = DoctorProfileSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
