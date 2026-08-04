@@ -11,9 +11,16 @@ from appointments.serializers import (
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
+    # ⚡ Bolt Optimization: Prevent N+1 queries from nested DoctorProfileSerializer & HospitalProfileSerializer
     queryset = Appointment.objects.select_related(
         'patient', 'doctor__user', 'doctor__specialization', 'hospital'
-    ).prefetch_related('prescription').all()
+    ).prefetch_related(
+        'prescription',
+        'doctor__reviews',
+        'doctor__reviews__patient',
+        'hospital__hospital_departments__department',
+        'hospital__facilities'
+    ).all()
     serializer_class = AppointmentSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
