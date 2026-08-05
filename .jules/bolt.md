@@ -1,3 +1,3 @@
-## 2024-05-24 - [Django REST Framework N+1 on Nested Serializers]
-**Learning:** DRF nested serializers and SerializerMethodField that fetch related data cause massive N+1 queries if the base queryset isn't optimized. For `DoctorProfileViewSet`, not using `select_related` and `prefetch_related` created a hidden N+1 bottleneck when serializing user details and reviews.
-**Action:** When working with Django REST Framework viewsets using nested serializers, explicitly use `select_related` for foreign key/one-to-one relations and `prefetch_related` for reverse/many-to-many relations in the queryset.
+## 2024-05-19 - DRF SerializerMethodField N+1 Issues
+**Learning:** In Django Rest Framework, using `SerializerMethodField` or nested serializers without explicitly calling `.select_related()` (for ForeignKey/OneToOne) or `.prefetch_related()` (for ManyToMany/Reverse relations) on the viewset's `queryset` results in massive N+1 query problems. The serializer iterates through every object to evaluate the method or nested fields, querying the database repeatedly.
+**Action:** Always verify query performance when adding `SerializerMethodField` or nested serializers. Include necessary `select_related` or `prefetch_related` calls in the viewset's `queryset` to fetch all necessary data in a single batch.
