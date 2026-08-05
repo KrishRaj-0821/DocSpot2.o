@@ -13,7 +13,11 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-docspot-healthcare-ke
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
+_allowed_hosts = os.environ.get("ALLOWED_HOSTS", "")
+if _allowed_hosts:
+    ALLOWED_HOSTS = [h.strip() for h in _allowed_hosts.split(",") if h.strip()]
+else:
+    ALLOWED_HOSTS = ["*"] if DEBUG else []
 
 # Application definition
 INSTALLED_APPS = [
