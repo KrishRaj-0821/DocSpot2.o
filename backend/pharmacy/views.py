@@ -90,13 +90,14 @@ class MedicineOrderViewSet(viewsets.ModelViewSet):
         )
 
         # Create items
-        for oi in order_items_to_create:
-            OrderItem.objects.create(
+        OrderItem.objects.bulk_create([
+            OrderItem(
                 order=order,
                 medicine=oi['medicine'],
                 quantity=oi['quantity'],
                 price=oi['price'],
                 discount=oi['discount']
-            )
+            ) for oi in order_items_to_create
+        ])
 
         return Response(MedicineOrderSerializer(order).data, status=status.HTTP_201_CREATED)
