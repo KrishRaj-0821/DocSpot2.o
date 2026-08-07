@@ -4,7 +4,11 @@ from hospitals.models import HospitalProfile, Department, Bed
 from hospitals.serializers import HospitalProfileSerializer, DepartmentSerializer, BedSerializer
 
 class HospitalProfileViewSet(viewsets.ModelViewSet):
-    queryset = HospitalProfile.objects.all()
+    # Bolt: Optimize query by prefetching related facilities and departments
+    # to prevent N+1 queries when serializing the data.
+    queryset = HospitalProfile.objects.prefetch_related(
+        'hospital_departments__department', 'facilities'
+    )
     serializer_class = HospitalProfileSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
