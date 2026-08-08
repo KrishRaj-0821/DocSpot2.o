@@ -7,7 +7,7 @@ from medicines.models import Medicine
 from common.permissions import IsPharmacyAdmin
 
 class PharmacyProfileViewSet(viewsets.ModelViewSet):
-    queryset = PharmacyProfile.objects.all()
+    queryset = PharmacyProfile.objects.select_related('user').all() # Optimized: Added select_related to prevent N+1 queries
     serializer_class = PharmacyProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -21,7 +21,7 @@ class PharmacyProfileViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 class MedicineOrderViewSet(viewsets.ModelViewSet):
-    queryset = MedicineOrder.objects.all()
+    queryset = MedicineOrder.objects.select_related('user', 'pharmacy').prefetch_related('items__medicine__category').all() # Optimized: Added select_related/prefetch_related to prevent N+1 queries
     serializer_class = MedicineOrderSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
