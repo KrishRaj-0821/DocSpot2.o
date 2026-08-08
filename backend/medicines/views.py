@@ -11,7 +11,7 @@ class MedicineCategoryViewSet(viewsets.ModelViewSet):
     search_fields = ['name']
 
 class MedicineViewSet(viewsets.ModelViewSet):
-    queryset = Medicine.objects.all()
+    queryset = Medicine.objects.select_related('category').all() # Optimized: Added select_related to prevent N+1 queries
     serializer_class = MedicineSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]

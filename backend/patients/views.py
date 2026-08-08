@@ -4,7 +4,7 @@ from patients.models import PatientProfile, MedicalRecord
 from patients.serializers import PatientProfileSerializer, MedicalRecordSerializer
 
 class PatientProfileViewSet(viewsets.ModelViewSet):
-    queryset = PatientProfile.objects.all()
+    queryset = PatientProfile.objects.select_related('user').prefetch_related('medical_records').all() # Optimized: Added select_related/prefetch_related to prevent N+1 queries
     serializer_class = PatientProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 

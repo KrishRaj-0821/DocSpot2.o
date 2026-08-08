@@ -12,7 +12,7 @@ class AmbulanceViewSet(viewsets.ModelViewSet):
     filterset_fields = ['status', 'type']
 
 class AmbulanceBookingViewSet(viewsets.ModelViewSet):
-    queryset = AmbulanceBooking.objects.all()
+    queryset = AmbulanceBooking.objects.select_related('patient', 'ambulance').all() # Optimized: Added select_related to prevent N+1 queries
     serializer_class = AmbulanceBookingSerializer
     permission_classes = [permissions.IsAuthenticated]
 

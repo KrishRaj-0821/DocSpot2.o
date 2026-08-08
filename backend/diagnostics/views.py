@@ -11,7 +11,7 @@ class DiagnosticCenterViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'address', 'city']
 
 class DiagnosticTestViewSet(viewsets.ModelViewSet):
-    queryset = DiagnosticTest.objects.all()
+    queryset = DiagnosticTest.objects.select_related('center').all() # Optimized: Added select_related to prevent N+1 queries
     serializer_class = DiagnosticTestSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -19,7 +19,7 @@ class DiagnosticTestViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'description', 'category']
 
 class TestBookingViewSet(viewsets.ModelViewSet):
-    queryset = TestBooking.objects.all()
+    queryset = TestBooking.objects.select_related('patient', 'test__center').all() # Optimized: Added select_related to prevent N+1 queries
     serializer_class = TestBookingSerializer
     permission_classes = [permissions.IsAuthenticated]
 

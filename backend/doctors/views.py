@@ -18,7 +18,7 @@ class DoctorProfileViewSet(viewsets.ModelViewSet):
     ordering_fields = ['experience', 'fees']
 
 class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all()
+    queryset = Review.objects.select_related('patient').all() # Optimized: Added select_related to prevent N+1 queries
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend]
